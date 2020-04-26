@@ -88,11 +88,11 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
+# import dj_database_url
+# db_from_env = dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(db_from_env)
-DATABASES['default'] = dj_database_url.parse('postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee', conn_max_age=600)
-
+# DATABASES['default'] = dj_database_url.parse('postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee', conn_max_age=600)
+#https://fierce-garden-63252.herokuapp.com/
 #'postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee'
 # DATABASES = {
 #         'default': {
@@ -146,11 +146,11 @@ STATIC_URL = '/static/'
 #
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-
+print(BASE_DIR)
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
-MEDIA_URL = '/images/'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/upload')
+MEDIA_URL = '/images/upload/imagesp/'
+# print(MEDIA_URL)
 ##################
 
 # Static files (CSS, JavaScript, Images)

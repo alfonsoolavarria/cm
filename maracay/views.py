@@ -34,8 +34,7 @@ class Maracay(TemplateView):
             paginator = Paginator(contact_list, 10) # Show 25 contacts per page
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
-            print ("contacts",contacts)
-            direction = request.build_absolute_uri()+'images/images/'
+            direction = request.build_absolute_uri()+'static/images/upload/imagesp/'
             return render(request, 'market/index.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
         '''else:
             print ("22222")
