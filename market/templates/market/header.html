@@ -33,7 +33,7 @@
 
             <!-- <a href="#" class="flex-c-m trans-04 p-lr-25">
               <img src="/static/images/bible.png" style="width: 50px;" alt="">
-             <i class="fa fa-fw fa-money"></i>&nbsp;USD 
+             <i class="fa fa-fw fa-money"></i>&nbsp;USD
             </a> -->
           </div>
         </div>
@@ -148,7 +148,40 @@
     <!-- Menu Mobile -->
     <div class="menu-mobile">
       <ul class="topbar-mobile">
+        <!-- Topbar -->
+        <div class="top-bar">
+          <div class="content-topbar flex-sb-m h-full container">
+            <div class="left-top-bar">
 
+            </div>
+
+            <div class="right-top-bar flex-w h-full" >
+              {%if request.user and  user.is_anonymous != True %}
+              <div class="dropdown" style="cursor: pointer;color: #b2b2b2;">
+                <a class="dropdown-toggle flex-c-m trans-04 p-lr-25" style="font-size: 9px;" data-toggle="dropdown"><i class="fa fa-fw fa-user"></i>{{request.user}}
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu" style="width: 100%;z-index: 10000;background: #ECEBE5;">
+                    <li><i class="fa fa-fw fa-cog"></i><a href="/account/">Cuenta</a></li>
+                    <li><i class="fa fa-fw fa-power-off"></i><a href="/logout/">Cerrar Sesion</a></li>
+                  </ul>
+              </div>
+              {%else%}
+                <a href="/account/" class="flex-c-m trans-04 p-lr-25">
+                  <i class="fa fa-fw fa-user"></i> Mi cuenta
+                </a>
+              {%endif%}
+
+              <a href="/help/" class="flex-c-m trans-04 p-lr-25" style="font-size: 9px;">
+                <i class="fa fa-fw fa-question"></i> Ayuda & Preguntas
+              </a>
+
+              <!-- <a href="#" class="flex-c-m trans-04 p-lr-25">
+                <img src="/static/images/bible.png" style="width: 50px;" alt="">
+               <i class="fa fa-fw fa-money"></i>&nbsp;USD
+              </a> -->
+            </div>
+          </div>
+        </div>
           <!-- <li class="active-menu">
             <i class="fa fa-fw fa-home"></i><a href="/">Inicio</a>
           </li> -->
