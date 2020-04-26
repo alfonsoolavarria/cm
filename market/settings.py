@@ -89,8 +89,8 @@ DATABASES = {
     }
 }
 import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+# db_from_env = dj_database_url.config()
+DATABASES = {'default':dj_database_url.parse('postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee')}
 # DATABASES = {
 #         'default': {
 #             'ENGINE': 'djongo',
