@@ -83,12 +83,14 @@ DATABASES = {
         # 'NAME': 'criollitos',
         # 'USER': 'postgres',
         # 'PASSWORD': '1q2w3e4r',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 # DATABASES = {
 #         'default': {
 #             'ENGINE': 'djongo',
