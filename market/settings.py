@@ -88,9 +88,15 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+#####db de produccion
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+#####db de produccion
+
+
+
 # DATABASES['default'] = dj_database_url.parse('postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee', conn_max_age=600)
 #https://fierce-garden-63252.herokuapp.com/
 #'postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee'

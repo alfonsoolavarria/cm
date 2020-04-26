@@ -34,7 +34,7 @@ class Maracay(TemplateView):
             paginator = Paginator(contact_list, 10) # Show 25 contacts per page
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
-            direction = request.build_absolute_uri()+'static/images/upload/imagesp/'
+            direction = '/static/images/upload/imagesp/'
             return render(request, 'market/index.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
         '''else:
             print ("22222")
@@ -238,7 +238,9 @@ def AllProducts(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
-    return render(request, 'market/allProducts.html',{'contacts':contacts,'data':json.dumps(data['data'])})
+    print ("equest.get_host()",request.get_host())
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/allProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def ViveresProducts(request):
     _viveresproductsfilter = filterProducts(request)
@@ -252,7 +254,8 @@ def ViveresProducts(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
-    return render(request, 'market/viveresProducts.html',{'contacts':contacts,'data':json.dumps(data['data'])})
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/viveresProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def FrigorificoProducts(request):
     _frigorificoproductsfilter = filterProducts(request)
@@ -266,7 +269,8 @@ def FrigorificoProducts(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
-    return render(request, 'market/frigorificoProducts.html',{'contacts':contacts,'data':json.dumps(data['data'])})
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/frigorificoProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def EnlatadosProducts(request):
     _enlatadosproductsfilter = filterProducts(request)
@@ -280,7 +284,8 @@ def EnlatadosProducts(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
-    return render(request, 'market/enlatadosProducts.html',{'contacts':contacts,'data':json.dumps(data['data'])})
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/enlatadosProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 #Section Filter Prodcuts Admin
 def AllProductsAdmin(request):

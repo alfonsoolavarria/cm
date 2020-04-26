@@ -30,7 +30,7 @@ class backStart():
                 "name":a.name,
                 "cant":a.cant,
                 "description":a.description,
-                "image":a.image,
+                "name_image":a.name_image,
                 #"price":a.price,
                 })
             '''for b in Product.objects.filter()[int(self._request.GET.get('start',0)):int(self._request.GET.get('end',12))]:
@@ -263,7 +263,7 @@ class filterProducts():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
 
@@ -276,7 +276,7 @@ class filterProducts():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
     def frigorificoProductsFilter(self):
@@ -288,7 +288,7 @@ class filterProducts():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
     def enlatadosProductsFilter(self):
@@ -300,7 +300,7 @@ class filterProducts():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
 
@@ -320,7 +320,7 @@ class adminSite():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
 
@@ -333,7 +333,7 @@ class adminSite():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
     def frigorificoProductsFilterAdmin(self):
@@ -345,7 +345,7 @@ class adminSite():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
     def enlatadosProductsFilterAdmin(self):
@@ -357,6 +357,6 @@ class adminSite():
             "name":a.name,
             "cant":a.cant,
             "description":a.description,
-            "image":a.image,
+            "name_image":a.name_image,
             #"price":a.price,
             })
