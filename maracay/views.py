@@ -171,7 +171,8 @@ class ControlAdmin(View):
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
             dataAll = {'contacts':contacts}
-            return render(request, 'market/adminGestion.html', {'data':contacts,'flag':'all'})
+            direction = '/static/images/upload/imagesp/'
+            return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'all'})
         else: # registro
             return render(request, 'market/adminIndex.html', {})
 
@@ -238,7 +239,6 @@ def AllProducts(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
-    print ("equest.get_host()",request.get_host())
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/allProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
@@ -289,61 +289,77 @@ def EnlatadosProducts(request):
 
 #Section Filter Prodcuts Admin
 def AllProductsAdmin(request):
-    _allproductsfilter = adminSite(request)
-    _allproductsfilter.dataProductUser()
+    if str(request.user) != 'AnonymousUser':#si esta logeado su data
+        _allproductsfilter = adminSite(request)
+        _allproductsfilter.dataProductUser()
 
-    data = _allproductsfilter.response_data
-    data['code'] = _allproductsfilter.code
+        data = _allproductsfilter.response_data
+        data['code'] = _allproductsfilter.code
 
-    contact_list = data['cantTotal']
-    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
-    page = request.GET.get('page')
-    contacts = paginator.get_page(page)
-    dataAll = {'contacts':contacts}
-    return render(request, 'market/adminGestion.html', {'data':contacts,'flag':'all'})
+        contact_list = data['cantTotal']
+        paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+        page = request.GET.get('page')
+        contacts = paginator.get_page(page)
+        dataAll = {'contacts':contacts}
+        direction = '/static/images/upload/imagesp/'
+        return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'all'})
+    else:
+        return render(request, 'market/adminIndex.html', {})
 
 def ViveresProductsAdmin(request):
-    _viveresproductsfilter = adminSite(request)
-    _viveresproductsfilter.viveresProductsFilterAdmin()
+    if str(request.user) != 'AnonymousUser':#si esta logeado su data
+        _viveresproductsfilter = adminSite(request)
+        _viveresproductsfilter.viveresProductsFilterAdmin()
 
-    data = _viveresproductsfilter.response_data
-    data['code'] = _viveresproductsfilter.code
+        data = _viveresproductsfilter.response_data
+        data['code'] = _viveresproductsfilter.code
 
-    contact_list = data['cantTotal']
-    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
-    page = request.GET.get('page')
-    contacts = paginator.get_page(page)
-    dataAll = {'contacts':contacts}
-    return render(request, 'market/adminGestion.html', {'data':contacts,'flag':'vive'})
+        contact_list = data['cantTotal']
+        paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+        page = request.GET.get('page')
+        contacts = paginator.get_page(page)
+        dataAll = {'contacts':contacts}
+        direction = '/static/images/upload/imagesp/'
+        return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'vive'})
+    else:
+        return render(request, 'market/adminIndex.html', {})
 
 def FrigorificoProductsAdmin(request):
-    _frigorificoproductsfilter = adminSite(request)
-    _frigorificoproductsfilter.frigorificoProductsFilterAdmin()
+    if str(request.user) != 'AnonymousUser':#si esta logeado su data
+        _frigorificoproductsfilter = adminSite(request)
+        _frigorificoproductsfilter.frigorificoProductsFilterAdmin()
 
-    data = _frigorificoproductsfilter.response_data
-    data['code'] = _frigorificoproductsfilter.code
+        data = _frigorificoproductsfilter.response_data
+        data['code'] = _frigorificoproductsfilter.code
 
-    contact_list = data['cantTotal']
-    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
-    page = request.GET.get('page')
-    contacts = paginator.get_page(page)
-    dataAll = {'contacts':contacts}
-    return render(request, 'market/adminGestion.html', {'data':contacts,'flag':'frigo'})
+        contact_list = data['cantTotal']
+        paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+        page = request.GET.get('page')
+        contacts = paginator.get_page(page)
+        dataAll = {'contacts':contacts}
+        direction = '/static/images/upload/imagesp/'
+        return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'frigo'})
+    else:
+        return render(request, 'market/adminIndex.html', {})
 
 def EnlatadosProductsAdmin(request):
-    _enlatadosproductsfilter = adminSite(request)
-    _enlatadosproductsfilter.enlatadosProductsFilterAdmin()
+    if str(request.user) != 'AnonymousUser':#si esta logeado su data
+        _enlatadosproductsfilter = adminSite(request)
+        _enlatadosproductsfilter.enlatadosProductsFilterAdmin()
 
-    data = _enlatadosproductsfilter.response_data
-    data['code'] = _enlatadosproductsfilter.code
+        data = _enlatadosproductsfilter.response_data
+        data['code'] = _enlatadosproductsfilter.code
 
-    contact_list = data['cantTotal']
-    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
-    page = request.GET.get('page')
-    contacts = paginator.get_page(page)
-    dataAll = {'contacts':contacts}
-    return render(request, 'market/adminGestion.html', {'data':contacts,'flag':'enla'})
-
+        contact_list = data['cantTotal']
+        paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+        page = request.GET.get('page')
+        contacts = paginator.get_page(page)
+        dataAll = {'contacts':contacts}
+        direction = '/static/images/upload/imagesp/'
+        return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'enla'})
+    else:
+        return render(request, 'market/adminIndex.html', {})
+        
 #Caja
 def CartOrder(request):
     data = {}
