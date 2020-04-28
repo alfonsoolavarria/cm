@@ -50,7 +50,7 @@ class backStart():
     def guardaCompra(self):
         def hilo2():
             try:
-                print (self._request.POST)
+                print ("Voy a confirmar",self._request.POST)
                 ########################codigo de seguridad de compra###################
                 def ran_gen(size, chars=string.ascii_uppercase + string.digits):
                     return ''.join(random.choice(chars) for x in range(size))
@@ -82,12 +82,15 @@ class backStart():
                         start_date=dataSave['start_date'],
                         cant_product=dataSave['cant_product'],
                     )
-                    dataSave['product'].cant = dataSave['product'].cant - int(dataSave['cant_product'])
-                    dataSave['product'].save()
+                    # dataSave['product'].cant = dataSave['product'].cant - int(dataSave['cant_product'])
+                    update_product_cant = Product.objects.get(pk=int(dataSave['product'].id))
+                    update_product_cant.cant= int(update_product_cant.cant) - int(dataSave['cant_product'])
+                    update_product_cant.save()
+                    # dataSave['product'].update(cant=dataSave['product'].cant - int(dataSave['cant_product']))
+                    # dataSave['product'].save()
                     compras.save()
                     dataSave = {}
                     productId = 0
-
                 #save historial################
                 historialCompras = purchaseHistory.objects.create(
                     code_purchase=tokenCode,
@@ -95,6 +98,7 @@ class backStart():
                     total=''
                 )
                 historialCompras.save()
+                print ("historial uardado")
                 ###############################
                 #Envio la factura por email
                 carroEmail = {'compra':[]}
@@ -102,7 +106,7 @@ class backStart():
                 totalGeneral=0
                 for value in allProducts:
                     carroEmail['compra'].append({
-                    'image':value.product.image,
+                    'image':value.product.name_image,
                     'name':value.product.name,
                     'price':str(value.product.price)+' / '+str(value.cant_product),
                     'total':float(value.product.price)*int(value.cant_product),
@@ -110,7 +114,7 @@ class backStart():
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
                 carroEmail['totalGeneral'] = totalGeneral
                 carroEmail['totalCompleto'] = carroEmail['totalGeneral']+Tools.objects.get(pk=1).costoenvio
-
+                print("salida al email")
                 msg_html = render_to_string('market/facturaCompra.html',
                     {
                         'asunto':'Factura' ,
@@ -123,15 +127,15 @@ class backStart():
                         'costoEnvio':Tools.objects.get(pk=1).costoenvio,
                     })
 
-                send_mail(
-                    'Title',
-                    'Subject',
-                    settings.EMAIL_HOST_USER,#from
-                    ['alfonsojn15@gmail.com'],#to
-                    html_message=msg_html,
-                )
+                # send_mail(
+                #     'Title',
+                #     'Subject',
+                #     settings.EMAIL_HOST_USER,#from
+                #     ['alfonsojn15@gmail.com'],#to
+                #     html_message=msg_html,
+                # )
             except Exception as e:
-                print (e)
+                print (e,"guardaCompra")
                 self.code = 500
 
         thread = Thread(target = hilo2)

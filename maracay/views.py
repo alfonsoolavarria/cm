@@ -359,7 +359,7 @@ def EnlatadosProductsAdmin(request):
         return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'enla'})
     else:
         return render(request, 'market/adminIndex.html', {})
-        
+
 #Caja
 def CartOrder(request):
     data = {}
@@ -388,34 +388,38 @@ def CartOrder(request):
 def ConfimationOrder(request):
     if str(request.user) == 'AnonymousUser':
         return render(request, 'market/registerLogin.html', {})
+    try:
+        dataUser = User.objects.get(email=request.user)
+        data = {
+        'user':dataUser.id,
+        'name':dataUser.first_name,
+        'email':dataUser.email,
+        'costoenvio':Tools.objects.get().costoenvio,
+        'code':200,
+        'compra':[],
+        'tipoPago':'',
+        }
+        compra = PurchaseConfirmation.objects.filter(user=dataUser).last()
+        allProducts = PurchaseConfirmation.objects.filter(code=compra.code)
+        totalGeneral=0
+        for value in allProducts:
+            data['tipoPago'] = value.payment_type
+            data['code'] = value.code
+            data['compra'].append({
+            'name':value.product.name,
+            'price':str(value.product.price)+' / '+str(value.cant_product),
+            'image':'/static/images/upload/imagesp/'+value.product.name_image,
+            'total':float(value.product.price)*int(value.cant_product),
+            })
+            totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
 
-    dataUser = User.objects.get(email=request.user)
-    data = {
-    'user':dataUser.id,
-    'name':dataUser.first_name,
-    'email':dataUser.email,
-    'costoenvio':Tools.objects.all().firts().costoenvio,
-    'code':200,
-    'compra':[],
-    'tipoPago':'',
-    }
-    compra = PurchaseConfirmation.objects.filter(user=dataUser).last()
-    allProducts = PurchaseConfirmation.objects.filter(code=compra.code)
-    totalGeneral=0
-    for value in allProducts:
-        data['tipoPago'] = value.payment_type
-        data['code'] = value.code
-        data['compra'].append({
-        'name':value.product.name,
-        'price':str(value.product.price)+' / '+str(value.cant_product),
-        'image':value.product.image,
-        'total':float(value.product.price)*int(value.cant_product),
-        })
-        totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
+        data['totalGeneral'] = totalGeneral
+        data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
+        print ("------>",data)
+        return render(request, 'market/confirmationOrder.html',data)
+    except Exception as e:
+        print("ConfimationOrder",e)
 
-    data['totalGeneral'] = totalGeneral
-    data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
-    return render(request, 'market/confirmationOrder.html',data)
 
 #envio de formulario de ayuda
 def HelpForm(request):
@@ -449,7 +453,7 @@ def CartOrderEntrega(request):
     data = {}
     _allproducts = backStart(request)
     _allproducts.guardaCompra()
-
+    print ("terine de confirar")
     data['code'] = _allproducts.code
     if data['code'] !=500:
         data = {'code':200}
