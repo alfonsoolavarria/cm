@@ -21,7 +21,8 @@ def verificacion_compras():
                 comprasParaVerificar = PurchaseConfirmation.objects.filter(confirmation=2)
                 for compra in comprasParaVerificar:
                     ahora = datetime.datetime.now(pytz.timezone('America/Caracas'))
-                    fechaAcomparar = compra.start_date+timedelta(hours=config.TIEMPO_DE_ANULACION_COMPRA)
+                    # fechaAcomparar = compra.start_date+timedelta(hours=config.TIEMPO_DE_ANULACION_COMPRA)
+                    fechaAcomparar = compra.start_date+timedelta(minutes=1)
                     if ahora>fechaAcomparar:
                         print ('Anular la compra',compra.id)
                         compra.confirmation = 1

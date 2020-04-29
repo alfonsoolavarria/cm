@@ -30,6 +30,7 @@ class Profile(models.Model):
 class Tools(models.Model):
     id=models.AutoField(primary_key=True)
     costoenvio=models.PositiveSmallIntegerField(default=100)
+    hilo_en_proceso=models.PositiveSmallIntegerField(default=0)#0no esta corriendo  1 ya esta iniciado
     create_at=models.DateTimeField(auto_now_add=True)
 
 class TokenPassword(models.Model):
@@ -63,3 +64,9 @@ class purchaseHistory(models.Model):
     code_purchase=models.CharField(max_length=100)#codigo de seguridad de la compra relacionado a la compra
     total=models.CharField(max_length=100)
     user=models.ForeignKey(User,related_name='user_history',on_delete=models.CASCADE)
+
+class PagosImagenes(models.Model):
+    id=models.AutoField(primary_key=True)
+    email_user=models.CharField(max_length=200)
+    picture = models.ImageField(upload_to='imagespagos')
+    create_at=models.DateTimeField(auto_now_add=True,null=True)

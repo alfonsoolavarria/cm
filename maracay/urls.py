@@ -7,7 +7,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
     FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail)
 from django.conf import settings
 from django.conf.urls import url
-from maracay import verificacion_compras,agrega_costo
+from maracay import agrega_costo
 
 urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
@@ -49,8 +49,6 @@ urlpatterns = [
 
 
 ]
-#proceso trabajoRecursivo
-#verificacion_compras()
 
 #proces de agregar costo de envio
 # agrega_costo()

@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime, timedelta, date, time
 import schedule, time, pytz, datetime
-
+from maracay import verificacion_compras
 
 class backStart():
     def __init__(self, request):
@@ -58,7 +58,7 @@ class backStart():
                 ########################################################################
 
                 carro = json.loads(self._request.POST['carrito'])
-
+                costo_envio = Tools.objects.get(pk=1).costoenvio
                 dataSave = {}
                 productId = 0
                 carroEmail = {'compra':[]}
@@ -111,7 +111,8 @@ class backStart():
                     })
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
                 carroEmail['totalGeneral'] = totalGeneral
-                carroEmail['totalCompleto'] = carroEmail['totalGeneral']+Tools.objects.get(pk=1).costoenvio
+                carroEmail['totalCompleto'] = carroEmail['totalGeneral']+costo_envio
+                direction = '/static/images/upload/imagesp/'
                 msg_html = render_to_string('market/facturaCompra.html',
                     {
                         'asunto':'Factura' ,
@@ -121,25 +122,32 @@ class backStart():
                         'totalGeneral':carroEmail['totalGeneral'],
                         'totalCompleto':carroEmail['totalCompleto'],
                         'codigo':tokenCode,
-                        'costoEnvio':Tools.objects.get(pk=1).costoenvio,
+                        'costoEnvio':costo_envio,
+                        'direction':direction,
                     })
 
-                # send_mail(
-                #     'Title',
-                #     'Subject',
-                #     settings.EMAIL_HOST_USER,#from
-                #     ['alfonsojn15@gmail.com'],#to
-                #     html_message=msg_html,
-                # )
+                send_mail(
+                    'Detalles de la Compra',
+                    'Subject',
+                    settings.EMAIL_HOST_USER,#from
+                    [user.email,settings.EMAIL_HOST_USER],#to
+                    html_message=msg_html,
+                )
+                #verificar si el hilo de revision de compras esta o no activo
+                objeto_tools = Tools.objects.get(pk=1)
+                if objeto_tools.hilo_en_proceso == 0:
+                    # proceso trabajoRecursivo
+                    print("Ejecucion de Hilo")
+                    verificacion_compras()
+                    objeto_tools.hilo_en_proceso=1
+                    objeto_tools.save()
             except Exception as e:
-                print (e,"guardaCompra")
                 self.code = 500
 
         thread = Thread(target = hilo2)
         thread.start()
 
     def detailProducts(self):
-        print (self._request.user.id)
         productos = PurchaseConfirmation.objects.filter(code=self._request.GET['code'])
         totalGeneral=0
         for value in productos:
@@ -151,7 +159,7 @@ class backStart():
                 'start_date':value.start_date,
                 'name':value.product.name,
                 'price':value.product.price,
-                'image':value.product.image,
+                'image':value.product.name_image,
                 'total':float(value.product.price)*int(value.cant_product),
                 'cant_product':value.cant_product,
             })
@@ -239,7 +247,7 @@ class profileBackend():
             tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
             self.response_data['data'].append({
             "code_purchase":a.code_purchase,
-            "total":a.total,
+            "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
             "state":tabladecompra.confirmation,
             "payment_type":tabladecompra.payment_type,
             "start_date":tabladecompra.start_date-timedelta(hours=4),

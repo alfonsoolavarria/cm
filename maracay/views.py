@@ -12,11 +12,11 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
-from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword
+from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes
 from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
-
+import os
 # Create your views here.
 #Main Class
 class Maracay(TemplateView):
@@ -210,19 +210,21 @@ def CartShopping(request):
                 'rif':dataUser.user_profile.rif,
                 'localphone':dataUser.user_profile.localphone,
                 'reference':dataUser.user_profile.reference,
-                'costoenvio':Tools.objects.all().first().costoenvio,
+                'costoenvio':Tools.objects.get().costoenvio,
                 'code':200
             })
         except Exception as e:
             print (e)
-            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.all().first().costoenvio})
+            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
     else:
         try:
-            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.all().first().costoenvio})
+            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
         except Tools.DoesNotExist:
             data = {'costoenvio':config.COSTO_ENVIO,'create_at':datetime.datetime.now()}
             costo = Tools(**data)
             costo.save()
+            return HttpResponseRedirect("/")
+        except Exception as e:
             return HttpResponseRedirect("/")
 
 
@@ -376,7 +378,7 @@ def CartOrder(request):
             'rif':dataUser.user_profile.rif,
             'localphone':dataUser.user_profile.localphone,
             'reference':dataUser.user_profile.reference,
-            'costoenvio':Tools.objects.all().first().costoenvio,
+            'costoenvio':Tools.objects.get().costoenvio,
             'code':200
             }
         except Exception as e:
@@ -415,7 +417,6 @@ def ConfimationOrder(request):
 
         data['totalGeneral'] = totalGeneral
         data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
-        print ("------>",data)
         return render(request, 'market/confirmationOrder.html',data)
     except Exception as e:
         print("ConfimationOrder",e)
@@ -425,22 +426,62 @@ def ConfimationOrder(request):
 def HelpForm(request):
     def hilo():
         try:
+            # from django.core.mail import EmailMultiAlternatives
+            # from email.mime.image import MIMEImage
+
+            asunto = request.POST.get('asunto')
+            email = request.POST.get('email')
+            mensaje = request.POST.get('mensaje')
             msg_html = render_to_string('market/emailHelp.html',
-                {
-                    'asunto':request.POST.get('asunto','') ,
-                    'mensaje':request.POST.get('mensaje',''),
-                    'email':request.POST.get('email','')
-                })
+            {
+                "asunto":asunto,
+                "email":email,
+                "mensaje":mensaje,
+            })
 
             send_mail(
-                'Ayuda, Criollitos Market',
-                'formulario de ayuda',
-                settings.EMAIL_HOST_USER,#from
-                [request.POST.get('email','')],#to
-                html_message=msg_html,
+            asunto,
+            asunto,
+            settings.EMAIL_HOST_USER,#from
+            [request.POST.get('email','')],#to
+            html_message=msg_html,
             )
+            #funciona solo que desde el fron hay problemas al enviar la data
+            # html_content = render_to_string('market/emailHelp.html', {
+            #     "asunto":asunto,
+            #     "email":email,
+            #     "mensaje":mensaje,
+            # })
+            # text_content = render_to_string('market/emailHelp.html', {
+            #     "asunto":asunto,
+            #     "email":email,
+            #     "mensaje":mensaje,
+            # })
+            # msg = EmailMultiAlternatives(asunto, text_content,
+            #                             email,[settings.EMAIL_HOST_USER])
+            #
+            # msg.attach_alternative(html_content, "text/html")
+            #
+            # msg.mixed_subtype = 'related'
+            # #guardo la imagen del pago##
+            # datos = {'picture':request.FILES['image'],'email_user':email}
+            # new_pago = PagosImagenes(**datos)
+            # new_pago.save()
+            # ###########################
+            #
+            # ruta = str(new_pago.picture)
+            # fp = open(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/static/images/upload/'+ruta, 'rb')
+            #
+            # msg_img = MIMEImage(fp.read())
+            #
+            # fp.close()
+            # msg_img.add_header('Content-ID', '<{}>'.format(1))
+            # msg.attach(msg_img)
+            # #envio de email
+            # msg.send()
         except Exception as e:
-            print ('e',e)
+            print(e)
+
     thread = Thread(target = hilo)
     thread.start()
     data = {'code':200}
@@ -453,7 +494,6 @@ def CartOrderEntrega(request):
     data = {}
     _allproducts = backStart(request)
     _allproducts.guardaCompra()
-    print ("terine de confirar")
     data['code'] = _allproducts.code
     if data['code'] !=500:
         data = {'code':200}
@@ -526,7 +566,8 @@ def Detail(request):
         _detailproducts = backStart(request)
         _detailproducts.detailProducts()
         data = _detailproducts.response_data
-        return render(request, 'market/detailProduct.html', {'data':data['data'],'data2':data['data2'][0]})
+        direction = '/static/images/upload/imagesp/'
+        return render(request, 'market/detailProduct.html', {'direction':direction,'data':data['data'],'data2':data['data2'][0]})
     else:
         data = {'code':500,'message':'Codigo invalido'}
         return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')

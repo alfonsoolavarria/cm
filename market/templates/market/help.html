@@ -25,13 +25,13 @@
 								<img src="/static/images/correohelp.jpg" alt="">
 							</div>
 							<div class="data" style="margin-left: 19%;width: 50%;margin-top: -16%;">
-								<label for="">Email de Contacto:<br>servicio@criollitos.com</label>
+								<label for="">Email de Contacto:<br><b>criollitosmarket@gmail.com</b></label>
 							</div>
 						</div>
 				</div>
 			<div class="col-md-8" style="border: 1px solid;border-radius: 2px;">
 				<h3 style="text-align:center;"><b>Contáctanos</b></h3>
-				<form class="form-horizontal" role="form"><label id="token" style="visibility:hidden;">{% csrf_token %}</label>
+				<form id="pagosend" class="form-horizontal" role="form"><label id="token" style="visibility:hidden;">{% csrf_token %}</label>
 				  <div class="form-group">
 				    <label for="ejemplo_email_3" class="col-lg-2 control-label">Asunto</label>
 				    <div class="col-lg-10">
@@ -43,19 +43,26 @@
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="ejemplo_password_3" class="col-lg-2 control-label">Email</label>
+				    <label for="ejemplo_password_3" class="col-lg-2 control-label">Su Email</label>
 				    <div class="col-lg-10">
-				      <input type="email" class="form-control" id="ejemplo_password_3"
-				             placeholder="Email">
+				      <input type="email" class="form-control" id="ejemplo_password_3" placeholder="Email">
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <label for="ejemplo_password_4" class="col-lg-2 control-label">Mensaje</label>
 				    <div class="col-lg-10">
-				      <textarea class="form-control" id="messageText" name="message" placeholder="¿Cómo le podemos ayudar?" rows="3"></textarea>
+				      <textarea class="form-control" id="messageText" name="message" placeholder="Ingrese el nùmero de comprobante de pago-----¿Còmo podemos ayudarle?" rows="3"></textarea>
 				    </div>
 				  </div>
+				  <div class="form-group">
+				    <label for="ejemplo_password_4" style="text-align: center;" class="col-lg-10 control-label">Desde su email personal puede enviarnos el <b>comprobante de pago y el còdigo de compra</b> a la siguiente direccion <b>criollitosmarket@gmail.com</b></label>
+				  </div>
+					<!-- <div class="form-group">
+				    <label for="filepago">Sube tu pago</label>
+				    <input type="file" class="form-control-file" id="filepago" style="position: relative;margin-top: -30px;margin-left: 97px;">
+				  </div> -->
 				</form>
+
 				<div class="form-group">
 					<div class="col-lg-offset-2 col-lg-10">
 						<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" id="helpForm">

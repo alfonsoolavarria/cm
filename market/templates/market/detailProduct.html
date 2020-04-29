@@ -31,7 +31,7 @@
                       </tr>
                         {%for value in data%}
                           <tr>
-                    				<td style="text-align:center;;"><img style="border-radius:10px;width: 90px;height: 70px;" src="/static/{{value.image}}" alt=""></td>
+                    				<td style="text-align:center;;"><img style="border-radius:10px;width: 90px;height: 70px;" src="{{direction}}{{value.image}}" alt=""></td>
                             <td>{{value.name}}</td>
                             <td style="text-align:left;">{{value.price}}</td>
                     				<td>{{value.cant_product}}</td>

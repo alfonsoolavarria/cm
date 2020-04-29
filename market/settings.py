@@ -77,15 +77,15 @@ WSGI_APPLICATION = 'market.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'ENGINE': 'django.db.backends.sqlite3',
         #'TIMEOUT':2,
-        # 'NAME': 'criollitos',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'postgres',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'criollitos',
+        'USER': 'postgres',
+        # 'PASSWORD': '21098026',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -171,7 +171,6 @@ MEDIA_URL = '/images/upload/imagesp/'
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'gmail'
-#EMAIL_HOST_PASSWORD = 'tjxoyyohbkwysros'
-EMAIL_HOST_PASSWORD = 'passsmtp'
+EMAIL_HOST_USER = 'criollitosmarket@gmail.com'
+EMAIL_HOST_PASSWORD = 'udhdwnanhbgcwbzh'
 EMAIL_PORT = 587

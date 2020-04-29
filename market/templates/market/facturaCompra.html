@@ -35,7 +35,7 @@
   <table cellspacing="0" cellpadding="0" style="width: 600px;" align="center" class="container">
     <tr>
       <td width="100">
-        <img style="margin-left:40%;" src="http://35.173.244.11:8000/static/dist/img/LOGO-ATXPNG.png" width="140"/>
+        <img style="margin-left:40%;" src="" width="140"/>
       </td>
     </tr>
   </table>
@@ -45,7 +45,7 @@
       <table cellspacing="0" cellpadding="0" style="width: 600px" align="center" class="container">
         <tr>
           <td width="100" align="left" style="padding: 60px;">
-            <img style="margin-left: 40px;margin-right: -40px;" src="http://35.173.244.11:8000/static/dist/img/ICONO-ALERTAS.png" width="90"/>
+            <img style="margin-left: 40px;margin-right: -40px;" src="" width="90"/>
           </td>
           <td>
             <font style="font-family: arial,helvetica,sans-serif" size="5">
@@ -79,11 +79,11 @@
   </tr>
   <table cellspacing="0" cellpadding="0" style="width: 600px;" align="center" class="container">
     <tr>
-      <td><font size="2" style="margin-left:3%;font-family: arial,helvetica,sans-serif" color="#828282">
+      <!-- <td><font size="2" style="margin-left:3%;font-family: arial,helvetica,sans-serif" color="#828282">
         <b>Producto</b><br>
-      </font></td>
+      </font></td> -->
       <td><font size="2" style="margin-top:-17px;font-family: arial,helvetica,sans-serif" color="#828282">
-        <b>Nombre</b><br>
+        <b>Nombre del Producto</b><br>
       </font></td>
       <td><font size="2" style="margin-top:-18px;font-family: arial,helvetica,sans-serif" color="#828282">
         <b>Precio/Cantidad</b><br>
@@ -96,9 +96,8 @@
     {%for value in carro%}
       <tr>
         {%for k,v in value.items|dictsort:"0.lower" %}
-          {%if k == 'image'%}
-            <td><img style='border-radius:10px;width: 100px;' src='/static/{{v}}' alt='IMG'></td>
-          {%else%}
+          {%if k != 'image'%}
+            <!-- <td><img style='border-radius:10px;width: 100px;' src='{{direction}}{{v}}' alt='IMG'></td> -->
             <td><h2 style='font-size: 12px;'>{{v}}</h2></td>
           {%endif%}
         {%endfor%}
@@ -110,7 +109,7 @@
   <table cellspacing="0" cellpadding="0" style="width: 600px;" align="center" class="container">
     <tr>
     <td><font size="2" style="font-family: arial,helvetica,sans-serif" color="#828282">
-        Recuerde enviar la <b>factura</b> junto al <b>código de compra</b> al siguiente correo: <b>factura@gmail.com</b>
+        Recuerde enviar la <b>factura</b> junto al <b>código de compra</b> al siguiente correo: <b>criollitosmarket@gmail.com</b>
       </font></td>
     </tr><br />
     <tr>
