@@ -50,7 +50,6 @@ class backStart():
     def guardaCompra(self):
         def hilo2():
             try:
-                print ("Voy a confirmar",self._request.POST)
                 ########################codigo de seguridad de compra###################
                 def ran_gen(size, chars=string.ascii_uppercase + string.digits):
                     return ''.join(random.choice(chars) for x in range(size))
@@ -98,7 +97,6 @@ class backStart():
                     total=''
                 )
                 historialCompras.save()
-                print ("historial uardado")
                 ###############################
                 #Envio la factura por email
                 carroEmail = {'compra':[]}
@@ -114,7 +112,6 @@ class backStart():
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
                 carroEmail['totalGeneral'] = totalGeneral
                 carroEmail['totalCompleto'] = carroEmail['totalGeneral']+Tools.objects.get(pk=1).costoenvio
-                print("salida al email")
                 msg_html = render_to_string('market/facturaCompra.html',
                     {
                         'asunto':'Factura' ,

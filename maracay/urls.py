@@ -53,4 +53,4 @@ urlpatterns = [
 #verificacion_compras()
 
 #proces de agregar costo de envio
-agrega_costo()
+# agrega_costo()

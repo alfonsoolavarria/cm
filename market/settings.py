@@ -77,15 +77,15 @@ WSGI_APPLICATION = 'market.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'ENGINE': 'django.db.backends.sqlite3',
         #'TIMEOUT':2,
-        # 'NAME': 'criollitos',
-        # 'USER': 'postgres',
-        # 'PASSWORD': '1q2w3e4r',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'criollitos',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -152,11 +152,9 @@ STATIC_URL = '/static/'
 #
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-print(BASE_DIR)
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/upload')
 MEDIA_URL = '/images/upload/imagesp/'
-# print(MEDIA_URL)
 ##################
 
 # Static files (CSS, JavaScript, Images)
