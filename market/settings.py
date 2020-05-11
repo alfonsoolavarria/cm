@@ -153,8 +153,8 @@ STATIC_URL = '/static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/upload')
-MEDIA_URL = '/images/upload/imagesp/'
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static/images/upload')
+MEDIA_URL = PROJECT_ROOT+'/static/images/upload/imagesp/'
 ##################
 
 # Static files (CSS, JavaScript, Images)

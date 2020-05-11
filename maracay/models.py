@@ -1,19 +1,24 @@
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+
 
 # Create your models here.
 class Product(models.Model):
     __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')))
     id=models.AutoField(primary_key=True)
-    name=models.CharField(max_length=100)
-    price=models.DecimalField(max_digits=30, decimal_places=2)
-    pricebs=models.DecimalField(max_digits=30, decimal_places=2,default=1)
-    description=models.CharField(max_length=200)
-    name_image=models.CharField(max_length=50)
+    name=models.CharField(max_length=100,help_text="Alias de la imagen")
+    price=models.DecimalField(max_digits=30, decimal_places=2,help_text="Precio en Dolares")
+    pricebs=models.DecimalField(max_digits=30, decimal_places=2,default=1,help_text="Precion en Bolivares")
+    description=models.CharField(max_length=200,help_text="Descripcion del producto")
+    name_image=models.CharField(max_length=50,help_text="Debes colocar el nombre de la imagen con la extension por ejemplo: imagen.png ")
     picture = models.ImageField(upload_to='imagesp')
-    cant=models.PositiveSmallIntegerField(default=1)
-    category=models.PositiveSmallIntegerField(choices=__cate)
+    cant=models.PositiveSmallIntegerField(default=1,help_text="Cantidad disponible el producto en el almacen")
+    category=models.PositiveSmallIntegerField(choices=__cate,help_text="Seleccione una categoria del producto")
     create_at=models.DateTimeField(auto_now_add=True,null=True)
 
 class Profile(models.Model):
@@ -71,3 +76,15 @@ class PagosImagenes(models.Model):
     email_user=models.CharField(max_length=200)
     picture = models.ImageField(upload_to='imagespagos')
     create_at=models.DateTimeField(auto_now_add=True,null=True)
+
+class DolarBolivar(models.Model):
+    id=models.AutoField(primary_key=True)
+    bolivar=models.DecimalField(max_digits=30, decimal_places=2,help_text="Cambia el dolar al precio actual y todos los precios de los productos en bolivares cambiaran al instante")
+
+@receiver(post_save, sender=DolarBolivar, dispatch_uid="update_bolivares_product")
+def update_bolivares_product(sender, instance, **kwargs):
+    update_ = Product.objects.all()
+    for value in update_:
+        value.pricebs = instance.bolivar
+        value.pricebs = value.price*instance.bolivar
+        value.save()
