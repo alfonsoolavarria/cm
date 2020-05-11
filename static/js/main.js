@@ -305,7 +305,7 @@
         $('.item-slick3').data('thumb',e.currentTarget.dataset.image);
         $('#imageDinamic2').attr('href',e.currentTarget.dataset.image);
         $('.mtext-105').text(e.currentTarget.dataset.name);//name
-        $('.mtext-106').text(e.currentTarget.dataset.price);//price
+        $('.mtext-106').text("$"+e.currentTarget.dataset.price+"-Bs"+e.currentTarget.dataset.pricebs);//price
         $('.stext-102').text(e.currentTarget.dataset.description);//description
         $('.cantHidden').text(e.currentTarget.dataset.cant);//cantidad de productos
         $('#imageDinamic').append("<img id='' src='"+e.currentTarget.dataset.image+"' alt=''>");//description

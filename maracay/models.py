@@ -8,6 +8,7 @@ class Product(models.Model):
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=100)
     price=models.DecimalField(max_digits=30, decimal_places=2)
+    pricebs=models.DecimalField(max_digits=30, decimal_places=2,default=1)
     description=models.CharField(max_length=200)
     name_image=models.CharField(max_length=50)
     picture = models.ImageField(upload_to='imagesp')
