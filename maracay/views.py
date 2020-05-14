@@ -382,7 +382,12 @@ def CartOrder(request):
             'code':200
             }
         except Exception as e:
-            print (e)
+            logout(request)
+            _allproducts = backStart(request)
+            _allproducts.get('all')
+            data = _allproducts.response_data
+            data['code'] = _allproducts.code
+            return render(request, 'market/index.html',{'data':data['data'][0] if data['data'] else {} })
 
     return render(request, 'market/order.html',data)
 

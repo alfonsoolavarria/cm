@@ -151,10 +151,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 #
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT,'static')
+STATICFILES_DIRS = (os.path.join(STATIC_ROOT, 'static'),)
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static/images/upload')
 MEDIA_URL = PROJECT_ROOT+'/static/images/upload/imagesp/'
+print(STATIC_ROOT)
+print(STATICFILES_DIRS)
+print(MEDIA_ROOT)
+print(MEDIA_URL)
+
 ##################
 
 # Static files (CSS, JavaScript, Images)
