@@ -40,7 +40,7 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
         "email":email,"nombre":nombre,
         "apellido":apellido,
         }
-    to = [{"email":email,"name":firstname}]
+    to = [{"email":email,"nombre":nombre}]
 
 
     if template == "registro":
