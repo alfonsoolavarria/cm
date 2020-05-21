@@ -77,6 +77,7 @@ $(document).ready(function() {
         phone:dataObj.telefono,
         direction:dataObj.direccion,
       }).done(function (result) {
+        console.log("resultresult",result);
         if (result.code==200) {
           alertify.success('Usuario Creado con Éxito');
           var delayInMilliseconds = 1000; //menos de 1 second

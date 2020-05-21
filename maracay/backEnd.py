@@ -217,6 +217,7 @@ class profileBackend():
             return self.response_data['error'].append("Debe insertar una Dirección")
         try:
             with transaction.atomic():
+                flag = False
                 try:
                     getVerifiedUser = User.objects.get(username=inssertDict['username'])
                     self.code = 500
@@ -227,11 +228,13 @@ class profileBackend():
                     creteProfile = Profile(**inssertDictProfile)
                     creteProfile.save()
                     print("save user")
-                    try:
-                        print("enviando emaal")
-                        sendinblue_send(1,inssertDict['email'],inssertDict['first_name'],inssertDict['last_name'],None)
-                    except Exception as e:
-                        print('Emailerror',e)
+                    flag = True
+            try:
+                if flag:
+                    print("enviando emaal")
+                    sendinblue_send('registro',inssertDict['email'],inssertDict['first_name'],inssertDict['last_name'],None)
+            except Exception as e:
+                print('Emailerror',e)
         except Exception as e:
             print (e)
             self.code = 500
@@ -239,16 +242,21 @@ class profileBackend():
 
 
     def accountData(self):
-        dataA = purchaseHistory.objects.all()
-        for a in dataA:
-            tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
-            self.response_data['data'].append({
-            "code_purchase":a.code_purchase,
-            "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
-            "state":tabladecompra.confirmation,
-            "payment_type":tabladecompra.payment_type,
-            "start_date":tabladecompra.start_date-timedelta(hours=4),
-            })
+        try:
+            dataA = purchaseHistory.objects.all()
+            for a in dataA:
+                tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
+                if tabladecompra:
+                    self.response_data['data'].append({
+                    "code_purchase":a.code_purchase,
+                    "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
+                    "state":tabladecompra.confirmation,
+                    "payment_type":tabladecompra.payment_type,
+                    "start_date":tabladecompra.start_date-timedelta(hours=4),
+                    })
+        except Exception as e:
+            print("account",e)
+
 
 
 
