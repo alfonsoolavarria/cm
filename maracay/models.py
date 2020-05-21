@@ -4,9 +4,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-
-
 # Create your models here.
 class Product(models.Model):
     __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')))

@@ -1,0 +1,12 @@
+@media screen and (min-width:600px){
+  #unook{
+    background-image:none;
+    background-color:black;
+  }
+}
+@media screen and (max-width:320px){
+  #unook{
+    background-image:none;
+    background-color:black;
+  }
+}

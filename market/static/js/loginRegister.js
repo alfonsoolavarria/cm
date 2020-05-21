@@ -29,7 +29,16 @@ $(document).ready(function() {
 
   $('#msform').submit(function (e) {
     e.preventDefault();
-    /*console.log('Registro',e.currentTarget);
+    var formData = $("#msform").serializeArray()
+    len = formData.length,
+    dataObj = {};
+    for (i=0; i<len; i++) {
+      dataObj[formData[i].name] = formData[i].value;
+    }
+    console.log(dataObj);
+
+    /*console.log("nuevo registro");
+    console.log('Registro',e.currentTarget);
     console.log(e.currentTarget[1].value); // email
     console.log(e.currentTarget[2].value); // password
     console.log(e.currentTarget[3].value); // confir password
@@ -42,34 +51,31 @@ $(document).ready(function() {
     console.log(e.currentTarget[13].value); // Tw
     console.log(e.currentTarget[14].value); // Fb
     console.log(e.currentTarget[15].value); // Goo*/
-
-    if (e.currentTarget[2].value.length>0 && e.currentTarget[3].value.length>0 &&
-      e.currentTarget[1].value.length>0 && e.currentTarget[6].value.length>0 &&
-      e.currentTarget[7].value.length>0 && e.currentTarget[8].value && e.currentTarget[9].value) {
+    if (len>0) {
 
         function validateEmail(email) {
           var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return re.test(email);
         }
 
-      var validate = validateEmail(e.currentTarget[1].value);
+      var validate = validateEmail(dataObj.email);
       if (!validate ) {
         swal("Email incorrecto", " ", "warning");
         //alertify.error("Email incorrecto");
         return false;
       }
+      if (dataObj.pass != dataObj.pass2) {
+        swal("Claves incorrectas", " ", "warning");
+        return false;
+      }
 
       $.post('/profile/',{
-        csrfmiddlewaretoken:e.currentTarget[0].value,
-        email:e.currentTarget[1].value,
-        password:e.currentTarget[2].value,
-        name:e.currentTarget[6].value,
-        lastname:e.currentTarget[7].value,
-        phone:e.currentTarget[8].value,
-        direction:e.currentTarget[9].value,
-        rif:e.currentTarget[13].value,
-        localphone:e.currentTarget[14].value,
-        reference:e.currentTarget[15].value
+        email:dataObj.email,
+        password:dataObj.pass,
+        name:dataObj.fname,
+        lastname:dataObj.lname,
+        phone:dataObj.telefono,
+        direction:dataObj.direccion,
       }).done(function (result) {
         if (result.code==200) {
           alertify.success('Usuario Creado con Éxito');
@@ -93,8 +99,6 @@ $(document).ready(function() {
       swal("Hace falta llenar un campo requerido", " ", "warning");
       //alertify.error('Hace falta llenar un campo requerido');
     }
-
-
 
    });
 

@@ -4,7 +4,13 @@
 	{% include "market/head.html" %}
 <body class="animsition">
 	{% include "market/header.html" %}
-	<style>
+	{% include "market/scripts.html" %}
+	<!-- <style>
+		search{
+			border: 1px solid black;
+		}
+	</style> -->
+	<!-- <style>
 	.register{
     background: -webkit-linear-gradient(left, #3931af, #00c6ff);
     margin-top: 3%;
@@ -100,7 +106,7 @@
     margin-bottom: -15%;
     color: #495057;
 }
-</style>
+</style> -->
   <div class="container" style="margin-top:100px;font-size:medium;">
     <div class="row">
        <div class="col-md-12" style="margin-top:20px;margin-bottom:100px;text-align:center;">
@@ -113,36 +119,12 @@
     </div>
   </div>
 
-  <!-- <div class="container">
-    <div class="row">
-      <div class="col-md-2">
-        <div class="">
-          <a href="#">Productos</a>
-        </div>
-        <div class="">
-          <a href="#">Usuarios</a>
-        </div>
-      </div>
-      <div class="col-md-10">
-        <div class="">
-          contenido
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-	<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
-<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="container register">
+<!-- <div class="container register">
 	<div class="row">
       <div class="col-md-3 register-left">
           <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
           <h3>Panel de Administraciòn</h3>
           <p></p>
-          <!-- <input type="submit" name="" value="Login"/><br/> -->
       </div>
       <div class="col-md-9 register-right">
           <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -162,37 +144,9 @@
 											<label for="inputPlaceholderEx">Ingrese el % (porcentaje) que desea aumentar a los precios</label>
                     	<input type="number" class="form-control" placeholder="% (porcentaje)" value="" required/>
                     </div>
-                    <!-- <div class="form-group">
-                    	<input type="text" class="form-control" placeholder="Precio" value="" required/>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Descripcion" value="" required/>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control"  placeholder="Cantidad" value="" required/>
-                    </div> -->
+
 										<input type="submit" class="btnRegister" value="Editar"/>
                   </div>
-                  <!-- <div class="col-md-6"> -->
-                      <!-- <div class="form-group">
-                          <input type="file" class="form-control" placeholder="Imagen" value="" />
-                      </div> -->
-                      <!-- <div class="form-group">
-                          <input type="text" minlength="10" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Your Phone *" value="" />
-                      </div> -->
-                      <!-- <div class="form-group">
-                          <select class="form-control">
-                              <option class="hidden" selected disabled>Categoria</option>
-                              <option value="1">Viveres</option>
-                              <option value="2">Frigorifico</option>
-                              <option value="3">Enlatados</option>
-                          </select>
-                      </div> -->
-                      <!-- <div class="form-group">
-                          <input type="text" class="form-control" placeholder="Enter Your Answer *" value="" />
-                      </div> -->
-
-                  <!-- </div> -->
 
 									<div class="flex-w flex-sb-m p-b-52">
 										<div class="flex-w flex-l-m filter-tope-group m-tb-10">
@@ -212,7 +166,7 @@
 												<a href="/criollitos/market/admin/enlatados/">Enlatados</a>
 											</button>
 										</div>
-										<!-- Search product -->
+
 										<div class="dis-none panel-search w-full p-t-10 p-b-15">
 											<div class="bor8 dis-flex p-l-15">
 												<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
@@ -225,13 +179,13 @@
 									</div>
 									<div class="bs-docs-example">
 										<div class="row isotope-grid1">
-										<!-- Productos -->
+
 										{%for value in data%}
 						         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
 							         <div class="block2">
 						             <div class="block2-pic hov-img0">
 						               <img style="border-radius:60px;" height="210" width="210" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">
-						               <!--modal=js-show-modal1 -->
+
 													 {%if value.cant == 0 %}
 														 <label style="color:red;" class="block2-btn flex-c-m stext-103 size-102 bg0 bor2 p-lr-15 trans-04">
 															 No disponible
@@ -247,8 +201,6 @@
 							            </div>
 							            <div class="block2-txt-child2 flex-r p-t-3">
 						              	<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-							              	<!-- <img class="icon-heart1 dis-block trans-04" src="{% static "images/icons/icon-heart-01.png" %}"> -->
-							                <!-- <img class="icon-heart2 dis-block trans-04 ab-t-l" src="{% static "images/icons/icon-heart-02.png" %}"> -->
 						                </a>
 													</div>
 							           </div>
@@ -269,34 +221,10 @@
                   <div class="form-group">
                       <input type="text" class="form-control" placeholder="Còdigo de Compra" value="" />
                   </div>
-                  <!-- <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Last Name *" value="" />
-                  </div>
-                  <div class="form-group">
-                      <input type="email" class="form-control" placeholder="Email *" value="" />
-                  </div>
-                  <div class="form-group">
-                      <input type="text" maxlength="10" minlength="10" class="form-control" placeholder="Phone *" value="" />
-                  </div> -->
+
               </div>
               <div class="col-md-6">
-                  <!-- <div class="form-group">
-                      <input type="password" class="form-control" placeholder="Password *" value="" />
-                  </div>
-                  <div class="form-group">
-                      <input type="password" class="form-control" placeholder="Confirm Password *" value="" />
-                  </div> -->
-                  <!-- <div class="form-group">
-                      <select class="form-control">
-                          <option class="hidden"  selected disabled>Please select your Sequrity Question</option>
-                          <option>What is your Birthdate?</option>
-                          <option>What is Your old Phone Number</option>
-                          <option>What is your Pet Name?</option>
-                      </select>
-                  </div> -->
-                  <!-- <div class="form-group">
-                      <input type="text" class="form-control" placeholder="`Answer *" value="" />
-                  </div> -->
+
                   <input type="submit" class="btnRegister"  value="Buscar" style="margin-top: 0px;"/>
               </div>
             </div>
@@ -305,7 +233,76 @@
       </div>
   </div>
 
+	</div> -->
+
+
+<!-- Nav bar nuevo Admin -->
+
+<nav class="navbar navbar-expand-lg navbar-dark primary-color mx-auto" style="bottom:30px;width:350px;">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Cotizacion<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Precios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Fin de Nav bar nuevo -->
+<div class="" style="text-align: center;">
+	 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
+	 <h4><b>Productos</b></h4>
+</div>
+
+<table id="productsAdmin" class="display mx-auto table table-striped table-bordered" style="width:90%">
+			<thead>
+					<tr>
+							<th>category</th>
+							<th>id</th>
+							<th>name</th>
+							<th>cant</th>
+							<th>description date</th>
+							<th>name_image</th>
+							<th>price</th>
+							<th>pricebs</th>
+					</tr>
+			</thead>
+	</table>
+	<div class="" style="text-align: center;">
+		 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
+		 <h4><b>Cotizacion</b></h4>
 	</div>
+
+<table id="cotizaciontable" class="display mx-auto table table-striped table-bordered" style="width:90%">
+			<thead>
+					<tr>
+							<th>category</th>
+							<th>id</th>
+							<th>name</th>
+							<th>cant</th>
+							<th>description date</th>
+							<th>name_image</th>
+							<th>price</th>
+							<th>pricebs</th>
+					</tr>
+			</thead>
+	</table>
+	<button type='button' id='buttonadd' class='btn btn-danger btn-rounded btn-sm'>Quitar producto seleccionado</button>
+
+
 
     {% include "market/footer.html" %}
     <!-- Back to top -->
@@ -314,6 +311,132 @@
     	<i class="zmdi zmdi-chevron-up"></i>
     </span>
     </div>
-      {% include "market/scripts.html" %}
+			<script type="text/javascript">
+			var editor;
+			$(document).ready(function() {
+
+		// 		editor = new $.fn.dataTable.Editor( {
+    //     "table": "#cotizaciontable",
+    //     "fields": [ {
+    //             "label": "category:",
+    //             "name": "category"
+    //         }, {
+    //             "label": "id:",
+    //             "name": "id"
+    //         }, {
+    //             "label": "name:",
+    //             "name": "name"
+    //         }, {
+    //             "label": "cant:",
+    //             "name": "cant"
+    //         }, {
+    //             "label": "description:",
+    //             "name": "description"
+    //         }, {
+    //             "label": "name_image:",
+    //             "name": "name_image",
+    //             // type: "datetime"
+    //         }, {
+    //             "label": "price:",
+    //             "name": "price"
+    //         }, {
+    //             "label": "pricebs:",
+    //             "name": "pricebs"
+    //         }
+    //     ]
+    // } );
+		//
+		// // Activate an inline edit on click of a table cell
+    // $('#cotizaciontable').on( 'click', 'tbody td:not(:first-child)', function (e) {
+    //     editor.inline( this );
+    // } )
+
+				var tableCotizacion = $('#cotizaciontable').DataTable({
+					// "dom": 'frtipB',
+					"dom": 'Bfrtip',
+					"buttons": [
+            'excel', 'pdf','colvis'
+        ],
+					"columns": [
+							{ "data": "category" },
+							{ "data": "id" },
+							{ "data": "name" },
+							{ "data": "cant" },
+							{ "data": "description" },
+							{ "data": "name_image" },
+							{ "data": "price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
+							{ "data": "pricebs" }
+					]
+				});
+
+				var table = $('#productsAdmin').DataTable( {
+							"ajax": {
+				        "url": "all/product/",
+				        "dataSrc": 'data'
+	    				},
+							"columns": [
+									{ "data": "category" },
+									{ "data": "id" },
+									{ "data": "name" },
+									{ "data": "cant" },
+									{ "data": "description" },
+									{ "data": "name_image" },
+									{ "data": "price" },
+									{ "data": "pricebs" }
+							]
+					});
+
+					// console.log(table.rows( { selected: true } ).data())
+					// $("#productsAdmin_wrapper").width('90%')
+					$("#productsAdmin_filter").css('position','inherit')
+					$("#productsAdmin_filter").css('left','-80px')
+					$("#productsAdmin_filter.label.input").parent().css('border','1px solid black')
+
+					// Selecciona las filas
+					$('#productsAdmin tbody').on( 'click', 'tr', function () {
+		        if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+								datosadd = tableCotizacion.rows().data();
+								listaid = []
+								if (datosadd.length>0) {
+									for (var i = 0; i < datosadd.length; i++) {
+										listaid.push(datosadd[i].id);
+										}
+										// console.log(listaid);
+										if (listaid.includes(table.row( this ).data().id)== false) {
+										tableCotizacion.row.add(table.row( this ).data()).draw();
+									}
+								}else {
+									tableCotizacion.row.add(table.row( this ).data()).draw();
+								}
+		        }
+	    		} );
+
+					// Eliminar product cotizado
+					$('#cotizaciontable tbody').on( 'click', 'tr', function () {
+						if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+								// $("#buttonadd").remove();
+		        }
+		        else {
+							// $("#buttonadd").remove();
+							tableCotizacion.$('tr.selected').removeClass('selected');
+							$(this).addClass('selected');
+							// $(this).append("")
+						}
+					});
+					$('#buttonadd').click( function () {
+						tableCotizacion.row('.selected').remove().draw( false );
+					});
+			});
+
+
+
+
+			</script>
   </body>
 </html>

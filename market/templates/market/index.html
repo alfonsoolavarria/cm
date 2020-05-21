@@ -2,58 +2,37 @@
 <!DOCTYPE html>
 <html lang="en">
 	{% include "market/head.html" %}
+	<style>
+	#unook{
+		background-image:url({% static "images/tercera.png" %});
+	}
+	@media only screen and (max-width: 500px) and (min-width: 341px){
+
+		#unook{
+			/* background-image:url('/static/images/div2.png'); */
+			background-image:url({% static "images/div2.png" %});
+			/* background-color:black; */
+		}
+	}
+	@media only screen and (max-width: 340px) and (min-width: 5px){
+
+		#unook{
+			/* background-image:url('/static/images/div1.png'); */
+			background-image:url({% static "images/div1.png" %});
+			/* background-color:red; */
+		}
+	}
+	</style>
 <body class="animsition">
 	{% include "market/header.html" %}
-
 	<!-- Click Cart -->
 	<!-- Slider -->
 	<section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
-				<!-- <div class="item-slick1" style="background-image:url({% static "images/slide-033.jpg" %})" >
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									Frigorifico
-								</span>
-							</div>
-
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInUpRight" data-delay="800">
-								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									Fresca Carne
-								</h2>
-							</div>
-
-							<div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
-								<a href="/frigorifico/" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Comprar ahora
-								</a>
-							</div>
-						</div>
-					</div>
-				</div> -->
-				<div class="item-slick1" style="background-image:url({% static "images/slide-cobertura.jpg" %})" >
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									COBERTURA
-								</span>
-							</div>
-
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInUpRight" data-delay="800">
-								<h4 class="ltext-201 cl2 p-t-19 p-b-43 respon1" style="font-size:31px;">
-									Maracay, Turmero, Cagua<br>
-									El limon, Palo Negro
-								</h4>
-							</div>
-
-							<div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
-								¡Disponibles!
-							</div>
-						</div>
-					</div>
+				<!-- style="background-image:url({% static "images/tercera.png" %})" -->
+				<div id="unook" class="item-slick1"  >
+				<!-- <div id="unook" class="item-slick1" > -->
 				</div>
 			</div>
 		</div>
@@ -107,9 +86,9 @@
 				<!-- Productos -->
 				{%for value in contacts%}
          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-	         <div class="block2">
+	         <div class="block2" class="border border-dark rounded mb-0" style="webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);">
              <div class="block2-pic hov-img0">
-              <img style="border-radius:60px;" height="210" width="210" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">
+              <img style="border-radius:60px;" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">
                <!--modal=js-show-modal1 -->
 							 {%if value.cant != 0 %}
 	               <a href="#" style="left:25%;min-width: 10px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-price="{{value.price}}" data-pricebs="{{value.pricebs}}" data-id="{{value.id}}" data-description="{{value.description}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">

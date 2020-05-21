@@ -9,6 +9,7 @@ from django.conf import settings
 from datetime import datetime, timedelta, date, time
 import schedule, time, pytz, datetime
 from maracay import verificacion_compras
+from maracay.sendinblue import sendinblue_send
 
 class backStart():
     def __init__(self, request):
@@ -181,12 +182,15 @@ class profileBackend():
 
     def post(self):
         #creacion de Usuario
+        print ("???......")
+        print(self._request.POST)
         inssertDict = {}
         inssertDictProfile = {}
         if 'email' in self._request.POST:
             inssertDict['email'] = self._request.POST['email']
             inssertDict['username'] = self._request.POST['email']
         else:
+            self.code = 409
             return self.response_data['error'].append("Error al crear Usuario/Sin email")
 
         if 'name' in self._request.POST:
@@ -197,33 +201,20 @@ class profileBackend():
         if 'password' in self._request.POST:
             inssertDict['password'] = self._request.POST['password']
         else:
+            self.code = 409
             return self.response_data['error'].append("Error al crear Usuario/Sin contraseña")
 
         if 'phone' in self._request.POST:
             inssertDictProfile['phone'] = self._request.POST['phone']
         else:
+            self.code = 409
             return self.response_data['error'].append("Debe insertar un número célular")
 
         if 'direction' in self._request.POST:
             inssertDictProfile['direction'] = self._request.POST['direction']
         else:
+            self.code = 409
             return self.response_data['error'].append("Debe insertar una Dirección")
-
-        if 'rif' in self._request.POST:
-            inssertDictProfile['rif'] = self._request.POST['rif']
-        else:
-            inssertDictProfile['rif'] = ''
-
-        if 'localphone' in self._request.POST:
-            inssertDictProfile['localphone'] = self._request.POST['localphone']
-        else:
-            inssertDictProfile['localphone'] = ''
-
-        if 'reference' in self._request.POST:
-            inssertDictProfile['reference'] = self._request.POST['reference']
-        else:
-            inssertDictProfile['reference'] = ''
-
         try:
             with transaction.atomic():
                 try:
@@ -235,6 +226,12 @@ class profileBackend():
                     inssertDictProfile['user'] = user
                     creteProfile = Profile(**inssertDictProfile)
                     creteProfile.save()
+                    print("save user")
+                    try:
+                        print("enviando emaal")
+                        sendinblue_send(1,inssertDict['email'],inssertDict['first_name'],inssertDict['last_name'],None)
+                    except Exception as e:
+                        print('Emailerror',e)
         except Exception as e:
             print (e)
             self.code = 500
@@ -319,6 +316,20 @@ class adminSite():
         self.user = 0
         self.response_data = {'error':[], 'data':[]}
         self.code = 200
+
+    def allProductsTable(self):
+        print("----???legueee")
+        for a in Product.objects.all():
+            self.response_data['data'].append({
+            "category":a.category,
+            "id":a.id,
+            "name":a.name,
+            "cant":a.cant,
+            "description":a.description,
+            "name_image":a.name_image,
+            "price":float(a.price),
+            "pricebs":float(a.pricebs)
+            })
 
     def dataProductUser(self):
         self.response_data['cantTotal']= Product.objects.all()

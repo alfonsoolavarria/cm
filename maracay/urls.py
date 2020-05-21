@@ -4,7 +4,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
     Places, Payment, Delivery, ControlAdmin, AllProducts,FrigorificoProducts,
     EnlatadosProducts,ViveresProducts, CartShopping, CartOrder, ConfimationOrder,HelpForm,
     CartOrderEntrega,Restore,Forgot,ForgotMail,AllProductsAdmin,ViveresProductsAdmin,
-    FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail)
+    FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail,AllProductsAdminTable,Register)
 from django.conf import settings
 from django.conf.urls import url
 from maracay import agrega_costo
@@ -12,6 +12,7 @@ from maracay import agrega_costo
 urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
     url(r'^account/$', Account.as_view(), name='account'),
+    url(r'^account/register/user/$', csrf_exempt(Register), name='registerUser'),
     url(r'^conditions/$', Conditions, name='Conditions'),
     url(r'^login/$', csrf_exempt(Login.as_view()), name='login'),
     url(r'^logout/$', csrf_exempt(Logout.as_view()), name='logout'),
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^delivery/$', Delivery, name='delivery'),
     #administrador
     url(r'^criollitos/market/admin/$', ControlAdmin.as_view(), name='admin'),
+    url(r'^criollitos/market/admin/all/product/$', csrf_exempt(AllProductsAdminTable), name='prodtable'),
     url(r'^criollitos/market/admin/all/$', AllProductsAdmin, name='adminall'),
     url(r'^criollitos/market/admin/viveres/$', ViveresProductsAdmin, name='adminviveres'),
     url(r'^criollitos/market/admin/frigorifico/$', FrigorificoProductsAdmin, name='adminfrigorifico'),

@@ -1,70 +1,52 @@
 {% load static %}
 {% block content %}
-<div class="container">
+
+<div class="container mt-5 mb-5">
   <div class="row">
-    <div class="col-md-6" style="border:1px solid;border-bottom-color: white;border-left-color: white;border-top-color: white;border-style: dotted;">
-      <form method="post" class="login">{% csrf_token %}
-        <h3 style="font-style: oblique;font-weight: 900;">Iniciar Sesión</h3><br>
-        <h4 style="color:#6c7ae0;">¡Si ya tienes una cuenta entra!</h4>
-        <fieldset id="login" style="">
-          <img id="profile-img" class="profile-img-card" src="{%static "images/avatar.png" %}" />
-          <input style="font-size:large;" type="text" name="email" placeholder="Email" required/>
-          <input style="font-size:medium;" type="password" name="pass" placeholder="Password" required/>
-          <button type="submit" class="btn btn-primary btn-block btn-flat" id="loginSubmit">Iniciar Sesión</button>
-          <div class="opciouno" style="margin-top: 10px;">
-            <div class="">
-              <a class="text-center" href="/restore">
-                Olvide mi contraseña
-              </a>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-    </div>
+    <div class="col-md-3"></div>
+    <!-- seccion login -->
     <div class="col-md-6">
-      <!-- multistep form -->
-      <form id="msform">
-        <h3 style="margin-bottom:10%;font-style: oblique;font-weight: 900;">Registro de Usuario</h3>
-        <!-- progressbar -->
-        <ul id="progressbar" style="margin-top: -4%;margin-bottom:2%;">
-          <li id="m1" class="active" style="font-size: small;color:black;">Email</li>
-          <li id="m2" style="font-size: small;color:black;">Datos Básicos</li>
-          <li id="m3" style="font-size: small;color:black;">Direcciones</li>
-        </ul>
-        <!-- fieldsets -->
-        <fieldset style="position:relative;">
-          <h2 class="fs-title">Email</h2>
-          <h3 class="fs-subtitle">Paso 1</h3>
-          <input style="font-size:medium;" type="text" id="1email" name="email" placeholder="Email" required/>
-          <input style="font-size:medium;" type="password" id="1pass" name="pass" placeholder="Password" required/>
-          <input style="font-size:medium;" type="password" id="1cpass" name="cpass" placeholder="Confirm Password" required/>
-          <!--<button type="submit" data-section="1" class="btn btn-primary next action-button" style="">Siguiente</button>-->
-          <input type="button" name="next" data-section="1" class="next action-button" value="Siguiente" />
-        </fieldset>
-        <fieldset style="position:relative;">
-          <h2 class="fs-title">Datos Básicos</h2>
-          <h3 class="fs-subtitle">Paso 2</h3>
-          <input style="font-size:medium;" type="text" id="2fname" name="fname" placeholder="Nombre" required/>
-          <input style="font-size:medium;" type="text" id="2lname" name="lname" placeholder="Apellido" required/>
-          <input style="font-size:medium;" type="text" id="2phone" name="phone" placeholder="Celular" />
-          <textarea style="font-size:medium;" name="address" id="2address" placeholder="Dirección de Envío" required></textarea>
-          <input type="button" name="previous" class="previous action-button" value="Anterior" />
-          <!--<button type="submit" class="btn btn-primary previous action-button" style="">Anterior</button>-->
-          <input type="button" name="next" data-section="2" class="next action-button" style="margin-top:-48px;margin-left:50%;" value="Siguiente" />
-          <!--<button type="submit" data-section="2" class="btn btn-primary next2 action-button" style="">Siguiente</button>-->
-        </fieldset>
-        <fieldset style="position:relative;">
-          <h2 class="fs-title">Direcciones</h2>
-          <h3 class="fs-subtitle">Paso 3</h3>
-          <input style="font-size:medium;" type="text" name="rif" placeholder="Número de rif o cédula" required />
-          <input style="font-size:medium;" type="text" name="localphone" placeholder="Número local (Opcional)" />
-          <input style="font-size:medium;" type="text" name="reference" placeholder="Punto de referencia de su dirección (Opcional)" />
-          <input style="font-size:medium;" type="button" name="previous" class="previous action-button" value="Anterior" />
-          <button type="submit" class="btn btn-primary action-button" id="loginRegister" style="top:270px;left:50%;padding:12px;font-family: initial;background-color: #6c7ae0;border-color: #6c7ae0;border-radius:5px;">Enviar</button>
-          <!--<input type="submit" name="submit" class="submit action-button" value="Enviar" style="margin-top: -42px;margin-left:50%;"/>-->
-        </fieldset>
-      </form>
+      <div class="card">
+        <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffe5a0 !important">
+          <strong style="color:black;">Iniciar sesión</strong>
+        </h5>
+        <!--Card content-->
+        <div class="card-body px-lg-5 pt-0">
+          <!-- Form -->
+          <form method="post" class="login text-center" style="color: #757575;">{% csrf_token %}
+            <!-- Email -->
+            <div class="md-form">
+              <input type="email" id="materialLoginFormEmail" name="email" class="form-control">
+              <label for="materialLoginFormEmail">E-mail</label>
+            </div>
+            <!-- Password -->
+            <div class="md-form">
+              <input type="password" id="materialLoginFormPassword" name="pass" class="form-control">
+              <label for="materialLoginFormPassword">Clave</label>
+            </div>
+            <div class="d-flex justify-content-around">
+              <div>
+              </div>
+              <div>
+                <!-- Forgot password -->
+                <a href="">Recuperar clave</a>
+              </div>
+            </div>
+            <!-- Sign in button -->
+            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" id="loginSubmit">Entrar</button>
+
+            <!-- Register -->
+            <p>¿No tienes cuenta?
+              <a href="register/user/">Crear Cuenta</a>
+            </p>
+          </form>
+          <!-- Form -->
+        </div>
+      </div>
     </div>
-  </div>
+    <!-- fin seccion login -->
+    <div class="col-md-3"></div>
 </div>
+</div>
+
 {% endblock %}

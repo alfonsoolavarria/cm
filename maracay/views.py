@@ -122,6 +122,7 @@ class Profile(View):
 
     #creacion de usuarios
     def post(self, request, *args, **kwargs):
+        print("llegeeeeeokokok")
         _newUser = profileBackend(request)
         _newUser.post()
         data = _newUser.response_data
@@ -158,9 +159,24 @@ class Profile(View):
             return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
 #Seccion de Administrador
+def AllProductsAdminTable(request):
+    print(">??????????????")
+    #poner esto and request.user.is_superuser==True para el admin
+    # if str(request.user) != 'AnonymousUser' :#si esta logeado su data
+    _allproductstable = adminSite(request)
+    _allproductstable.allProductsTable()
+    data = _allproductstable.response_data
+    print("data",data)
+    # data = {"a":"a"}
+    return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+    # else:
+    #     return render(request, 'market/adminIndex.html', {})
+
+
 class ControlAdmin(View):
     def get(self, request, *args, **kwargs):
-        if str(request.user) != 'AnonymousUser':#si esta logeado su data
+        #poner esto and request.user.is_superuser==True para el admin
+        if str(request.user) != 'AnonymousUser' :#si esta logeado su data
             _allproductsfilter = adminSite(request)
             _allproductsfilter.dataProductUser()
 
@@ -576,3 +592,6 @@ def Detail(request):
     else:
         data = {'code':500,'message':'Codigo invalido'}
         return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+
+def Register(request):
+    return render(request, 'market/register.html', {'flag':1})
