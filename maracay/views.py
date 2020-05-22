@@ -17,6 +17,7 @@ from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
 import os
+from maracay.sendinblue import sendinblue_send
 # Create your views here.
 #Main Class
 class Maracay(TemplateView):
@@ -122,7 +123,6 @@ class Profile(View):
 
     #creacion de usuarios
     def post(self, request, *args, **kwargs):
-        print("llegeeeeeokokok")
         _newUser = profileBackend(request)
         _newUser.post()
         data = _newUser.response_data
@@ -160,7 +160,6 @@ class Profile(View):
 
 #Seccion de Administrador
 def AllProductsAdminTable(request):
-    print(">??????????????")
     #poner esto and request.user.is_superuser==True para el admin
     # if str(request.user) != 'AnonymousUser' :#si esta logeado su data
     _allproductstable = adminSite(request)
@@ -595,3 +594,12 @@ def Detail(request):
 
 def Register(request):
     return render(request, 'market/register.html', {'flag':1})
+
+def SendEmailClient(request):
+    try:
+        email = request.POST.get("email")
+        if email:
+            dataUser = User.objects.get(email=request.POST['email'])
+            sendinblue_send('registro',dataUser.email,dataUser.first_name,dataUser.last_name,None)
+    except Exception as e:
+        pass

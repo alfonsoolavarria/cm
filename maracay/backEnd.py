@@ -182,8 +182,6 @@ class profileBackend():
 
     def post(self):
         #creacion de Usuario
-        print ("???......")
-        print(self._request.POST)
         inssertDict = {}
         inssertDictProfile = {}
         if 'email' in self._request.POST:
@@ -217,26 +215,18 @@ class profileBackend():
             return self.response_data['error'].append("Debe insertar una Dirección")
         try:
             with transaction.atomic():
-                flag = False
                 try:
                     getVerifiedUser = User.objects.get(username=inssertDict['username'])
                     self.code = 500
-                    return self.response_data['error'].append("Ya este Email existe")
+                    return self.response_data['error'].append("Intente con otro email")
                 except Exception as e:
                     user = User.objects.create_user(**inssertDict)
                     inssertDictProfile['user'] = user
                     creteProfile = Profile(**inssertDictProfile)
                     creteProfile.save()
                     print("save user")
-                    flag = True
-            try:
-                if flag:
-                    print("enviando emaal")
-                    sendinblue_send('registro',inssertDict['email'],inssertDict['first_name'],inssertDict['last_name'],None)
-            except Exception as e:
-                print('Emailerror',e)
         except Exception as e:
-            print (e)
+            print ("Error al guardar usuario",e)
             self.code = 500
             return self.response_data['error'].append("Error al crear Usuario"+str(e))
 

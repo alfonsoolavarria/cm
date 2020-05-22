@@ -9,16 +9,16 @@
     <div class="col-md-6">
 <div class="card">
 
-    <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffe5a0 !important">
-        <strong style="color:black;">Registro de Usuario</strong>
+    <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffb700 !important">
+        <strong style="color:black;"><b>Registro de Usuario</b></strong>
     </h5>
 
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
 
         <!-- Form -->
-        <form id="msform" class="text-center login" method="post" style="color: #757575;" action="#!">
-
+        <form id="msform" class="text-center" method="post" style="color: #757575;" action="#!">
+          {% csrf_token %}
             <div class="form-row">
                 <div class="col">
                     <!-- First name -->
@@ -80,14 +80,14 @@
             </div> -->
 
             <!-- Sign up button -->
-            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" id="loginRegister" type="submit">Registrar</button>
+            <button style="color:black !important;border:2px solid #ffb700 !important" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" id="loginRegister" type="submit">Registrar</button>
 
             <hr>
 
             <!-- Terms of service -->
             <p>Al registrarse
                 <em>acepta nuestros</em>
-                <a href="#" target="">Terminos de servicio</a>
+                <a style="color:black;" href="#" target=""><b>Terminos de servicio</b></a>
 
         </form>
         <!-- Form -->

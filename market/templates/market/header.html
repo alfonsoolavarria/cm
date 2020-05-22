@@ -15,10 +15,22 @@
     .main-menu-m>li>a>i{
       color:black
     }
+    .fa-carne{
+      background-image:url({% static "images/icons/meat.svg" %});
+      background-repeat: no-repeat;
+    }
+    .fa-charcuteria{
+      background-image:url({% static "images/icons/food.svg" %});
+      background-repeat: no-repeat;
+    }
+    .fa-vive{
+      background-image:url({% static "images/icons/food.svg" %});
+      background-repeat: no-repeat;
+    }
   </style>
   <header>
     <!-- Header desktop -->
-    <div class="container-menu-desktop" style="background-color:#ffe5a0;">
+    <div class="container-menu-desktop" style="background-color:#ffb700;">
       <!-- Topbar -->
       <div class="top-bar" style="height: 120px;background-color:transparent;">
         <div class="" style="top: 0px;">
@@ -59,11 +71,11 @@
                 </li> -->
 
                 <!-- <li> -->
-                  <li><a href="/all/"><i class="fas fa-store">&nbsp;Todos</i></a></li>
-                  <li><a href="/viveres/"><i class="fas fa-utensils">&nbsp;Viveres</i></a></li>
-                  <li><a href="/frigorifico/"><i class="fas fa-cheese">&nbsp;Charcuteria</i></a></li>
+                  <li><a href="/all/"><i class="fas fa-home">&nbsp;Todos</i></a></li>
+                  <li><a href="/viveres/"><i class="fa-vive">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Viveres</i></a></li>
+                  <li><a href="/frigorifico/"><i class="fa-charcuteria">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charcuteria</i></a></li>
                   <!-- <li><a href="/congelados/"><i class="fa fa-fw fa-car"></i>&nbsp;Congelados</a></li> -->
-                  <li><a href="/enlatados/"><i class="fas fa-drumstick-bite">&nbsp;Carnes</i></a></li>
+                  <li><a href="/enlatados/"><i class="fa-carne">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carnes</i></a></li>
                   <!-- <i class="fa fa-fw fa-cogs"></i><a href="#">Categorias</a>
                   <ul class="sub-menu" style="width: 100%;z-index: 10000;background: #ECEBE5;">
                     <!--<li><a href="home-02.html">Viveres</a></li>
@@ -98,7 +110,7 @@
                 <i class="zmdi zmdi-search"></i>
               </div> -->
 
-              <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" id="cartCesta" data-notify="0">
+              <div style="color:black;" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" id="cartCesta" data-notify="0">
                 <i class="zmdi zmdi-shopping-cart"></i>
               </div>
 
@@ -128,7 +140,7 @@
 
 
     <!-- Header Mobile -->
-    <div class="wrap-header-mobile" style="background-color:#ffe5a0;">
+    <div class="wrap-header-mobile" style="background-color:#ffb700;">
       <!-- Logo moblie  USAR SOLO EL CARRITO PARA Mobile Y ARREGAR TODO LO DEMAS-->
       <div class="logo-mobile">
         <a href="/"><img style="left:-20px;max-width:100%;max-height:130%;" src="{% static "images/icons/criollo.png" %}" alt="IMG-LOGO"></a>

@@ -2,12 +2,19 @@
 {% block content %}
 
 <div class="container mt-5 mb-5">
+  <style>
+    .swal-button{
+      background-color: transparent;
+        border: 1px solid #ffb700;
+        color: black;
+    }
+  </style>
   <div class="row">
     <div class="col-md-3"></div>
     <!-- seccion login -->
     <div class="col-md-6">
       <div class="card">
-        <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffe5a0 !important">
+        <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffb700 !important">
           <strong style="color:black;">Iniciar sesión</strong>
         </h5>
         <!--Card content-->
@@ -29,15 +36,15 @@
               </div>
               <div>
                 <!-- Forgot password -->
-                <a href="">Recuperar clave</a>
+                <a style="color:black;" href="">Recuperar clave</a>
               </div>
             </div>
             <!-- Sign in button -->
-            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" id="loginSubmit">Entrar</button>
+            <button style="color:black !important;border:2px solid #ffb700 !important" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" id="loginSubmit">Entrar</button>
 
             <!-- Register -->
             <p>¿No tienes cuenta?
-              <a href="register/user/">Crear Cuenta</a>
+              <a style="color:black;" href="register/user/">Crear Cuenta</a>
             </p>
           </form>
           <!-- Form -->
