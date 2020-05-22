@@ -47,17 +47,35 @@
             </form>
             <div class="opcioneslist" style="position: absolute;left:890px;top:25px">
               {%if request.user and  user.is_anonymous != True %}
-              <div class="dropdown" style="cursor: pointer;color: #b2b2b2;">
+              <!-- <div class="dropdown" style="cursor: pointer;color: #b2b2b2;">
                 <a class="dropdown-toggle" data-toggle="dropdown" style="color: black;"><i class="fa fa-fw fa-user"></i>{{request.user}}
                   <span class="caret"></span></a>
                   <ul class="dropdown-menu" style="width: 100%;z-index:10000;background: #ECEBE5;">
                     <li><i class="fa fa-fw fa-cog"></i><a style="color:black" href="/account/">Cuenta</a></li>
                     <li><i class="fa fa-fw fa-power-off"></i><a style="color:black" href="/logout/">Cerrar Sesion</a></li>
                   </ul>
+              </div> -->
+              <div class="btn-group" style="top:-7px;">
+                <button class="btn btn-sm dropdown-toggle" style="max-width:230px;background:white;color:black;" type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-fw fa-user"></i>{{request.user.first_name}} {{request.user.last_name}}
+                </button>
+                <div class="dropdown-menu" style="width: 100%;">
+                  <h4 style="text-align: center;color: black;"class="dropdown-header"><b>Hola {{request.user.first_name}}</b></h4>
+                  <h6 style="text-align: center;color: black;"class="dropdown-header">{{request.user}}</h6>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/account">Cuenta</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout/">Cerrar sesion</a>
+                </div>
               </div>
               {%else%}
-                <a href="/account/" style="color:black" class="">
-                  <i class="fa fa-fw fa-user"></i> Mi cuenta
+                <a href="/account/" style="color:black;padding:20px;" class="">
+                  <i class="fa fa-fw fa-user"></i> Ingresa
+                </a>
+                <a href="/account/register/user/" style="color:black" class="">
+                  <i class="fas fa-user-plus"></i> Crear cuenta
                 </a>
               {%endif%}
 
@@ -73,9 +91,9 @@
                 <!-- <li> -->
                   <li><a href="/all/"><i class="fas fa-home">&nbsp;Todos</i></a></li>
                   <li><a href="/viveres/"><i class="fa-vive">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Viveres</i></a></li>
-                  <li><a href="/frigorifico/"><i class="fa-charcuteria">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charcuteria</i></a></li>
+                  <li><a href="/charcuteria/"><i class="fa-charcuteria">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charcuteria</i></a></li>
                   <!-- <li><a href="/congelados/"><i class="fa fa-fw fa-car"></i>&nbsp;Congelados</a></li> -->
-                  <li><a href="/enlatados/"><i class="fa-carne">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carnes</i></a></li>
+                  <li><a href="/carnes/"><i class="fa-carne">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carnes</i></a></li>
                   <!-- <i class="fa fa-fw fa-cogs"></i><a href="#">Categorias</a>
                   <ul class="sub-menu" style="width: 100%;z-index: 10000;background: #ECEBE5;">
                     <!--<li><a href="home-02.html">Viveres</a></li>

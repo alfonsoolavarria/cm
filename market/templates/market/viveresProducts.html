@@ -30,89 +30,12 @@
 				</h3>
 			</div>
 
-			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<button id="allId" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="*">
-						<a href="/all/">Todos los Productos</a>
-					</button>
+			<!-- header de categorias de productos -->
+			{% include "market/categoriaProductos/menuproductos.html" %}
+			<!-- listado de productos -->
+			{% include "market/categoriaProductos/listado.html" %}
 
-					<button id="viveresId" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1">
-						<a href="/viveres/">Viveres</a>
-					</button>
 
-					<button id="frigorificoId" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-						<a href="/frigorifico/">Frigorifico</a>
-					</button>
-
-					<button id="enaltadoId" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-						<a href="/enlatados/">Enlatados</a>
-					</button>
-				</div>
-				<!-- Search product -->
-				<div class="dis-none panel-search w-full p-t-10 p-b-15">
-					<div class="bor8 dis-flex p-l-15">
-						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-							<i class="zmdi zmdi-search"></i>
-						</button>
-
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-					</div>
-				</div>
-			</div>
-
-			<div class="bs-docs-example">
-				<div class="row isotope-grid1">
-					<!-- Productos -->
-					{%for value in contacts%}
-	         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-		         <div class="block2">
-	             <div class="block2-pic hov-img0">
-	               <img style="border-radius:60px;" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">
-	               <!--modal=js-show-modal1 -->
-	               <a href="#" style="left:25%;min-width: 10px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-price="{{value.price}}" data-id="{{value.id}}" data-description="{{value.description}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-									 Detalles
-	               </a>
-	               <a href="#" style="left:70%;min-width:118px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-id="{{value.id}}" data-price="{{value.price}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 addModalCar" id="addItem">
-									 Añadir al <i class="zmdi zmdi-shopping-cart" style="margin-left: 5px;"></i>
-	               </a>
-	             </div>
-	             <div class="block2-txt flex-w flex-t p-t-14">
-		           	<div class="block2-txt-child1 flex-col-l ">
-	             		<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">{{value.name}}</a>
-	                <span class="stext-105 cl3">
-	                  {{value.price}}
-	                 </span>
-		            </div>
-		            <div class="block2-txt-child2 flex-r p-t-3">
-	              	<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-		              	<img class="icon-heart1 dis-block trans-04" src="{% static "images/icons/icon-heart-01.png" %}">
-		                <img class="icon-heart2 dis-block trans-04 ab-t-l" src="{% static "images/icons/icon-heart-02.png" %}">
-	                </a>
-								</div>
-		           </div>
-	          	</div>
-	      		</div>
-	    		{%endfor%}
-			</div>
-
-		  <ul style="left: 40%;position: absolute;"class="pagination pagination-sm">
-				{% if contacts.has_previous %}
-		    <li class="page-item">
-					<!--<a class="page-link" href="?page=1">Primera</a>-->
-      		<a style="margin-right: -5px;margin-top: -3px;"class="page-link" href="?page={{ contacts.previous_page_number }}">«</a>
-		    </li>
-				{% endif %}
-				<span style="margin-left: 10px;"class="current">
-      		<label style="color:#007bff;">P&aacute;gina {{ contacts.number }} de {{ contacts.paginator.num_pages }}.</label>
-  			</span>
-				{% if contacts.has_next %}
-		    <li class="page-item">
-					<a style="margin-left: 4px;margin-top: -3px;" class="page-link" href="?page={{ contacts.next_page_number }}">»</a>
-      		<!--<a class="page-link" href="?page={{ contacts.paginator.num_pages }}">Ultima</a>-->
-		    </li>
-				{% endif %}
-		  </ul>
-			</div>
 		</div>
 	</section>
 

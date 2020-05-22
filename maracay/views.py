@@ -257,7 +257,7 @@ def AllProducts(request):
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
-    return render(request, 'market/allProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+    return render(request, 'market/allProducts.html',{'all':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def ViveresProducts(request):
     _viveresproductsfilter = filterProducts(request)
@@ -272,7 +272,7 @@ def ViveresProducts(request):
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
-    return render(request, 'market/viveresProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+    return render(request, 'market/viveresProducts.html',{'viveres':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def FrigorificoProducts(request):
     _frigorificoproductsfilter = filterProducts(request)
@@ -303,6 +303,37 @@ def EnlatadosProducts(request):
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/enlatadosProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+
+def CharcuteriaProducts(request):
+    _charcuteriaproductsfilter = filterProducts(request)
+    _charcuteriaproductsfilter.charcuteriaProductsFilter()
+
+    data = _charcuteriaproductsfilter.response_data
+    data['code'] = _charcuteriaproductsfilter.code
+
+    contact_list = data['cantTotal']
+    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+    page = request.GET.get('page')
+    contacts = paginator.get_page(page)
+    dataAll = {'contacts':contacts}
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/charcuteriaProducts.html',{'charcuteria':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+
+def CarnesProducts(request):
+    _carnesproductsfilter = filterProducts(request)
+    _carnesproductsfilter.carnesProductsFilter()
+
+    data = _carnesproductsfilter.response_data
+    data['code'] = _carnesproductsfilter.code
+
+    contact_list = data['cantTotal']
+    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+    page = request.GET.get('page')
+    contacts = paginator.get_page(page)
+    dataAll = {'contacts':contacts}
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/carnesProducts.html',{'carne':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+
 
 #Section Filter Prodcuts Admin
 def AllProductsAdmin(request):

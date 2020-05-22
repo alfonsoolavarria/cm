@@ -5,7 +5,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
     EnlatadosProducts,ViveresProducts, CartShopping, CartOrder, ConfimationOrder,HelpForm,
     CartOrderEntrega,Restore,Forgot,ForgotMail,AllProductsAdmin,ViveresProductsAdmin,
     FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail,AllProductsAdminTable,Register,
-    SendEmailClient)
+    SendEmailClient,CharcuteriaProducts,CarnesProducts)
 from django.conf import settings
 from django.conf.urls import url
 from maracay import agrega_costo
@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
     url(r'^account/$', Account.as_view(), name='account'),
     url(r'^account/register/user/$', csrf_exempt(Register), name='registerUser'),
-    url(r'^client/web/email/$', csrf_exempt(SendEmailClient), name='registerUser'),
+    url(r'^client/web/email/$', csrf_exempt(SendEmailClient), name='sendemail'),
     url(r'^conditions/$', Conditions, name='Conditions'),
     url(r'^login/$', csrf_exempt(Login.as_view()), name='login'),
     url(r'^logout/$', csrf_exempt(Logout.as_view()), name='logout'),
@@ -38,8 +38,8 @@ urlpatterns = [
     #filtros
     url(r'^all/$', AllProducts, name='all'),
     url(r'^viveres/$', ViveresProducts, name='viveres'),
-    url(r'^frigorifico/$', FrigorificoProducts, name='frigorifico'),
-    url(r'^enlatados/$', EnlatadosProducts, name='enlatados'),
+    url(r'^charcuteria/$', CharcuteriaProducts, name='charcuteria'),
+    url(r'^carnes/$', CarnesProducts, name='carnes'),
     #carrito de compras
     url(r'^cart/shopping/$', csrf_exempt(CartShopping), name='cartshopping'),
     #caja de compras

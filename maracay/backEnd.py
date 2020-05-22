@@ -307,6 +307,30 @@ class filterProducts():
             "name_image":a.name_image,
             #"price":a.price,
             })
+    def charcuteriaProductsFilter(self):
+        self.response_data['cantTotal']= Product.objects.filter(category=4)
+        for a in Product.objects.filter(category=3):
+            self.response_data['data'].append({
+            "category":a.category,
+            "id":a.id,
+            "name":a.name,
+            "cant":a.cant,
+            "description":a.description,
+            "name_image":a.name_image,
+            #"price":a.price,
+            })
+    def carnesProductsFilter(self):
+        self.response_data['cantTotal']= Product.objects.filter(category=5)
+        for a in Product.objects.filter(category=3):
+            self.response_data['data'].append({
+            "category":a.category,
+            "id":a.id,
+            "name":a.name,
+            "cant":a.cant,
+            "description":a.description,
+            "name_image":a.name_image,
+            #"price":a.price,
+            })
 
 class adminSite():
     def __init__(self, request):
