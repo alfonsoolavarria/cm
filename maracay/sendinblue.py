@@ -31,6 +31,14 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
         if template == "registro":
             tempid = 1
 
+        if template == "contacto":
+            tempid = 2
+            params = {
+                "email":email,"asunto":extra['asunto'],
+                "mensaje":extra['mensaje']
+                }
+            to = [{"email":"criollitosmarket@gmail.com","nombre":"admin"}]
+
         transaction = {
             "to":to,
             # "subject": subject,
@@ -38,8 +46,6 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             "params":params
             }
         response = requests.request("POST",STRANS,json=transaction,headers=headers)
-        print(response)
-        print(response.text)
         return response.text
     except Exception as e:
         print("sendinblue",e)

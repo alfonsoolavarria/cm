@@ -479,24 +479,24 @@ def HelpForm(request):
         try:
             # from django.core.mail import EmailMultiAlternatives
             # from email.mime.image import MIMEImage
-
             asunto = request.POST.get('asunto')
             email = request.POST.get('email')
             mensaje = request.POST.get('mensaje')
-            msg_html = render_to_string('market/emailHelp.html',
-            {
-                "asunto":asunto,
-                "email":email,
-                "mensaje":mensaje,
-            })
-
-            send_mail(
-            asunto,
-            asunto,
-            settings.EMAIL_HOST_USER,#from
-            [request.POST.get('email','')],#to
-            html_message=msg_html,
-            )
+            sendinblue_send('contacto',email,"","",{"asunto":asunto,"mensaje":mensaje})
+            # msg_html = render_to_string('market/emailHelp.html',
+            # {
+            #     "asunto":asunto,
+            #     "email":email,
+            #     "mensaje":mensaje,
+            # })
+            #
+            # send_mail(
+            # asunto,
+            # asunto,
+            # settings.EMAIL_HOST_USER,#from
+            # [request.POST.get('email','')],#to
+            # html_message=msg_html,
+            # )
             #funciona solo que desde el fron hay problemas al enviar la data
             # html_content = render_to_string('market/emailHelp.html', {
             #     "asunto":asunto,
