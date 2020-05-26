@@ -27,6 +27,31 @@
       background-image:url({% static "images/icons/food.svg" %});
       background-repeat: no-repeat;
     }
+    .form-inline {
+      position: relative;
+      left: 150px;
+      top: -50px;
+      width: 660px;
+    }
+    .opcioneslist{
+      position: relative;
+      left: 780px;
+      top: -120px;
+      width: fit-content;
+  }
+  .wrap-icon-header-custom{
+    position: relative;
+    top: -204px;
+    width: 55px;
+    left: 1020px;
+  }
+  .menu-desktop{
+    position: relative;
+    top: -108px;
+    left: 180px;
+    width: fit-content;
+}
+  }
   </style>
   <header>
     <!-- Header desktop -->
@@ -41,11 +66,11 @@
               <img src="{% static "images/icons/criollo.png" %}" alt="IMG-LOGO" style="max-height:70px;">
             </a>
 
-            <form class="form-inline d-flex justify-content-center mb-5" style="width:660px;position: absolute;left:230px;top:25px">
+            <form class="form-inline d-flex justify-content-center mb-5">
               <input class="form-control form-control-sm mr-3 w-75 d-flex justify-content-center" type="text" placeholder="Buscar" aria-label="Buscar">
               <i class="fas fa-search active" aria-hidden="true"></i>
             </form>
-            <div class="opcioneslist" style="position: absolute;left:890px;top:25px">
+            <div class="opcioneslist">
               {%if request.user and  user.is_anonymous != True %}
               <!-- <div class="dropdown" style="cursor: pointer;color: #b2b2b2;">
                 <a class="dropdown-toggle" data-toggle="dropdown" style="color: black;"><i class="fa fa-fw fa-user"></i>{{request.user}}
@@ -82,7 +107,7 @@
             </div>
 
             <!-- Menu desktop -->
-            <div class="menu-desktop" style="position: absolute;top:40px;left:280px;">
+            <div class="menu-desktop">
               <ul class="main-menu">
                 <!-- <li class="active-menu">
                   <i class="fa fa-fw fa-home"></i><a href="/">Inicio</a>
@@ -123,7 +148,7 @@
             </div>
 
             <!-- Icon header -->
-            <div class="wrap-icon-header flex-w flex-r-m" style="top: 23px;position: absolute;left: 1140px;">
+            <div class="wrap-icon-header-custom">
               <!-- <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
                 <i class="zmdi zmdi-search"></i>
               </div> -->
