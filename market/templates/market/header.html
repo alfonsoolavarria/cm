@@ -41,17 +41,17 @@
   }
   .wrap-icon-header-custom{
     position: relative;
-    top: -204px;
-    width: 55px;
-    left: 1020px;
+    top: 20px;
+    width: fit-content;
+    left: 178px;
   }
   .menu-desktop{
     position: relative;
-    top: -108px;
-    left: 180px;
+    top: -135px;
+    left: 188px;
     width: fit-content;
-}
   }
+
   </style>
   <header>
     <!-- Header desktop -->
@@ -72,14 +72,6 @@
             </form>
             <div class="opcioneslist">
               {%if request.user and  user.is_anonymous != True %}
-              <!-- <div class="dropdown" style="cursor: pointer;color: #b2b2b2;">
-                <a class="dropdown-toggle" data-toggle="dropdown" style="color: black;"><i class="fa fa-fw fa-user"></i>{{request.user}}
-                  <span class="caret"></span></a>
-                  <ul class="dropdown-menu" style="width: 100%;z-index:10000;background: #ECEBE5;">
-                    <li><i class="fa fa-fw fa-cog"></i><a style="color:black" href="/account/">Cuenta</a></li>
-                    <li><i class="fa fa-fw fa-power-off"></i><a style="color:black" href="/logout/">Cerrar Sesion</a></li>
-                  </ul>
-              </div> -->
               <div class="btn-group" style="top:-7px;">
                 <button class="btn btn-sm dropdown-toggle" style="max-width:230px;background:white;color:black;" type="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
@@ -103,79 +95,42 @@
                   <i class="fas fa-user-plus"></i> Crear cuenta
                 </a>
               {%endif%}
+              <!-- Icon header -->
+              <div class="wrap-icon-header-custom">
+                <!-- <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+                  <i class="zmdi zmdi-search"></i>
+                </div> -->
 
+                <div style="color:black;" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" id="cartCesta" data-notify="0">
+                  <i class="zmdi zmdi-shopping-cart"></i>
+                </div>
+
+                <!-- <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
+                  <i class="zmdi zmdi-favorite-outline"></i>
+                </a> -->
+              </div>
             </div>
 
             <!-- Menu desktop -->
             <div class="menu-desktop">
               <ul class="main-menu">
-                <!-- <li class="active-menu">
-                  <i class="fa fa-fw fa-home"></i><a href="/">Inicio</a>
-                </li> -->
-
-                <!-- <li> -->
                   <li><a href="/all/"><i class="fas fa-home">&nbsp;Todos</i></a></li>
                   <li><a href="/viveres/"><i class="fa-vive">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Viveres</i></a></li>
                   <li><a href="/charcuteria/"><i class="fa-charcuteria">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Charcuteria</i></a></li>
-                  <!-- <li><a href="/congelados/"><i class="fa fa-fw fa-car"></i>&nbsp;Congelados</a></li> -->
                   <li><a href="/carnes/"><i class="fa-carne">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carnes</i></a></li>
-                  <!-- <i class="fa fa-fw fa-cogs"></i><a href="#">Categorias</a>
-                  <ul class="sub-menu" style="width: 100%;z-index: 10000;background: #ECEBE5;">
-                    <!--<li><a href="home-02.html">Viveres</a></li>
-                    <li><a href="home-03.html">Ferreteria</a></li>-->
                   </ul>
-                <!-- </li>  -->
 
-                <!-- <li class="label1" data-label1="hot">
-                  <a href="shoping-cart.html">Features</a>
-                </li>
-
-                <li>
-                  <a href="blog.html">Blog</a>
-                </li>
-
-                <li>
-                  <a href="about.html">About</a>
-                </li>
-
-                <li>
-                  <a href="contact.html">Contact</a>
-                </li> -->
-              <!-- </ul> -->
               <a href="/help/" class="" style="color:black">
                 <i class="fa fa-fw fa-question"></i> Ayuda & Preguntas
               </a>
-            </div>
-
-            <!-- Icon header -->
-            <div class="wrap-icon-header-custom">
-              <!-- <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                <i class="zmdi zmdi-search"></i>
-              </div> -->
-
-              <div style="color:black;" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" id="cartCesta" data-notify="0">
-                <i class="zmdi zmdi-shopping-cart"></i>
-              </div>
-
-              <!-- <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-                <i class="zmdi zmdi-favorite-outline"></i>
-              </a> -->
             </div>
           </nav>
         </div>
       </div>
         <div class="content-topbar flex-sb-m h-full container">
           <div class="left-top-bar">
-
           </div>
-
           <div class="" style="position: fixed;top: 30px;right: 230px;">
-
-
-            <!-- <a href="#" class="flex-c-m trans-04 p-lr-25">
-              <img src="/static/images/bible.png" style="width: 50px;" alt="">
-             <i class="fa fa-fw fa-money"></i>&nbsp;USD
-            </a> -->
           </div>
         </div>
       </div>
