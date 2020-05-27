@@ -4,11 +4,15 @@
 	{% include "market/head.html" %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static "css/reset.min.css" %}">
-  <link rel="stylesheet" href="{% static "css/forgot.css" %}">
-
-<body class="animsition" translate="no">
+  <!-- <link rel="stylesheet" href="{% static "css/forgot.css" %}"> -->
+	<style>
+	body{
+		font-family:nativa;
+	}
+	</style>
+<body>
   	{% include "market/header.html" %}
-	<div class="container">
+	<!-- <div class="container">
 		<div class="row">
 			<div class="col-md-12" style="">
 				<form class="forgot">{% csrf_token %}
@@ -25,6 +29,53 @@
 				</form>
 			</div>
 		</div>
+	</div> -->
+	<div class="container mt-5 mb-5">
+	  <style>
+	    .swal-button{
+	      background-color: transparent;
+	        border: 1px solid #ffb700;
+	        color: black;
+	    }
+	  </style>
+	  <div class="row">
+	    <div class="col-md-3"></div>
+	    <!-- seccion login -->
+	    <div class="col-md-6">
+	      <div class="card">
+	        <h5 class="card-header info-color white-text text-center py-4" style="background-color:#ffb700 !important">
+	          <strong style="color:black;">Recuperación de Clave</strong>
+	        </h5>
+	        <!--Card content-->
+	        <div class="card-body px-lg-5 pt-0">
+	          <!-- Form -->
+	          <form method="post" class="forgot text-center" style="color: #757575;">{% csrf_token %}
+	            <!-- Email -->
+	            <div class="md-form">
+	              <input type="email" id="forgotuser" name="email" class="form-control">
+	              <label for="materialLoginFormEmail">E-mail</label>
+								<small id="materialRegisterFormPasswordHelpBlockforgot" class="form-text text-muted mb-4">
+                    Recibirà un correo con el proceso de cambio de clave
+                </small>
+	            </div>
+	            <div class="d-flex justify-content-around">
+	              <div>
+	              </div>
+
+	            </div>
+	            <!-- Sign in button -->
+	            <button style="color:black !important;border:2px solid #ffb700 !important" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit" id="forgotSubmit">Enviar Correo</button>
+
+
+	            <img id="profile-img" class="profile-img-card" src="{%static "images/forgot.png" %}" />
+	          </form>
+	          <!-- Form -->
+	        </div>
+	      </div>
+	    </div>
+	    <!-- fin seccion login -->
+	    <div class="col-md-3"></div>
+	</div>
 	</div>
 
 

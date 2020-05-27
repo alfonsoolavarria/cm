@@ -39,6 +39,13 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
                 }
             to = [{"email":"criollitosmarket@gmail.com","nombre":"admin"}]
 
+        if template == "forgot":
+            tempid = 4
+            params = {
+                "email":email,"token":extra['token'],
+                }
+
+
         transaction = {
             "to":to,
             # "subject": subject,

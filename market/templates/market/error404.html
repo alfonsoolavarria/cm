@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include "market/head.html" %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<body >
+	  	{% include "market/header.html" %}
+				<div class="container mt-5 mb-5">
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-6" style="">
+							<div class="card">
+				        <h5 class="card-header info-color white-text text-center py-4" style="background-color:#b93000 !important">
+				          <strong style="color:black;">Error, intente de nuevo</strong>
+				        </h5>
+				        <!--Card content-->
+				        <div class="card-body px-lg-5 pt-0">
+				          <!-- Form -->
+				          <form method="post" class="login text-center" style="color: #757575;">
+				            <img src="{%static "images/404.jpg" %}" alt="">
+				          </form>
+				          <!-- Form -->
+				        </div>
+				      </div>
+						</div>
+							<div class="col-md-3"></div>
+					</div>
+				</div>
+
+			{% include "market/banner.html" %}
+
+			{% include "market/footer.html" %}
+
+			{% include "market/scripts.html" %}
+
+	</body>
+</html>

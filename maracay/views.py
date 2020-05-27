@@ -578,19 +578,21 @@ def Forgot(request):
 
         def forgotPassword():
             try:
-                msg_html = render_to_string('market/forgotPassword.html',
-                {
-                'email':request.POST.get('email',''),
-                'token':tokenCode,
-                })
 
-                send_mail(
-                'Recuperar Clave',
-                'siga los pasos',
-                settings.EMAIL_HOST_USER,#from
-                [request.POST.get('email','')],#to
-                html_message=msg_html,
-                )
+                sendinblue_send('forgot',dataUser.email,"","",{'token':request.build_absolute_uri()+'mail/?token='+dataToke['token']})
+                # msg_html = render_to_string('market/forgotPassword.html',
+                # {
+                # 'email':request.POST.get('email',''),
+                # 'token':tokenCode,
+                # })
+                #
+                # send_mail(
+                # 'Recuperar Clave',
+                # 'siga los pasos',
+                # settings.EMAIL_HOST_USER,#from
+                # [request.POST.get('email','')],#to
+                # html_message=msg_html,
+                # )
             except Exception as e:
                 print ('e',e)
 
@@ -608,9 +610,13 @@ def Forgot(request):
 
 def ForgotMail(request):
     if 'token' in request.GET:
-        return render(request, 'market/forgotPasswordFinal.html', {'token':request.GET['token']})
+        try:
+            TokenPassword.objects.get(token=request.GET.get('token'))
+            return render(request, 'market/forgotPasswordFinal.html', {'token':request.GET['token']})
+        except Exception as e:
+            return render(request, 'market/error404.html', {})
     else:
-        print ("poner un pagina de rebotado")
+        return render(request, 'market/error404.html', {})
 
 def Detail(request):
     if 'code' in request.GET:
