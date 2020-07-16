@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from maracay.models import Product, Profile, PurchaseConfirmation, Tools, purchaseHistory
 from django.db import transaction
 import json,random, string
-from threading import Thread
+# from threading import Thread
+import threading
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
@@ -49,59 +50,72 @@ class backStart():
             return self.response_data['error'].append(str(e))
 
     def guardaCompra(self):
-        def hilo2():
-            try:
-                ########################codigo de seguridad de compra###################
-                def ran_gen(size, chars=string.ascii_uppercase + string.digits):
-                    return ''.join(random.choice(chars) for x in range(size))
+        try:
+            ########################codigo de seguridad de compra###################
+            def ran_gen(size, chars=string.ascii_uppercase + string.digits):
+                return ''.join(random.choice(chars) for x in range(size))
 
-                tokenCode = ran_gen(30,"abcdefghijkLmnNopqrstuvwxyz0123456789./*-")
-                ########################################################################
+            tokenCode = ran_gen(11,"abcdefghijkLmnNopqrstuvwxyz0123456789./*-")
+            ########################################################################
 
-                carro = json.loads(self._request.POST['carrito'])
-                costo_envio = Tools.objects.get(pk=1).costoenvio
+            carro = json.loads(self._request.POST['carrito'])
+            costo_envio = Tools.objects.get(pk=1).costoenvio
+            dataSave = {}
+            productId = 0
+            carroEmail = {'compra':[]}
+            for value in carro:
+                for k,v in value.items():
+                    if k == 'id':
+                        dataSave['product']=Product.objects.get(pk=int(v))
+                    if k == 'cantidad':
+                        dataSave['cant_product']=v
+
+                dataSave['start_date'] = self._request.POST['start_date']
+                dataSave['code'] = tokenCode
+                user = User.objects.get(email=self._request.user)
+
+                compras = PurchaseConfirmation.objects.create(
+                    code=dataSave['code'],
+                    user=user,
+                    confirmation=2,
+                    product=dataSave['product'],
+                    start_date=dataSave['start_date'],
+                    cant_product=dataSave['cant_product'],
+                )
+                # dataSave['product'].cant = dataSave['product'].cant - int(dataSave['cant_product'])
+                update_product_cant = Product.objects.get(pk=int(dataSave['product'].id))
+                update_product_cant.cant= int(update_product_cant.cant) - int(dataSave['cant_product'])
+                update_product_cant.save()
+                # dataSave['product'].update(cant=dataSave['product'].cant - int(dataSave['cant_product']))
+                # dataSave['product'].save()
+                compras.save()
                 dataSave = {}
                 productId = 0
-                carroEmail = {'compra':[]}
-                for value in carro:
-                    for k,v in value.items():
-                        if k == 'id':
-                            dataSave['product']=Product.objects.get(pk=int(v))
-                        if k == 'cantidad':
-                            dataSave['cant_product']=v
+            ####################save historial################
+            historialCompras = purchaseHistory.objects.create(
+                code_purchase=tokenCode,
+                lugarpago=self._request.POST['lugarpago'],
+                categoria_pago=self._request.POST['categoria_pago'],
+                payment_type=self._request.POST['pago'],
+                user=user,
+                total=self._request.POST['total'],
+                moneda=self._request.POST['moneda'],
+            )
+            historialCompras.save()
+        except Exception as e:
+            self.code = 500
+            return
 
-                    dataSave['start_date'] = self._request.POST['start_date']
-                    dataSave['code'] = tokenCode
-                    user = User.objects.get(email=self._request.user)
-                    compras = PurchaseConfirmation.objects.create(
-                        code=dataSave['code'],
-                        user=user,
-                        payment_type=self._request.POST['pago'],
-                        confirmation=2,
-                        product=dataSave['product'],
-                        start_date=dataSave['start_date'],
-                        cant_product=dataSave['cant_product'],
-                    )
-                    # dataSave['product'].cant = dataSave['product'].cant - int(dataSave['cant_product'])
-                    update_product_cant = Product.objects.get(pk=int(dataSave['product'].id))
-                    update_product_cant.cant= int(update_product_cant.cant) - int(dataSave['cant_product'])
-                    update_product_cant.save()
-                    # dataSave['product'].update(cant=dataSave['product'].cant - int(dataSave['cant_product']))
-                    # dataSave['product'].save()
-                    compras.save()
-                    dataSave = {}
-                    productId = 0
-                #save historial################
-                historialCompras = purchaseHistory.objects.create(
-                    code_purchase=tokenCode,
-                    user=user,
-                    total=''
-                )
-                historialCompras.save()
+
+        def hilo2(comprascode,pago,params_user,costo_envio):
+            try:
+                print ("dentro del hilo")
+                print("pago",pago)
+                print("user",user)
                 ###############################
                 #Envio la factura por email
                 carroEmail = {'compra':[]}
-                allProducts = PurchaseConfirmation.objects.filter(code=compras.code)
+                allProducts = PurchaseConfirmation.objects.filter(code=comprascode)
                 totalGeneral=0
                 for value in allProducts:
                     carroEmail['compra'].append({
@@ -114,26 +128,39 @@ class backStart():
                 carroEmail['totalGeneral'] = totalGeneral
                 carroEmail['totalCompleto'] = carroEmail['totalGeneral']+costo_envio
                 direction = '/static/images/upload/imagesp/'
-                msg_html = render_to_string('market/facturaCompra.html',
-                    {
-                        'asunto':'Factura' ,
-                        'payment_type':self._request.POST['pago'],
-                        'email':self._request.user,
-                        'carro':carroEmail['compra'],
-                        'totalGeneral':carroEmail['totalGeneral'],
-                        'totalCompleto':carroEmail['totalCompleto'],
-                        'codigo':tokenCode,
-                        'costoEnvio':costo_envio,
-                        'direction':direction,
-                    })
 
-                send_mail(
-                    'Detalles de la Compra',
-                    'Subject',
-                    settings.EMAIL_HOST_USER,#from
-                    [user.email,settings.EMAIL_HOST_USER],#to
-                    html_message=msg_html,
-                )
+                sendinblue_send('detallescompra',str(params_user),"","",{
+                    "asunto":"Factura",
+                    'payment_type':pago,
+                    'email':str(params_user),
+                    'carro':carroEmail['compra'],
+                    'totalGeneral':carroEmail['totalGeneral'],
+                    'totalCompleto':carroEmail['totalCompleto'],
+                    'codigo':comprascode,
+                    'costoEnvio':costo_envio,
+                    'direction':direction,
+                })
+
+                # msg_html = render_to_string('market/facturaCompra.html',
+                #     {
+                #         'asunto':'Factura' ,
+                #         'payment_type':self._request.POST['pago'],
+                #         'email':self._request.user,
+                #         'carro':carroEmail['compra'],
+                #         'totalGeneral':carroEmail['totalGeneral'],
+                #         'totalCompleto':carroEmail['totalCompleto'],
+                #         'codigo':tokenCode,
+                #         'costoEnvio':costo_envio,
+                #         'direction':direction,
+                #     })
+                #
+                # send_mail(
+                #     'Detalles de la Compra',
+                #     'Subject',
+                #     settings.EMAIL_HOST_USER,#from
+                #     [user.email,settings.EMAIL_HOST_USER],#to
+                #     html_message=msg_html,
+                # )
                 #verificar si el hilo de revision de compras esta o no activo
                 objeto_tools = Tools.objects.get(pk=1)
                 if objeto_tools.hilo_en_proceso == 0:
@@ -143,35 +170,52 @@ class backStart():
                     objeto_tools.hilo_en_proceso=1
                     objeto_tools.save()
             except Exception as e:
+                print ("----",e)
                 self.code = 500
+                return
 
-        thread = Thread(target = hilo2)
-        thread.start()
+        envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
+        envioemailfactura.start()
 
     def detailProducts(self):
-        productos = PurchaseConfirmation.objects.filter(code=self._request.GET['code'])
-        totalGeneral=0
-        for value in productos:
-            totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
-            self.response_data['data'].append({
-                'payment_type':value.payment_type,
-                'code':value.code,
-                'confirmation':value.confirmation,
-                'start_date':value.start_date,
-                'name':value.product.name,
-                'price':value.product.price,
-                'image':value.product.name_image,
-                'total':float(value.product.price)*int(value.cant_product),
-                'cant_product':value.cant_product,
-            })
+        try:
+            history = purchaseHistory.objects.filter(code_purchase=self._request.GET['code'])
+            productos = PurchaseConfirmation.objects.filter(code=self._request.GET['code'])
+            totalGeneral=0
+            moneda = ""
+            payment_type = ""
+            lugarpago = ""
+            for h in history:
+                moneda = h.moneda
+                payment_type=h.payment_type
+                lugarpago=h.lugarpago
+                for value in productos:
+                    totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
+                    self.response_data['data'].append({
+                        'payment_type':h.payment_type,
+                        'code':value.code,
+                        'confirmation':value.confirmation,
+                        'start_date':value.start_date,
+                        'name':value.product.name,
+                        'price':value.product.price,
+                        'image':value.product.name_image,
+                        'total':float(value.product.price)*int(value.cant_product),
+                        'cant_product':value.cant_product,
+                    })
 
-        totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
-        self.response_data['data2'].append({
-            'totalGeneral':totalGeneral,
-            'totalCompleto':totalCompleto,
-            'direccion':Profile.objects.get(user=self._request.user.id).direction,
-            'costoenvio':Tools.objects.get(pk=1).costoenvio,
-        })
+            totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
+            self.response_data['data2'].append({
+                'totalGeneral':totalGeneral,
+                'totalCompleto':totalCompleto,
+                'direccion':Profile.objects.get(user=self._request.user.id).direction,
+                'costoenvio':Tools.objects.get(pk=1).costoenvio,
+                'moneda':moneda if moneda != "" else "USD" ,
+                'payment_type':payment_type if payment_type != "" else "No aplica",
+                'lugarpago':lugarpago if lugarpago != "" else "No aplica",
+            })
+        except Exception as e:
+            print("detailProducts",e)
+
 
 class profileBackend():
     def __init__(self, request):
@@ -233,15 +277,16 @@ class profileBackend():
 
     def accountData(self):
         try:
-            dataA = purchaseHistory.objects.all()
+            dataA = purchaseHistory.objects.filter(user=self._request.user)[:35]
             for a in dataA:
                 tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
                 if tabladecompra:
                     self.response_data['data'].append({
                     "code_purchase":a.code_purchase,
-                    "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
+                    # "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
+                    "total":a.total,
                     "state":tabladecompra.confirmation,
-                    "payment_type":tabladecompra.payment_type,
+                    "payment_type":a.payment_type+"-"+a.moneda,
                     "start_date":tabladecompra.start_date-timedelta(hours=4),
                     })
         except Exception as e:

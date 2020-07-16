@@ -4,7 +4,7 @@ $(document).ready(function() {
 
   $("#paymentBox2").click(function(e){
     swal({
-     title:"¿Està seguro de continuar con la compra?",
+     title:"¿Está seguro de continuar con la compra?",
      text:"",
      icon:"warning",
      buttons:['No','Si'],
@@ -13,23 +13,84 @@ $(document).ready(function() {
      if (willDelete){
 
           var tipodePago = ''
+          var lugarPago = ''
+          var moneda = ''
+          var categoria_pago = ''
+          var lista_pago = [
+            "Argentina",
+             "Chile",
+             "Colombia",
+             "España",
+             "EspañaBizzum",
+             "México",
+             "Panamá",
+             "Paypal",
+             "Perú",
+             "Portugal",
+             "USA",
+             "Banesco",
+             "Mercantil",
+             "Venezuela",
+           ]
+           var moneda_pago = {
+             "Argentina":"USD",
+              "Chile":"CLP",
+              "Colombia":"COP",
+              "España":"EUR",
+              "EspañaBizzum":"EUR",
+              "México":"MXN",
+              "Panamá":"PAB/USD",
+              "Paypal":"USD",
+              "Perú":"PEN/USD",
+              "Portugal":"EUR",
+              "USA":"USD",
+              "Banesco":"Bs",
+              "Mercantil":"Bs",
+              "Venezuela":"Bs",
+            }
+
+           // if ($(".totalDinamicFinal").val())
 
           if ($('#optionsRadios1').is(':checked')) {
             tipodePago = 'Transferencia'
+            if ($('#inlineRadio1').is(':checked')) {
+              lugarPago = $("#inlineFormCustomSelect1").val();
+              categoria_pago = "Nacional";
+            }
+            if ($('#inlineRadio2').is(':checked')) {
+              lugarPago = $("#inlineFormCustomSelect2").val();
+              categoria_pago = "Internacional";
+            }
+
+            if (tipodePago == '' || lugarPago == '') {
+              swal("Debe seleccionar una forma de pago", " ", "warning");
+              //alertify.error("");
+              return false;
+            }
+
+            if (lista_pago.indexOf(lugarPago) == -1 ) {
+              swal("Debe seleccionar una forma de pago", " ", "warning");
+              //alertify.error("");
+              return false;
+            }
+
           }
           if ($('#optionsRadios2').is(':checked')) {
-            tipodePago = 'Pago Mòvil'
+            tipodePago = 'Pago Móvil'
+            if (tipodePago == '' || tipodePago != 'Pago Móvil') {
+              swal("Debe seleccionar una forma de pago", " ", "warning");
+              //alertify.error("");
+              return false;
+            }
           }
-          if ($('#optionsRadios3').is(':checked')) {
-            tipodePago = 'Paypal'
-          }
+          // if ($('#optionsRadios3').is(':checked')) {
+          //   tipodePago = 'Paypal'
+          // }
+          /*Modeda de Pago*/
+          moneda=moneda_pago[lugarPago]
 
-          if (tipodePago == '') {
-            swal("Debe seleccionar una forma de pago", " ", "warning");
-            //alertify.error("");
-            return false;
-          }
-          $("#paymentBox2").remove();
+          // $("#paymentBox2").remove();
+          $("#paymentBox2").css("visibility","hidden");
           $("#sendUserSection1").css("visibility","hidden");
           $("#sendUserSection2").css("visibility","hidden");
           $("#preloader").css("visibility","visible");
@@ -39,7 +100,10 @@ $(document).ready(function() {
 
           $.post('/orden/entrega/',{
             pago:tipodePago,
-            total:$("#totalDinamicFinal").val(),
+            lugarpago:lugarPago,
+            categoria_pago:categoria_pago,
+            total:$(".totalDinamicFinal").text(),
+            moneda:moneda,
             carrito:JSON.stringify(carrito),
             start_date:fechadeinicio,
           }).done(function (result) {
@@ -51,12 +115,15 @@ $(document).ready(function() {
             }else {
               //poner un tootip
               swal(result.message, " ", "warning");
+              $("#preloader").css("visibility","hidden");
+              $("#paymentBox2").css("visibility","visible");
+              $("#sendUserSection1").css("visibility","visible");
+              $("#sendUserSection2").css("visibility","visible");
               //alertify.error(result.message);
-              window.location.href = '/confirmacion';
             }
           }).fail(function(error) {
             console.log(error.responseText);
-            window.location.href = '/confirmacion';
+            window.location.href = '/';
           });
      }
    })

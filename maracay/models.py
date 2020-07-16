@@ -53,7 +53,6 @@ class Shopping(models.Model):#compra
 class PurchaseConfirmation(models.Model):#confirmacion de compra
     # __confirmCompra=((1,_('Anulada')),(2,_('Pendiente')),(3,_('Confirmada')))
     id=models.AutoField(primary_key=True)
-    payment_type=models.CharField(max_length=100)
     user=models.ForeignKey(User,related_name='user_confirm',on_delete=models.CASCADE)
     code=models.CharField(max_length=100)#codigo de seguridad de la compra
     confirmation=models.PositiveSmallIntegerField(default=2)#para saber si se hizo o no la transferencia
@@ -63,10 +62,16 @@ class PurchaseConfirmation(models.Model):#confirmacion de compra
     create_at=models.DateTimeField(auto_now_add=True)
 
 class purchaseHistory(models.Model):
+    #se guarda el historial de compra con su total en la modena que pagara o pago
     id=models.AutoField(primary_key=True)
     code_purchase=models.CharField(max_length=100)#codigo de seguridad de la compra relacionado a la compra
-    total=models.CharField(max_length=100)
-    user=models.ForeignKey(User,related_name='user_history',on_delete=models.CASCADE)
+    total=models.CharField(max_length=100)#total de compra
+    user=models.ForeignKey(User,related_name='user_history',on_delete=models.CASCADE)#usuario que compro
+    lugarpago=models.CharField(max_length=100)#lugar de pago (pais)
+    categoria_pago=models.CharField(max_length=100)#tipo de pago (Nacional o Internacional)
+    payment_type=models.CharField(max_length=100)#modo de pago (PayPal o Transferencia)
+    moneda=models.CharField(max_length=100)#moneda en que cotizo su pago
+    create_at=models.DateTimeField(auto_now_add=True)
 
 class PagosImagenes(models.Model):
     id=models.AutoField(primary_key=True)

@@ -82,9 +82,9 @@
 			</div>
 			<div class="col-md-3" style="margin-top:20px;margin-bottom:40px;text-align:center;">
 				<div class="">
-					<h4 id="totalCompraText" style="font-size:18px;text-align:center;">{{totalGeneral}}</h4>
-					<h4 id="totalCompraText2" style="font-size:18px;text-align:center;">{{costoenvio}}</h4>
-					<h4 id="totalCompraText3" style="font-size:18px;text-align:center;"><b>{{totalCompleto}}</b></h4>
+					<h4 id="totalCompraText" style="font-size:18px;text-align:center;">${{totalGeneral}}</h4>
+					<h4 id="totalCompraText2" style="font-size:18px;text-align:center;">${{costoenvio}}</h4>
+					<h4 id="totalCompraText3" style="font-size:18px;text-align:center;"><b>$</b><b>{{totalCompleto}}</b></h4>
 				</div>
 			</div>
 		</div>
@@ -100,33 +100,12 @@
 				<p style="color:black;"><u>Código de Compra</u>: <b>{{code}}</b></p><br>
 			</div>
 			<div class="col-md-6" style="margin-bottom: 20px;">
-				<p>Su método de Pago seleccionado fue por medio de: <b>{{tipoPago}}</b>. <br>Haganos una transferencia a la cuenta de su preferencia.</p>
+				<p>Su método de Pago seleccionado fue por medio de: <b>{{tipoPago}} - {{lugarpago}}</b>. <br>Haganos una transferencia a la siguiente cuenta:</p>
 			</div>
-			<div class="col-md-6" style="background-color:#dddddc;">
-				<p>Total:</p>
-			</div>
-			<div class="col-md-6" style="border-left:3px solid white; background-color:#dddddc;">
-				<b>{{totalCompleto}}</b>
-			</div>
-			<div class="col-md-6" style="background-color:#dddddc;margin-top: 10px;">
-				<p>A nombre de: </p>
-			</div>
-			<div class="col-md-6" style="border-left:3px solid white;background-color:#dddddc;margin-top: 10px;">
-				<b>XXXXXXXXXXXXXX</b>
-			</div>
-			<div class="col-md-6" style="background-color:#dddddc;margin-top: 10px;">
-				<p>Número de Cuenta: </p>
-
-			</div>
-			<div class="col-md-6" style="border-left:3px solid white;background-color:#dddddc;margin-top: 10px;">
-				<b>1234-1234-1234-1234</b>
-			</div>
-			<div class="col-md-6" style="background-color:#dddddc;margin-top: 10px;">
-				<p>Nombre del Banco: </p>
-			</div>
-			<div class="col-md-6" style="border-left:3px solid white;background-color:#dddddc;margin-top: 10px;">
-				<b>BANORTE</b>
-			</div>
+			<!-- cuentasTransferencia -->
+			{% with templatecountry=lugarpago|add:".html" %}
+				{% include "market/cuentas/"|add:templatecountry %}
+			{% endwith %}
 			<div class="col-md-12" style="margin-top:20px;">
 				<b style="color:red;">NOTA:</b> Envíe el número de <u><b>referencia completo del pago</b></u>, o el <u><b>capture</b></u> de la transferencia con el <u><b>código de compra</b></u> en el siguiente enlace: <a href="/help/">REPORTE EL PAGO<a>
 			</div>

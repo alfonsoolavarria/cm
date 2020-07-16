@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
-from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes
+from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory
 from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
@@ -35,6 +35,10 @@ class Maracay(TemplateView):
             paginator = Paginator(contact_list, 10) # Show 25 contacts per page
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
+            for value in contacts:
+                print ("contactscontacts",value)
+                print ("contactscontacts",value.price)
+
             direction = '/static/images/upload/imagesp/'
             return render(request, 'market/index.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
         '''else:
@@ -456,15 +460,19 @@ def ConfimationOrder(request):
         allProducts = PurchaseConfirmation.objects.filter(code=compra.code)
         totalGeneral=0
         for value in allProducts:
-            data['tipoPago'] = value.payment_type
             data['code'] = value.code
             data['compra'].append({
             'name':value.product.name,
-            'price':str(value.product.price)+' / '+str(value.cant_product),
+            'price':"$"+str(value.product.price)+' / '+str(value.cant_product),
             'image':'/static/images/upload/imagesp/'+value.product.name_image,
-            'total':float(value.product.price)*int(value.cant_product),
+            'total':"$"+str(float(value.product.price)*int(value.cant_product)),
             })
             totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
+
+        for value2 in purchaseHistory.objects.filter(code_purchase=compra.code):
+            data['lugarpago'] = value2.lugarpago
+            data['tipoPago'] = value2.payment_type
+
 
         data['totalGeneral'] = totalGeneral
         data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
@@ -545,6 +553,7 @@ def CartOrderEntrega(request):
     data = {}
     _allproducts = backStart(request)
     _allproducts.guardaCompra()
+    print("-----_allproducts.code",_allproducts.code)
     data['code'] = _allproducts.code
     if data['code'] !=500:
         data = {'code':200}

@@ -9,10 +9,10 @@
            <img style="border-radius:60px;" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">
            <!--modal=js-show-modal1 -->
            {%if value.cant != 0 %}
-             <a href="#" style="left:25%;min-width: 10px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-price="{{value.price}}" data-id="{{value.id}}" data-description="{{value.description}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+             <a href="#" style="left:25%;min-width: 10px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-price="{{value.price}}" data-pricebs="{{value.pricebs}}" data-id="{{value.id}}" data-description="{{value.description}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                Detalles
              </a>
-             <a href="#" style="left:70%;min-width:118px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-id="{{value.id}}" data-price="{{value.price}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 addModalCar" id="addItem">
+             <a href="#" style="left:70%;min-width:118px;" data-image="{{direction}}{{value.name_image}}" data-name="{{value.name}}" data-cant="{{value.cant}}" data-id="{{value.id}}" data-price="{{value.price}}" data-pricebs="{{value.pricebs}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 addModalCar" id="addItem">
                Añadir al <i class="zmdi zmdi-shopping-cart" style="margin-left: 5px;"></i>
              </a>
             {%else%}
@@ -25,7 +25,7 @@
           <div class="block2-txt-child1 flex-col-l " style="width: 100%;">
             <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">{{value.name}}</a>
             <span class="stext-105 cl3">
-              {{value.price}}
+              ${{value.price}}
              </span>
           </div>
           <div class="block2-txt-child2 flex-r p-t-3">

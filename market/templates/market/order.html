@@ -95,7 +95,7 @@ body{
 									</div>
 									<div class="size-2091" style="margin-left:20px;">
 										<span class="mtext-110 cl2 costoEnvio">
-											<b>{{costoenvio}}</b>
+											<b>$</b><b id="coenconf">{{costoenvio}}</b>
 										</span>
 									</div>
 								</div>
@@ -130,8 +130,7 @@ body{
 									</div>
 
 									<div class="size-209 p-t-1">
-										<span class="mtext-110 cl2 totalDinamicFinal">
-										</span>
+										<b>$</b><span class="mtext-110 cl2 totalDinamicFinal"></span>
 									</div>
 								</div>
 							</div>
@@ -190,11 +189,46 @@ body{
 									 <div class="radio" style="margin-bottom: 10px;">
 										 <input style="display:initial;" type="radio" name="optionsRadios" id="optionsRadios1" value="1" >
 										 <label style="display:initial;">
-											 Transferencia Bancaria "BANESCO" (BsS)
+											 Transferencia Bancaria (Nacional/Internacional)
+											 <!-- radio de transferencia -->
+											 <div class="form-row align-items-center" id="cuentasTransferencia" style="visibility:hidden;position:fixed">
+											    <div class="col-auto my-1 col-md-6">
+														<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+												      <label class="mr-sm-2" for="inlineFormCustomSelect">Nacional</label>
+												      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect1" disabled>
+												        <option selected>Selecciona</option>
+												        <option value="Banesco">Banesco</option>
+												        <option value="Mercantil">Mercantil</option>
+												        <option value="Venezuela">Venezuela</option>
+												      </select>
+											    	</div>
+											    </div>
+											    <div class="col-auto my-1 col-md-6">
+														<div class="form-check form-check-inline">
+															<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+												      <label class="mr-sm-2" for="inlineFormCustomSelect">Internacional</label>
+												      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect2" disabled>
+												        <option selected>Selecciona</option>
+												        <option value="Argentina">Argentina</option>
+												        <option value="Chile">Chile</option>
+												        <option value="Colombia">Colombia</option>
+												        <option value="España">España</option>
+												        <option value="EspañaBizzum">EspañaBizzum</option>
+												        <option value="México">México</option>
+												        <option value="Panamá">Panamá</option>
+												        <option value="Paypal">Paypal</option>
+												        <option value="Perú">Perú</option>
+												        <option value="Portugal">Portugal</option>
+												        <option value="USA">USA</option>
+												      </select>
+											    	</div>
+											    </div>
+    										</div>
 										 </label>
 										 <label id="banescoTransf" style="margin-top:10px;visibility:hidden;position:fixed;">
 											 Una vez realizada la compra, con esta opciòn tendra un màximo de 1 hora para hacer su transferencia
-											 <b>BANESCO-BANESCO</b> y <b>REPORTAR SU PAGO</b> de lo contrario su compra serà <b>anulada</b>.
+											 y <b>REPORTAR SU PAGO</b>, de lo contrario su compra serà <b>anulada</b>.
 											</label>
 										 </div>
 										 <!-- <div class="radio" style="margin-bottom: 10px;">
@@ -220,7 +254,7 @@ body{
 											 </div>
 											 <br>
 
-										 <div class="radio">
+										 <!-- <div class="radio">
 											 <input style="display:initial;" type="radio" name="optionsRadios" id="optionsRadios3" value="3">
 											 <label style="display:initial;">
 												 PayPal
@@ -229,7 +263,7 @@ body{
 												 Una vez realizada la compra, con esta opciòn tendra un màximo de 1 hora para hacer su transferencia
 												 <b>PayPal</b> y <b>REPORTAR SU PAGO</b> de lo contrario su compra serà <b>anulada</b>.
 											 </label>
-										 </div>
+										 </div> -->
 										 <br>
 									 </form>
 							 </div>
@@ -286,9 +320,13 @@ body{
 			if ($('#optionsRadios1').is(':checked')) {
 				$("#banescoTransf").css("visibility","visible");
 				$("#banescoTransf").css("position","static");
+				$("#cuentasTransferencia").css("visibility","visible");
+				$("#cuentasTransferencia").css("position","static");
 	    }else{
 				$("#banescoTransf").css("visibility","hidden");
 				$("#banescoTransf").css("position","fixed");
+				$("#cuentasTransferencia").css("visibility","hidden");
+				$("#cuentasTransferencia").css("position","fixed");
 			}
 	    if ($('#optionsRadios2').is(':checked')) {
 				$("#movilTransf").css("visibility","visible");
@@ -306,6 +344,17 @@ body{
 				$("#paypalTransf").css("position","fixed");
 			}
 
+	    if ($('#inlineRadio1').is(':checked')) {
+				$("#inlineFormCustomSelect1").prop("disabled", false)
+	    }else{
+				$("#inlineFormCustomSelect1").prop("disabled", true)
+			}
+	    if ($('#inlineRadio2').is(':checked')) {
+				$("#inlineFormCustomSelect2").prop("disabled", false)
+	    }else{
+				$("#inlineFormCustomSelect2").prop("disabled", true)
+			}
+
       });
 
 			var listPriceTotal = 0;
@@ -314,8 +363,8 @@ body{
 				for (var i = 0; i < carrito.length; i++) {
 					listPriceTotal = listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad));
 				}
-				$(".totalDinamicFinal").text(parseFloat(listPriceTotal)+parseFloat($(".costoEnvio").text()));
-				$(".subTotalDinamic").text(listPriceTotal);
+				$(".totalDinamicFinal").text(parseFloat(listPriceTotal)+parseFloat($("#coenconf").text()));
+				$(".subTotalDinamic").text("$"+listPriceTotal);
 			}
 			$('#action').click(function (e) {
 				e.preventDefault();

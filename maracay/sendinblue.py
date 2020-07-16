@@ -45,6 +45,20 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
                 "email":email,"token":extra['token'],
                 }
 
+        if template == "detallescompra":
+            tempid = 5
+            params = {
+                "asunto":extra["asunto"],
+                'payment_type':['payment_type'],
+                'email':extra['email'],
+                'carro':extra['carro'],
+                'totalGeneral':extra['totalGeneral'],
+                'totalCompleto':extra['totalCompleto'],
+                'codigo':extra['codigo'],
+                'costoEnvio':extra['costoEnvio'],
+                'direction':extra['direction'],
+            }
+
 
         transaction = {
             "to":to,

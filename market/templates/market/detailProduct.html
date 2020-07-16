@@ -31,11 +31,11 @@
                       </tr>
                         {%for value in data%}
                           <tr>
-                    				<td style="text-align:center;;"><img style="border-radius:10px;width: 90px;height: 70px;" src="{{direction}}{{value.image}}" alt=""></td>
+                    				<td style="text-align:center;;"><img style="border-radius:10px;width: 90px;height:90px;" src="{{direction}}{{value.image}}" alt=""></td>
                             <td>{{value.name}}</td>
-                            <td style="text-align:left;">{{value.price}}</td>
+                            <td style="text-align:center;">${{value.price}}</td>
                     				<td>{{value.cant_product}}</td>
-                    				<td>{{value.total}}</td>
+                    				<td>${{value.total}}</td>
                           </tr>
                   			{%endfor%}
                     </table>
@@ -56,7 +56,7 @@
                       </span>
                     </div>
                     <div class="" style="margin-left:20px;">
-                      <span class="mtext-110 cl2"> {{data2.totalGeneral}}
+                      <span class="mtext-110 cl2"> ${{data2.totalGeneral}}
                       </span>
                     </div>
                   </div>
@@ -68,7 +68,31 @@
                     </div>
                     <div class="" style="margin-left:20px;">
                       <span class="mtext-110 cl2">
-        								{{data2.costoenvio}}
+        								${{data2.costoenvio}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-w flex-t bor12 p-b-13">
+                    <div class="">
+                      <span class="stext-110 cl2">
+                        Tipo de Pago:
+                      </span>
+                    </div>
+                    <div class="" style="margin-left:20px;">
+                      <span class="mtext-110 cl2">
+        								{{data2.payment_type}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-w flex-t bor12 p-b-13">
+                    <div class="">
+                      <span class="stext-110 cl2">
+                        Forma de Pago:
+                      </span>
+                    </div>
+                    <div class="" style="margin-left:20px;">
+                      <span class="mtext-110 cl2">
+        								{{data2.lugarpago}}
                       </span>
                     </div>
                   </div>
@@ -98,12 +122,12 @@
                   <div class="flex-w flex-t p-t-27 p-b-33">
                     <div class="">
                       <span class="mtext-101 cl2">
-                        Total:
+                        Total Pagado:
                       </span>
                     </div>
 
                     <div class="p-t-1" style="margin-left:20px;">
-                      <span class="mtext-110 cl2"> <b>{{data2.totalCompleto}}</b>
+                      <span class="mtext-110 cl2"> <b>{{data2.moneda}} - {{data2.totalCompleto}}</b>
                       </span>
                     </div>
                   </div>

@@ -29,7 +29,7 @@ $(document).ready(function() {
 
   /*add al carro*/
   function agregarItem(item){
-    console.log('---->',item);
+    // console.log('---->',item);
     var carrito = JSON.parse(localStorage.getItem("carrito"));
     if (carrito && carrito.length>0) {
       for (i of carrito){
