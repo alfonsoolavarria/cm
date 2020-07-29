@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from maracay.models import Product, Profile, PurchaseConfirmation, Tools, purchaseHistory
+from maracay.models import Product, Profile, PurchaseConfirmation, Tools, purchaseHistory, DolarBolivar
 from django.db import transaction
 import json,random, string
 # from threading import Thread
@@ -51,6 +51,60 @@ class backStart():
 
     def guardaCompra(self):
         try:
+            ####scraping currency from Google
+            try:
+                valores_conversion = []
+                valor_str = ""
+                valor_float = ""
+                if self._request.POST['categoria_pago']=='Internacional':
+                    print("Pago Internacional")
+                    import requests
+                    from bs4 import BeautifulSoup
+                    print(self._request.POST['total'])
+                    print(self._request.POST['moneda'])
+                    if self._request.POST['lugarpago'] not in ['Paypal','USA','Argentina']:
+                        r = requests.get("https://www.google.com/search?q="+self._request.POST['total']+"+usd+to+"+self._request.POST['moneda']+"")
+                        soup = BeautifulSoup(r.text, 'html.parser')
+
+                        get_class_value_convert = soup.find_all("div", class_="BNeawe iBp4i AP7Wnd")
+
+                        for index,value_convert in enumerate(get_class_value_convert):
+                            valores_conversion.append(value_convert.text.strip())
+
+                        print(valores_conversion)
+
+                        if valores_conversion:
+                            valor_str = valores_conversion[0].split()[0]
+                            valor_float=valor_str.replace(",","")
+                        else:
+                            print("error conversion",e)
+                            self.code = 500
+                            return
+
+                        print ("Toma valor en bruto",valor_str)
+                        print ("Total mejorado para save sin el 5%",valor_float)
+                        #aumento del 5%, sumo 1 porque el round si es menor de 5 lo deja si es > 5 lo sube
+                        print(type(valor_float),valor_float)
+                        #el ,2 despues son la cantidad de decimales a mostrar
+                        valor_float=round(float(valor_float)+0.1,2)
+                        print("valor_float",valor_float)
+                        aument1 = (valor_float*5)/100
+                        valor_float=round(valor_float+aument1,2)
+                        print("--->valor con el 5%",valor_float)
+                    else:
+                        valor_float=self._request.POST['total']
+                        print ("Total mejorado para save sin el 5% PaypalUSA",valor_float)
+                else:
+                    print("Pago Nacional")
+                    bolivar_acutal = DolarBolivar.objects.get().bolivar
+                    valor_float = round(float(self._request.POST['total'])*float(bolivar_acutal),3)
+                    print("valor_floa--->t",valor_float)
+            except Exception as e:
+                print("scraping",e)
+                self.code = 500
+                return
+            ####
+
             ########################codigo de seguridad de compra###################
             def ran_gen(size, chars=string.ascii_uppercase + string.digits):
                 return ''.join(random.choice(chars) for x in range(size))
@@ -98,11 +152,12 @@ class backStart():
                 categoria_pago=self._request.POST['categoria_pago'],
                 payment_type=self._request.POST['pago'],
                 user=user,
-                total=self._request.POST['total'],
-                moneda=self._request.POST['moneda'],
+                total=valor_float,
+                moneda=self._request.POST['moneda'] if 'moneda' in self._request.POST else "",
             )
             historialCompras.save()
         except Exception as e:
+            print("save",e)
             self.code = 500
             return
 
@@ -174,8 +229,8 @@ class backStart():
                 self.code = 500
                 return
 
-        envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
-        envioemailfactura.start()
+        # envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
+        # envioemailfactura.start()
 
     def detailProducts(self):
         try:
@@ -189,6 +244,7 @@ class backStart():
                 moneda = h.moneda
                 payment_type=h.payment_type
                 lugarpago=h.lugarpago
+                totalcompra=h.total
                 for value in productos:
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
                     self.response_data['data'].append({
@@ -203,10 +259,10 @@ class backStart():
                         'cant_product':value.cant_product,
                     })
 
-            totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
+            # totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
             self.response_data['data2'].append({
                 'totalGeneral':totalGeneral,
-                'totalCompleto':totalCompleto,
+                'totalCompleto':totalcompra,
                 'direccion':Profile.objects.get(user=self._request.user.id).direction,
                 'costoenvio':Tools.objects.get(pk=1).costoenvio,
                 'moneda':moneda if moneda != "" else "USD" ,
@@ -281,10 +337,16 @@ class profileBackend():
             for a in dataA:
                 tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
                 if tabladecompra:
+                    if a.moneda == "Bs":
+                        total="{:,.2f}".format(float(a.total)).replace(","," ")
+                        total=total.replace(".",",")
+                        total=total.replace(" ",".")
+                    else:
+                        total=a.total
                     self.response_data['data'].append({
                     "code_purchase":a.code_purchase,
                     # "total":(tabladecompra.cant_product*tabladecompra.product.price)+Tools.objects.get(pk=1).costoenvio,
-                    "total":a.total,
+                    "total":total,
                     "state":tabladecompra.confirmation,
                     "payment_type":a.payment_type+"-"+a.moneda,
                     "start_date":tabladecompra.start_date-timedelta(hours=4),

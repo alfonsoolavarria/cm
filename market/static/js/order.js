@@ -33,20 +33,21 @@ $(document).ready(function() {
              "Venezuela",
            ]
            var moneda_pago = {
-             "Argentina":"USD",
+              "Argentina":"USD",
               "Chile":"CLP",
               "Colombia":"COP",
               "España":"EUR",
               "EspañaBizzum":"EUR",
               "México":"MXN",
-              "Panamá":"PAB/USD",
+              "Panamá":"PAB",/*PAB/USD*/
               "Paypal":"USD",
-              "Perú":"PEN/USD",
+              "Perú":"PEN",/*PEN/USD*/
               "Portugal":"EUR",
               "USA":"USD",
               "Banesco":"Bs",
               "Mercantil":"Bs",
               "Venezuela":"Bs",
+              "PagoMovil":"Bs",
             }
 
            // if ($(".totalDinamicFinal").val())
@@ -76,13 +77,22 @@ $(document).ready(function() {
 
           }
           if ($('#optionsRadios2').is(':checked')) {
-            tipodePago = 'Pago Móvil'
-            if (tipodePago == '' || tipodePago != 'Pago Móvil') {
+            tipodePago = 'Pago Movil'
+            lugarPago = 'PagoMovil'
+            if (tipodePago == '' || tipodePago != 'Pago Movil') {
               swal("Debe seleccionar una forma de pago", " ", "warning");
               //alertify.error("");
               return false;
             }
           }
+
+          if (tipodePago == '') {
+            swal("Debe seleccionar una forma de pago", " ", "warning");
+            //alertify.error("");
+            return false;
+          }
+
+
           // if ($('#optionsRadios3').is(':checked')) {
           //   tipodePago = 'Paypal'
           // }

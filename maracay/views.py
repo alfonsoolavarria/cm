@@ -471,11 +471,18 @@ def ConfimationOrder(request):
 
         for value2 in purchaseHistory.objects.filter(code_purchase=compra.code):
             data['lugarpago'] = value2.lugarpago
+            data['moneda'] = value2.moneda
             data['tipoPago'] = value2.payment_type
+            data['totalenmodena'] = value2.total
 
 
         data['totalGeneral'] = totalGeneral
         data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
+        if data['moneda'] == 'Bs':
+            data['totalenmodena']="{:,.2f}".format(float(data['totalenmodena'])).replace(","," ")
+            data['totalenmodena']=data['totalenmodena'].replace(".",",")
+            data['totalenmodena']=data['totalenmodena'].replace(" ",".")
+        
         return render(request, 'market/confirmationOrder.html',data)
     except Exception as e:
         print("ConfimationOrder",e)
@@ -553,7 +560,6 @@ def CartOrderEntrega(request):
     data = {}
     _allproducts = backStart(request)
     _allproducts.guardaCompra()
-    print("-----_allproducts.code",_allproducts.code)
     data['code'] = _allproducts.code
     if data['code'] !=500:
         data = {'code':200}
