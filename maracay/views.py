@@ -534,7 +534,11 @@ def HelpForm(request):
         sendinblue_send('contacto',email,"","",{
             "asunto":asunto,
             "mensaje":mensaje,
-            "attachment":[{"content":request.headers['Host']+"/"+localtion_save+file_name,"name":file_name}]
+            "attachment":[
+                {"content":request.headers['Host']+"/"+localtion_save+file_name,
+                "name":file_name,
+                "ex":request.headers['Host']+"/"+localtion_save+file_name,
+                }]
         })
     except Exception as e:
         print("eeeeee",e)
