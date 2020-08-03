@@ -53,6 +53,9 @@ class Maracay(TemplateView):
             dataAll = {'contacts':contacts}
             return HttpResponse(json.dumps(dataAll, cls=DjangoJSONEncoder), content_type='application/json')'''
 
+    #post
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class Account(View):
@@ -482,7 +485,7 @@ def ConfimationOrder(request):
             data['totalenmodena']="{:,.2f}".format(float(data['totalenmodena'])).replace(","," ")
             data['totalenmodena']=data['totalenmodena'].replace(".",",")
             data['totalenmodena']=data['totalenmodena'].replace(" ",".")
-        
+
         return render(request, 'market/confirmationOrder.html',data)
     except Exception as e:
         print("ConfimationOrder",e)
@@ -490,14 +493,71 @@ def ConfimationOrder(request):
 
 #envio de formulario de ayuda
 def HelpForm(request):
+    try:
+        from django.core.files.storage import FileSystemStorage
+        print("envio el formulario con la imagen")
+        # from django.core.mail import EmailMultiAlternatives
+        # from email.mime.image import MIMEImage
+        asunto = request.POST.get('asunto')
+        email = request.POST.get('email')
+        mensaje = request.POST.get('mensaje')
+        imagen = request.POST.get('imagen')
+        nombre_imagen = request.POST.get('nombre_imagen')
+        # print('foto',request.FILES.get('foto'))
+        #guardado del archivo
+        import base64
+        from datetime import datetime
+        import os,stat
+        from django.core.files.base import ContentFile
+
+
+        image_data = request.POST.get('imagen')
+
+        format, imgstr = image_data.split(';base64,')
+        print("format", format)
+        ext = format.split('/')[-1]
+
+        now = datetime.now()
+        current_time = now.strftime("%Y-%m-%d")
+
+        data = ContentFile(base64.b64decode(imgstr))
+        file_name = str(current_time)+"-"+nombre_imagen
+        localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
+
+
+        fs = FileSystemStorage(location=localtion_save)
+        fs.save(file_name, data)
+        print("request.headers",)
+        #alfonso
+
+        # test = "https://frutasyverdura.weebly.com/uploads/5/5/6/8/55681601/163975_orig.jpg"
+        sendinblue_send('contacto',email,"","",{
+            "asunto":asunto,
+            "mensaje":mensaje,
+            "attachment":[{"content":request.headers['Host']+"/"+localtion_save+file_name,"name":file_name}]
+        })
+    except Exception as e:
+        print("eeeeee",e)
+
     def hilo():
         try:
+            print("envio el formulario con la imagen")
             # from django.core.mail import EmailMultiAlternatives
             # from email.mime.image import MIMEImage
             asunto = request.POST.get('asunto')
             email = request.POST.get('email')
             mensaje = request.POST.get('mensaje')
-            sendinblue_send('contacto',email,"","",{"asunto":asunto,"mensaje":mensaje})
+            imagen = request.POST.get('imagen')
+            nombre_imagen = request.POST.get('nombre_imagen')
+            # print("base",imagen)
+            # print("nombre_imagen",nombre_imagen)
+            sendinblue_send('contacto',email,"","",{
+                "asunto":asunto,
+                "mensaje":mensaje,
+                "attachment":[{"content":imagen,"name":nombre_imagen}]
+            })
+
+
             # msg_html = render_to_string('market/emailHelp.html',
             # {
             #     "asunto":asunto,
@@ -548,8 +608,8 @@ def HelpForm(request):
         except Exception as e:
             print(e)
 
-    thread = Thread(target = hilo)
-    thread.start()
+    # thread = Thread(target = hilo)
+    # thread.start()
     data = {'code':200}
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 

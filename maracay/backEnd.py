@@ -164,9 +164,6 @@ class backStart():
 
         def hilo2(comprascode,pago,params_user,costo_envio):
             try:
-                print ("dentro del hilo")
-                print("pago",pago)
-                print("user",user)
                 ###############################
                 #Envio la factura por email
                 carroEmail = {'compra':[]}

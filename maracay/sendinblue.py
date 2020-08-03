@@ -19,7 +19,8 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
         headers = {
             'accept': 'application/json',
             'api-key': KEYSENDI,
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'content-length': '606',
             }
         params = {
             "email":email,"nombre":nombre,
@@ -35,7 +36,8 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             tempid = 2
             params = {
                 "email":email,"asunto":extra['asunto'],
-                "mensaje":extra['mensaje']
+                "mensaje":extra['mensaje'],
+                "attachment":extra['attachment']
                 }
             to = [{"email":"criollitosmarket@gmail.com","nombre":"admin"}]
 
@@ -67,6 +69,8 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             "params":params
             }
         response = requests.request("POST",STRANS,json=transaction,headers=headers)
+        print("--->",response.status_code)
+        print("--->",response.text)
         return response.text
     except Exception as e:
         print("sendinblue",e)

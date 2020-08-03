@@ -156,6 +156,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT,'static')
 STATICFILES_DIRS = (os.path.join(STATIC_ROOT, 'static'),)
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static/images/upload')
 MEDIA_URL = PROJECT_ROOT+'/static/images/upload/imagesp/'
+FILE_UPLOAD_PERMISSIONS = 0o777
+
 ##################
 
 # Static files (CSS, JavaScript, Images)
