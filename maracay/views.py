@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
-from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory
+from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory, Pagos
 from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
@@ -495,6 +495,7 @@ def ConfimationOrder(request):
 def HelpForm(request):
     try:
         from django.core.files.storage import FileSystemStorage
+
         print("envio el formulario con la imagen")
         # from django.core.mail import EmailMultiAlternatives
         # from email.mime.image import MIMEImage
@@ -525,9 +526,15 @@ def HelpForm(request):
         localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
 
 
+
         fs = FileSystemStorage(location=localtion_save)
-        fs.save(file_name, data)
-        print("request.headers",)
+        mymodel = Pagos()
+        mymodel.pago.save(file_name,data)
+
+        
+        # fs.save(file_name, data)
+
+        # print("rurllll",fs.ur(mymodel))
         #alfonso
 
         # test = "https://frutasyverdura.weebly.com/uploads/5/5/6/8/55681601/163975_orig.jpg"
@@ -535,9 +542,9 @@ def HelpForm(request):
             "asunto":asunto,
             "mensaje":mensaje,
             "attachment":[
-                {"content":request.headers['Host']+"/"+localtion_save+file_name,
+                {"content":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
                 "name":file_name,
-                "ex":request.headers['Host']+"/"+localtion_save+file_name,
+                "ex":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
                 }]
         })
     except Exception as e:

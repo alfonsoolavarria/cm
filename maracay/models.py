@@ -18,6 +18,12 @@ class Product(models.Model):
     category=models.PositiveSmallIntegerField(choices=__cate,help_text="Seleccione una categoria del producto")
     create_at=models.DateTimeField(auto_now_add=True,null=True)
 
+
+class Pagos(models.Model):
+    id=models.AutoField(primary_key=True)
+    pago = models.ImageField(upload_to='imagesp/capturas/')
+    create_at=models.DateTimeField(auto_now_add=True,null=True)
+
 class Profile(models.Model):
     id=models.AutoField(primary_key=True)
     user=models.OneToOneField(User, related_name='user_profile',on_delete=models.CASCADE)
