@@ -82,7 +82,7 @@ DATABASES = {
         #'TIMEOUT':2,
         'NAME': 'criollitos',
         'USER': 'postgres',
-        # 'PASSWORD': '21098026',
+        'PASSWORD': '21098026',
         'HOST': 'localhost',
         'PORT': '5432',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -152,11 +152,18 @@ STATIC_URL = '/static/'
 #
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT,'static')
-STATICFILES_DIRS = (os.path.join(STATIC_ROOT, 'static'),)
+STATIC_ROOT = os.path.join(PROJECT_ROOT+STATIC_URL)
+STATICFILES_DIRS = [PROJECT_ROOT,'static',"static/images/upload/"]
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static/images/upload')
 MEDIA_URL = PROJECT_ROOT+'/static/images/upload/'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 FILE_UPLOAD_PERMISSIONS = 0o777
+STATICFILES_FINDERS=[
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 ##################
 

@@ -9,6 +9,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
 from django.conf import settings
 from django.conf.urls import url
 from maracay import agrega_costo
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
@@ -50,8 +51,6 @@ urlpatterns = [
     url(r'^confirmacion/$', csrf_exempt(ConfimationOrder), name='confirmacioncompra'),
     #detales de la compra
     url(r'^detalles/$', csrf_exempt(Detail), name='detail'),
-
-
 ]
 
 #proces de agregar costo de envio

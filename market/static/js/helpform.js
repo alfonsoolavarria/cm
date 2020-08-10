@@ -11,8 +11,9 @@ $(document).ready(function() {
       // reader.fileName = files[i].name;
       var filedata = reader.result;
       console.log(filedata)
-      
+
       var nombreimagen = input.files[0].name
+      var extension = input.files[0].type
       $.post('/help/form/',{
         csrfmiddlewaretoken:$("#token")[0].children.defaultValue,
         email:$("#ejemplo_password_3").val(),
@@ -20,6 +21,8 @@ $(document).ready(function() {
         mensaje:$("#messageText").val(),
         imagen:filedata,
         nombre_imagen:nombreimagen,
+        extension:extension,
+        codigo:$("#codigo1").val(),
       }).done(function (result) {
         if (result.code==200) {
           swal("Mensaje enviado con Éxito", " ", "success");
@@ -56,6 +59,10 @@ $(document).ready(function() {
       swal("Debe ingresar un Mensaje", " ", "warning");
       return false;
     }
+    if ($("#codigo1").val().length<1) {
+      swal("Debe ingresar un Código de Compra", " ", "warning");
+      return false;
+    }
     if ($("#asuntoSelect").val().length<1) {
       swal("Debe seleccionar un Asunto", " ", "warning");
       return false;
@@ -69,5 +76,19 @@ $(document).ready(function() {
     }
 
   });
+
+  $("#asuntoSelect").change(function() {
+    if ($("#asuntoSelect").val() != 'Pagos-Transferencias'){
+      $("#ccompra").css('visibility','hidden');
+      $("#ccompra").css('display','none');
+      $("#xcompra").css('visibility','hidden');
+      $("#xcompra").css('display','none');
+    }else {
+      $("#ccompra").css('visibility','visible');
+      $("#ccompra").css('display','grid');
+      $("#xcompra").css('visibility','visible');
+      $("#xcompra").css('display','grid');
+    }
+});
 
 });

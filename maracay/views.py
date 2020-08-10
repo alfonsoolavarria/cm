@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
-from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory, Pagos
+from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory
 from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
@@ -493,65 +493,11 @@ def ConfimationOrder(request):
 
 #envio de formulario de ayuda
 def HelpForm(request):
-    try:
-        from django.core.files.storage import FileSystemStorage
-
-        print("envio el formulario con la imagen")
-        # from django.core.mail import EmailMultiAlternatives
-        # from email.mime.image import MIMEImage
-        asunto = request.POST.get('asunto')
-        email = request.POST.get('email')
-        mensaje = request.POST.get('mensaje')
-        imagen = request.POST.get('imagen')
-        nombre_imagen = request.POST.get('nombre_imagen')
-        # print('foto',request.FILES.get('foto'))
-        #guardado del archivo
-        import base64
-        from datetime import datetime
-        import os,stat
-        from django.core.files.base import ContentFile
-
-
-        image_data = request.POST.get('imagen')
-
-        format, imgstr = image_data.split(';base64,')
-        print("format", format)
-        ext = format.split('/')[-1]
-
-        now = datetime.now()
-        current_time = now.strftime("%Y-%m-%d")
-
-        data = ContentFile(base64.b64decode(imgstr))
-        file_name = str(current_time)+"-"+nombre_imagen
-        localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
-
-
-
-        fs = FileSystemStorage(location=localtion_save)
-        mymodel = Pagos()
-        mymodel.pago.save(file_name,data)
-
-        
-        # fs.save(file_name, data)
-
-        # print("rurllll",fs.ur(mymodel))
-        #alfonso
-
-        # test = "https://frutasyverdura.weebly.com/uploads/5/5/6/8/55681601/163975_orig.jpg"
-        sendinblue_send('contacto',email,"","",{
-            "asunto":asunto,
-            "mensaje":mensaje,
-            "attachment":[
-                {"content":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
-                "name":file_name,
-                "ex":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
-                }]
-        })
-    except Exception as e:
-        print("eeeeee",e)
 
     def hilo():
         try:
+            from django.core.files.storage import FileSystemStorage
+
             print("envio el formulario con la imagen")
             # from django.core.mail import EmailMultiAlternatives
             # from email.mime.image import MIMEImage
@@ -560,14 +506,50 @@ def HelpForm(request):
             mensaje = request.POST.get('mensaje')
             imagen = request.POST.get('imagen')
             nombre_imagen = request.POST.get('nombre_imagen')
-            # print("base",imagen)
-            # print("nombre_imagen",nombre_imagen)
+            codigo = request.POST.get('codigo')
+            extension = request.POST.get('extension')
+            extension = '.'+extension.split("/")[1]
+            print("extension",extension)
+            # print('foto',request.FILES.get('foto'))
+            #guardado del archivo
+            import base64
+            from datetime import datetime
+            import os,stat
+            from django.core.files.base import ContentFile
+
+            def ran_gen(size, chars=string.ascii_uppercase + string.digits):
+                return ''.join(random.choice(chars) for x in range(size))
+
+            nombre_random = ran_gen(5,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
+
+            image_data = request.POST.get('imagen')
+
+            format, imgstr = image_data.split(';base64,')
+            ext = format.split('/')[-1]#otra extension por si acaso
+            now = datetime.now()
+            current_time = now.strftime("%Y-%m-%d")
+
+            data = ContentFile(base64.b64decode(imgstr))
+            file_name = str(current_time)+"-"+codigo+extension
+            localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
+
+            fs = FileSystemStorage(location=localtion_save)
+            mymodel = PagosImagenes(email_user=email,asunto=asunto,codigo_compra=codigo,mensaje=mensaje)
+
+            istan = mymodel.picture.save(file_name,data)
+            # mymodel.email_user.save(request.user)
+            # fs.save(file_name, data)
+            # print("rurllll",fs.url(mymodel))
+            # test = "https://frutasyverdura.weebly.com/uploads/5/5/6/8/55681601/163975_orig.jpg"
             sendinblue_send('contacto',email,"","",{
                 "asunto":asunto,
                 "mensaje":mensaje,
-                "attachment":[{"content":imagen,"name":nombre_imagen}]
+                "codigo":codigo,
+                "attachment":[
+                    {"content":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
+                    "name":file_name,
+                    }]
             })
-
 
             # msg_html = render_to_string('market/emailHelp.html',
             # {
@@ -619,8 +601,9 @@ def HelpForm(request):
         except Exception as e:
             print(e)
 
-    # thread = Thread(target = hilo)
-    # thread.start()
+    thread = Thread(target = hilo)
+    thread.start()
+
     data = {'code':200}
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
@@ -651,7 +634,7 @@ def Forgot(request):
         def ran_gen(size, chars=string.ascii_uppercase + string.digits):
             return ''.join(random.choice(chars) for x in range(size))
 
-        tokenCode = ran_gen(30,"abcdefghijkLmnNopqrstuvwxyz0123456789./*-")
+        tokenCode = ran_gen(30,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
         ########################################################################
         try:
             token = TokenPassword.objects.get(user=dataUser)

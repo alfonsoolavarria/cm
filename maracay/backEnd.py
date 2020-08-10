@@ -57,11 +57,8 @@ class backStart():
                 valor_str = ""
                 valor_float = ""
                 if self._request.POST['categoria_pago']=='Internacional':
-                    print("Pago Internacional")
                     import requests
                     from bs4 import BeautifulSoup
-                    print(self._request.POST['total'])
-                    print(self._request.POST['moneda'])
                     if self._request.POST['lugarpago'] not in ['Paypal','USA','Argentina']:
                         r = requests.get("https://www.google.com/search?q="+self._request.POST['total']+"+usd+to+"+self._request.POST['moneda']+"")
                         soup = BeautifulSoup(r.text, 'html.parser')
@@ -71,7 +68,6 @@ class backStart():
                         for index,value_convert in enumerate(get_class_value_convert):
                             valores_conversion.append(value_convert.text.strip())
 
-                        print(valores_conversion)
 
                         if valores_conversion:
                             valor_str = valores_conversion[0].split()[0]
@@ -81,24 +77,24 @@ class backStart():
                             self.code = 500
                             return
 
-                        print ("Toma valor en bruto",valor_str)
-                        print ("Total mejorado para save sin el 5%",valor_float)
+                        # print ("Toma valor en bruto",valor_str)
+                        # print ("Total mejorado para save sin el 5%",valor_float)
                         #aumento del 5%, sumo 1 porque el round si es menor de 5 lo deja si es > 5 lo sube
-                        print(type(valor_float),valor_float)
+                        # print(type(valor_float),valor_float)
                         #el ,2 despues son la cantidad de decimales a mostrar
                         valor_float=round(float(valor_float)+0.1,2)
-                        print("valor_float",valor_float)
+                        # print("valor_float",valor_float)
                         aument1 = (valor_float*5)/100
                         valor_float=round(valor_float+aument1,2)
-                        print("--->valor con el 5%",valor_float)
+                        # print("--->valor con el 5%",valor_float)
                     else:
                         valor_float=self._request.POST['total']
-                        print ("Total mejorado para save sin el 5% PaypalUSA",valor_float)
+                        # print ("Total mejorado para save sin el 5% PaypalUSA",valor_float)
                 else:
-                    print("Pago Nacional")
+                    # print("Pago Nacional")
                     bolivar_acutal = DolarBolivar.objects.get().bolivar
                     valor_float = round(float(self._request.POST['total'])*float(bolivar_acutal),3)
-                    print("valor_floa--->t",valor_float)
+                    # print("valor_floa--->t",valor_float)
             except Exception as e:
                 print("scraping",e)
                 self.code = 500
@@ -109,7 +105,7 @@ class backStart():
             def ran_gen(size, chars=string.ascii_uppercase + string.digits):
                 return ''.join(random.choice(chars) for x in range(size))
 
-            tokenCode = ran_gen(11,"abcdefghijkLmnNopqrstuvwxyz0123456789./*-")
+            tokenCode = ran_gen(11,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
             ########################################################################
 
             carro = json.loads(self._request.POST['carrito'])

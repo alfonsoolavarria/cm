@@ -37,6 +37,7 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             params = {
                 "email":email,"asunto":extra['asunto'],
                 "mensaje":extra['mensaje'],
+                "codigo":extra['codigo'],
                 "attachment":extra['attachment']
                 }
             to = [{"email":"criollitosmarket@gmail.com","nombre":"admin"}]

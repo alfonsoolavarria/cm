@@ -8,7 +8,7 @@ from django.dispatch import receiver
 class Product(models.Model):
     __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')),(4,_('Charcuteria')),(5,_('Carnes')))
     id=models.AutoField(primary_key=True)
-    name=models.CharField(max_length=100,help_text="Alias de la imagen")
+    name=models.CharField(max_length=1000,help_text="Alias de la imagen")
     price=models.DecimalField(max_digits=30, decimal_places=2,help_text="Precio en Dolares")
     pricebs=models.DecimalField(max_digits=30, decimal_places=2,default=1,help_text="Precion en Bolivares")
     description=models.CharField(max_length=200,help_text="Descripcion del producto")
@@ -18,11 +18,6 @@ class Product(models.Model):
     category=models.PositiveSmallIntegerField(choices=__cate,help_text="Seleccione una categoria del producto")
     create_at=models.DateTimeField(auto_now_add=True,null=True)
 
-
-class Pagos(models.Model):
-    id=models.AutoField(primary_key=True)
-    pago = models.ImageField(upload_to='imagesp/capturas/')
-    create_at=models.DateTimeField(auto_now_add=True,null=True)
 
 class Profile(models.Model):
     id=models.AutoField(primary_key=True)
@@ -53,14 +48,14 @@ class Shopping(models.Model):#compra
     user=models.OneToOneField(User, related_name='user_shopping',on_delete=models.CASCADE)
     product=models.OneToOneField(Product, related_name='user_products',on_delete=models.CASCADE)
     cantshopping=models.PositiveSmallIntegerField(default=0)
-    code=models.CharField(max_length=100)
+    code=models.CharField(max_length=1000)
     create_at=models.DateTimeField(auto_now_add=True)
 
 class PurchaseConfirmation(models.Model):#confirmacion de compra
     # __confirmCompra=((1,_('Anulada')),(2,_('Pendiente')),(3,_('Confirmada')))
     id=models.AutoField(primary_key=True)
     user=models.ForeignKey(User,related_name='user_confirm',on_delete=models.CASCADE)
-    code=models.CharField(max_length=100)#codigo de seguridad de la compra
+    code=models.CharField(max_length=1000)#codigo de seguridad de la compra
     confirmation=models.PositiveSmallIntegerField(default=2)#para saber si se hizo o no la transferencia
     start_date=models.DateTimeField(null=True)#fecha de creacion sera para el servicio init
     product=models.ForeignKey(Product, related_name='product_comprado',on_delete=models.CASCADE)
@@ -70,20 +65,27 @@ class PurchaseConfirmation(models.Model):#confirmacion de compra
 class purchaseHistory(models.Model):
     #se guarda el historial de compra con su total en la modena que pagara o pago
     id=models.AutoField(primary_key=True)
-    code_purchase=models.CharField(max_length=100)#codigo de seguridad de la compra relacionado a la compra
-    total=models.CharField(max_length=100)#total de compra
+    code_purchase=models.CharField(max_length=1000)#codigo de seguridad de la compra relacionado a la compra
+    total=models.CharField(max_length=1000)#total de compra
     user=models.ForeignKey(User,related_name='user_history',on_delete=models.CASCADE)#usuario que compro
-    lugarpago=models.CharField(max_length=100)#lugar de pago (pais)
-    categoria_pago=models.CharField(max_length=100)#tipo de pago (Nacional o Internacional)
-    payment_type=models.CharField(max_length=100)#modo de pago (PayPal o Transferencia)
-    moneda=models.CharField(max_length=100)#moneda en que cotizo su pago
+    lugarpago=models.CharField(max_length=1000)#lugar de pago (pais)
+    categoria_pago=models.CharField(max_length=1000)#tipo de pago (Nacional o Internacional)
+    payment_type=models.CharField(max_length=1000)#modo de pago (PayPal o Transferencia)
+    moneda=models.CharField(max_length=1000)#moneda en que cotizo su pago
     create_at=models.DateTimeField(auto_now_add=True)
 
+from django.utils.html import mark_safe
 class PagosImagenes(models.Model):
     id=models.AutoField(primary_key=True)
     email_user=models.CharField(max_length=200)
-    picture = models.ImageField(upload_to='imagespagos')
+    picture = models.ImageField(upload_to='imagesp/capturas/')
     create_at=models.DateTimeField(auto_now_add=True,null=True)
+    asunto=models.CharField(max_length=1000)
+    codigo_compra=models.CharField(max_length=200)
+    mensaje=models.CharField(max_length=1000)
+    def image_tag(self):
+        return mark_safe('<img src="/static/images/upload/%s" width="150" height="150" />' % (self.picture))
+    image_tag.short_description = 'Image'
 
 class DolarBolivar(models.Model):
     id=models.AutoField(primary_key=True)
