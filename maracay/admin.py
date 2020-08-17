@@ -6,24 +6,22 @@ from django.utils.html import format_html
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name_image', 'price', 'pricebs')
+    list_display = ('name','name_image', 'price', 'pricebs','visible')
     list_filter = ('name', 'price', 'pricebs')
     search_fields = ('name', 'price', 'pricebs')
-
-admin.site.register(Product,ProductAdmin)
-admin.site.register(Tools)
-admin.site.register(Shopping)
-admin.site.register(PurchaseConfirmation)
-admin.site.register(purchaseHistory)
 
 class Model1Admin(admin.ModelAdmin):
     list_display = ('codigo_compra','create_at',)
     fields = ['image_tag','asunto','codigo_compra','mensaje','create_at']
     readonly_fields = ['image_tag','asunto','codigo_compra','mensaje','create_at']
 
-
-admin.site.register(PagosImagenes,Model1Admin)
-
 class DolarAdmin(admin.ModelAdmin):
     list_display = ('bolivar',)
+
+admin.site.register(Product,ProductAdmin)
+admin.site.register(Tools)
+admin.site.register(Shopping)
+admin.site.register(PurchaseConfirmation)
+admin.site.register(purchaseHistory)
 admin.site.register(DolarBolivar,DolarAdmin)
+admin.site.register(PagosImagenes,Model1Admin)

@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.html import mark_safe
 
 # Create your models here.
 class Product(models.Model):
-    __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')),(4,_('Charcuteria')),(5,_('Carnes')))
+    __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')),(4,_('Charcuteria')),(5,_('Carnes')),(6,_('Personales')))
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=1000,help_text="Alias de la imagen")
     price=models.DecimalField(max_digits=30, decimal_places=2,help_text="Precio en Dolares")
@@ -16,6 +17,7 @@ class Product(models.Model):
     picture = models.ImageField(upload_to='imagesp')
     cant=models.PositiveSmallIntegerField(default=1,help_text="Cantidad disponible el producto en el almacen")
     category=models.PositiveSmallIntegerField(choices=__cate,help_text="Seleccione una categoria del producto")
+    visible = models.BooleanField(default=False)
     create_at=models.DateTimeField(auto_now_add=True,null=True)
 
 
@@ -74,7 +76,7 @@ class purchaseHistory(models.Model):
     moneda=models.CharField(max_length=1000)#moneda en que cotizo su pago
     create_at=models.DateTimeField(auto_now_add=True)
 
-from django.utils.html import mark_safe
+
 class PagosImagenes(models.Model):
     id=models.AutoField(primary_key=True)
     email_user=models.CharField(max_length=200)

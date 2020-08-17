@@ -24,13 +24,13 @@ urlpatterns = [
     url(r'^forgot/password/mail/$', ForgotMail, name='restoredesdeemail'),
     url(r'^profile/$', csrf_exempt(Profile.as_view()), name='profile'),
     url(r'^help/$', Help, name='help'),
-    url(r'^help/form/$', csrf_exempt(HelpForm), name='helpform'),
+    url(r'^help/form/$', csrf_exempt(HelpForm), name='helpform'),#OJO NOTA LEER verofocar si la imagen es muy pesada mandar alerta
     url(r'^we/$', We, name='we'),
     url(r'^places/$', Places, name='places'),
     url(r'^payment/$', Payment, name='payment'),
     url(r'^delivery/$', Delivery, name='delivery'),
     #administrador
-    url(r'^criollitos/market/admin/$', ControlAdmin.as_view(), name='admin'),
+    url(r'^criollitos/market/admin/$', csrf_exempt(ControlAdmin.as_view()), name='admin'),
     url(r'^criollitos/market/admin/all/product/$', csrf_exempt(AllProductsAdminTable), name='prodtable'),
     url(r'^criollitos/market/admin/all/$', AllProductsAdmin, name='adminall'),
     url(r'^criollitos/market/admin/viveres/$', ViveresProductsAdmin, name='adminviveres'),

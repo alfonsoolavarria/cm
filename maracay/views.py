@@ -12,12 +12,19 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
-from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory
+from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory, Product, DolarBolivar
 from maracay import get_client_ip, config
 import json,random, string, datetime
 from django.contrib import admin
 import os
 from maracay.sendinblue import sendinblue_send
+from django.core.files.storage import FileSystemStorage
+import base64
+from datetime import datetime
+import os,stat
+from django.core.files.base import ContentFile
+import xlrd
+
 # Create your views here.
 #Main Class
 class Maracay(TemplateView):
@@ -181,22 +188,105 @@ def AllProductsAdminTable(request):
 
 class ControlAdmin(View):
     def get(self, request, *args, **kwargs):
-        #poner esto and request.user.is_superuser==True para el admin
-        if str(request.user) != 'AnonymousUser' :#si esta logeado su data
-            _allproductsfilter = adminSite(request)
-            _allproductsfilter.dataProductUser()
+        try:
+            #poner esto and request.user.is_superuser==True para el admin
+            if str(request.user) != 'AnonymousUser' :#si esta logeado su data
+                _allproductsfilter = adminSite(request)
+                _allproductsfilter.dataProductUser()
+                lista_template = ['productos','cotizacion','precios']
+                data = _allproductsfilter.response_data
+                data['code'] = _allproductsfilter.code
+                contact_list = data['cantTotal']
+                # paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+                # page = request.GET.get('page')
+                # contacts = paginator.get_page(page)
+                # dataAll = {'contacts':contacts}
+                flag = False
+                direction = '/static/images/upload/imagesp/'
+                for value in lista_template:
+                    print("value",value)
+                    if value in request.GET:
+                        flag=True
+                        data[value]=True
+                if not flag:
+                    data['cotizacion']=True
+                print("Data",data)
+                return render(request, 'market/admintemplates/adminGestion.html', {'valores':data,'direction':direction,'data':data['data'],'flag':'all'})
+                #mandar los productos con nombre , y precio en dolares y dejar dos campos vacion que seran cant y total
+                #llenarlo en el fron dinamicamente y hacer la multiplicacion y ya  y poner un filtro para mostrar solo los que
+                #estan llenos y buscar poner un boton para eportarlo y ya
 
-            data = _allproductsfilter.response_data
-            data['code'] = _allproductsfilter.code
-            contact_list = data['cantTotal']
-            paginator = Paginator(contact_list, 10) # Show 25 contacts per page
-            page = request.GET.get('page')
-            contacts = paginator.get_page(page)
-            dataAll = {'contacts':contacts}
-            direction = '/static/images/upload/imagesp/'
-            return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'all'})
-        else: # registro
-            return render(request, 'market/adminIndex.html', {})
+            else: # registro
+                return render(request, 'market/admintemplates/adminIndex.html', {})
+
+        except Exception as e:
+            print(e)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            archivo = request.POST.get('archivo')
+            nombre_archivo = request.POST.get('nombre_archivo')
+            format, imgstr = archivo.split(';base64,')
+            ext = format.split('/')[-1]
+
+            data = ContentFile(base64.b64decode(imgstr))
+
+            localtion_save = settings.MEDIA_ROOT
+            fs = FileSystemStorage(location=localtion_save)
+            fs.save(nombre_archivo, data)
+
+            #Abrimos el archivo excel
+            documento = xlrd.open_workbook(settings.MEDIA_ROOT+'/'+nombre_archivo)
+            sheet_excel = documento.sheet_names()
+            if 'CALCULADOR' in sheet_excel:
+                lista_productos_precios_venta = documento.sheet_by_index(sheet_excel.index('CALCULADOR'))
+                listafinal = []
+                listafinalreal = []
+
+                for i in range(lista_productos_precios_venta.nrows): #
+                    if i !=0:
+                        fila = lista_productos_precios_venta.row(i) #
+                        listafinal.append([str(fila[1]).split("text:"),str(fila[2]).split("number:"),str(fila[5]).split("number:")])
+
+                for product_precio in listafinal:
+                    nombre_producto = product_precio[0][1].replace("'","")
+                    precio_producto = round(float(product_precio[1][1]),2)
+                    categoria = round(float(product_precio[2][1]))
+
+                    try:
+                        producto_para_actualizar = Product.objects.get(name=nombre_producto)
+                        producto_para_actualizar.price = precio_producto
+                        producto_para_actualizar.pricebs = round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2)
+                        producto_para_actualizar.save()
+                    except Exception as e:
+                        if categoria != 0:
+                            print("No existe y lo creo")
+                            actualizado = Product.objects.create(
+                                name=nombre_producto,
+                                price=precio_producto,
+                                category=categoria,
+                                pricebs=round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2))
+                            actualizado.save()
+                        else:
+                            print("salta porque no es categoria valida")
+
+            else:
+                data = {"code":500,"mensaje":"Error Verifique el archivo subido"}
+            print("borrar excel del sistema ")
+            os.remove(settings.MEDIA_ROOT+'/'+nombre_archivo)
+            data = {"code":200,"mensaje":"Subido Correctamente"}
+            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+        except Exception as e1:
+            print("borrar excel del sistema error")
+            try:
+                os.remove(settings.MEDIA_ROOT+'/'+nombre_archivo)
+                data = {"code":500,"error":"BackEnd "+str(e1)}
+                return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+            except Exception as e:
+                data = {"code":500,"error":"BackEnd "+str(e1)}
+                return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+
+
 
 #Fin de la Seccion de Administrador
 
@@ -496,7 +586,7 @@ def HelpForm(request):
 
     def hilo():
         try:
-            from django.core.files.storage import FileSystemStorage
+
 
             print("envio el formulario con la imagen")
             # from django.core.mail import EmailMultiAlternatives
@@ -512,10 +602,7 @@ def HelpForm(request):
             print("extension",extension)
             # print('foto',request.FILES.get('foto'))
             #guardado del archivo
-            import base64
-            from datetime import datetime
-            import os,stat
-            from django.core.files.base import ContentFile
+
 
             def ran_gen(size, chars=string.ascii_uppercase + string.digits):
                 return ''.join(random.choice(chars) for x in range(size))

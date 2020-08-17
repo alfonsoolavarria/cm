@@ -1,0 +1,38 @@
+{% load static %}
+<div class="" style="text-align: center;">
+	 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
+	 <h4><b>Productos</b></h4>
+</div>
+
+<table id="productsAdmin" class="display mx-auto table table-striped table-bordered" style="width:90%">
+			<thead class="thead-dark">
+					<tr style="text-align:center;">
+							<th style="width:50%">Nombre</th>
+							<th>Price</th>
+					</tr>
+			</thead>
+			{%for value in data%}
+				<tr style="text-align:center;">
+					<td>{{value.name}}</td>
+					<td><label id="price-{{forloop.counter}}">{{value.price}}</label></td>
+				</tr>
+			{%endfor%}
+	</table>
+
+
+	<form id="" class="form-horizontal" enctype="multipart/form-data" style="margin-left:4%">
+		<label id="token" style="visibility:hidden;">{% csrf_token %}</label>
+		<div class="form-group" id='xcompra'>
+			<label class="col-lg-5 control-label" >Sube el Excel para actualizar precios o incluir nuevos productos</label>
+			<div class="col-lg-10">
+				<input type="file" class="form-control-file" name="foto" id="fileproducto">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-lg-offset-2 col-lg-3">
+				<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" id="excelproductos">
+					Subir
+				</button>
+			</div>
+		</div>
+	</form>

@@ -20,12 +20,12 @@ class backStart():
         self.code = 200
 
     def get(self,params=None):
-        self.response_data['cantTotal']= Product.objects.all()
+        self.response_data['cantTotal']= Product.objects.filter(visible=True)
         #self.response_data['first'] = self._request.GET.get('start',0)
         #self.response_data['last'] = self._request.GET.get('end',12)
 
         try:
-            for a in Product.objects.all():
+            for a in Product.objects.filter(visible=True):
                 self.response_data['data'].append({
                 "category":a.category,
                 "id":a.id,
@@ -116,7 +116,7 @@ class backStart():
             for value in carro:
                 for k,v in value.items():
                     if k == 'id':
-                        dataSave['product']=Product.objects.get(pk=int(v))
+                        dataSave['product']=Product.objects.get(pk=int(v),visible=True)
                     if k == 'cantidad':
                         dataSave['cant_product']=v
 
@@ -133,7 +133,7 @@ class backStart():
                     cant_product=dataSave['cant_product'],
                 )
                 # dataSave['product'].cant = dataSave['product'].cant - int(dataSave['cant_product'])
-                update_product_cant = Product.objects.get(pk=int(dataSave['product'].id))
+                update_product_cant = Product.objects.get(visible=True,pk=int(dataSave['product'].id))
                 update_product_cant.cant= int(update_product_cant.cant) - int(dataSave['cant_product'])
                 update_product_cant.save()
                 # dataSave['product'].update(cant=dataSave['product'].cant - int(dataSave['cant_product']))
@@ -359,8 +359,8 @@ class filterProducts():
         self.code = 200
 
     def allProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.all()
-        for a in Product.objects.all():
+        self.response_data['cantTotal']= Product.objects.filter(visible=True)
+        for a in Product.objects.filter(visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -372,8 +372,8 @@ class filterProducts():
             })
 
     def viveresProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=1)
-        for a in Product.objects.filter(category=1):
+        self.response_data['cantTotal']= Product.objects.filter(category=1,visible=True)
+        for a in Product.objects.filter(category=1,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -384,8 +384,8 @@ class filterProducts():
             #"price":a.price,
             })
     def frigorificoProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=2)
-        for a in Product.objects.filter(category=2):
+        self.response_data['cantTotal']= Product.objects.filter(category=2,visible=True)
+        for a in Product.objects.filter(category=2,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -396,8 +396,8 @@ class filterProducts():
             #"price":a.price,
             })
     def enlatadosProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=3)
-        for a in Product.objects.filter(category=3):
+        self.response_data['cantTotal']= Product.objects.filter(category=3,visible=True)
+        for a in Product.objects.filter(category=3,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -408,8 +408,8 @@ class filterProducts():
             #"price":a.price,
             })
     def charcuteriaProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=4)
-        for a in Product.objects.filter(category=3):
+        self.response_data['cantTotal']= Product.objects.filter(category=4,visible=True)
+        for a in Product.objects.filter(category=4,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -420,8 +420,8 @@ class filterProducts():
             #"price":a.price,
             })
     def carnesProductsFilter(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=5)
-        for a in Product.objects.filter(category=3):
+        self.response_data['cantTotal']= Product.objects.filter(category=5,visible=True)
+        for a in Product.objects.filter(category=5,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -440,8 +440,7 @@ class adminSite():
         self.code = 200
 
     def allProductsTable(self):
-        print("----???legueee")
-        for a in Product.objects.all():
+        for a in Product.objects.filter(visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -454,8 +453,8 @@ class adminSite():
             })
 
     def dataProductUser(self):
-        self.response_data['cantTotal']= Product.objects.all()
-        for a in Product.objects.all():
+        self.response_data['cantTotal']= Product.objects.filter(visible=True)
+        for a in Product.objects.filter(visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -463,12 +462,12 @@ class adminSite():
             "cant":a.cant,
             "description":a.description,
             "name_image":a.name_image,
-            #"price":a.price,
+            "price":a.price,
             })
 
     def viveresProductsFilterAdmin(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=1)
-        for a in Product.objects.filter(category=1):
+        self.response_data['cantTotal']= Product.objects.filter(category=1,visible=True)
+        for a in Product.objects.filter(category=1,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -479,8 +478,8 @@ class adminSite():
             #"price":a.price,
             })
     def frigorificoProductsFilterAdmin(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=2)
-        for a in Product.objects.filter(category=2):
+        self.response_data['cantTotal']= Product.objects.filter(category=2,visible=True)
+        for a in Product.objects.filter(category=2,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,
@@ -491,8 +490,8 @@ class adminSite():
             #"price":a.price,
             })
     def enlatadosProductsFilterAdmin(self):
-        self.response_data['cantTotal']= Product.objects.filter(category=3)
-        for a in Product.objects.filter(category=3):
+        self.response_data['cantTotal']= Product.objects.filter(category=3,visible=True)
+        for a in Product.objects.filter(category=3,visible=True):
             self.response_data['data'].append({
             "category":a.category,
             "id":a.id,

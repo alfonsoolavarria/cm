@@ -27,7 +27,7 @@ def verificacion_compras():
                         print ('Anular la compra',compra.id)
                         compra.confirmation = 1
                         #restituyo la cantidad de productos comprados
-                        producto = Product.objects.get(id=compra.product.id)
+                        producto = Product.objects.get(id=compra.product.id,visible=True)
                         producto.cant = int(producto.cant)+int(compra.cant_product)
                         #guardo cambios
                         compra.save()

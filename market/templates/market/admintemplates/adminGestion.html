@@ -245,64 +245,31 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Cotizacion<span class="sr-only">(current)</span></a>
+      <li class="nav-item {% if valores.cotizacion %} active {% endif %}">
+        <a class="nav-link" href="/criollitos/market/admin?cotizacion=True">Cotizacion</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Productos</a>
+      <li class="nav-item {% if valores.productos %} active {% endif %}">
+        <a class="nav-link" href="/criollitos/market/admin?productos=True">Productos</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Precios</a>
+      <li class="nav-item {% if valores.precios %} active {% endif %}">
+        <a class="nav-link" href="/criollitos/market/admin?precios=True">Precios</a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
+      </li> -->
     </ul>
   </div>
 </nav>
-
-<!-- Fin de Nav bar nuevo -->
-<div class="" style="text-align: center;">
-	 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
-	 <h4><b>Productos</b></h4>
-</div>
-
-<table id="productsAdmin" class="display mx-auto table table-striped table-bordered" style="width:90%">
-			<thead>
-					<tr>
-							<th>category</th>
-							<th>id</th>
-							<th>name</th>
-							<th>cant</th>
-							<th>description date</th>
-							<th>name_image</th>
-							<th>price</th>
-							<th>pricebs</th>
-					</tr>
-			</thead>
-	</table>
-	<div class="" style="text-align: center;">
-		 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
-		 <h4><b>Cotizacion</b></h4>
-	</div>
-
-<table id="cotizaciontable" class="display mx-auto table table-striped table-bordered" style="width:90%">
-			<thead>
-					<tr>
-							<th>category</th>
-							<th>id</th>
-							<th>name</th>
-							<th>cant</th>
-							<th>description date</th>
-							<th>name_image</th>
-							<th>price</th>
-							<th>pricebs</th>
-					</tr>
-			</thead>
-	</table>
-	<button type='button' id='buttonadd' class='btn btn-danger btn-rounded btn-sm'>Quitar producto seleccionado</button>
-
-
+	<!-- Cotizacion -->
+	{% if valores.cotizacion %}
+		{% include "market/admintemplates/cotizador.html" %}
+	{% endif %}
+	{% if valores.productos %}
+		{% include "market/admintemplates/productos.html" %}
+	{% endif %}
+	{% if valores.precios %}
+		{% include "market/admintemplates/precios.html" %}
+	{% endif %}
 
     {% include "market/footer.html" %}
     <!-- Back to top -->
@@ -311,132 +278,5 @@
     	<i class="zmdi zmdi-chevron-up"></i>
     </span>
     </div>
-			<script type="text/javascript">
-			var editor;
-			$(document).ready(function() {
-
-		// 		editor = new $.fn.dataTable.Editor( {
-    //     "table": "#cotizaciontable",
-    //     "fields": [ {
-    //             "label": "category:",
-    //             "name": "category"
-    //         }, {
-    //             "label": "id:",
-    //             "name": "id"
-    //         }, {
-    //             "label": "name:",
-    //             "name": "name"
-    //         }, {
-    //             "label": "cant:",
-    //             "name": "cant"
-    //         }, {
-    //             "label": "description:",
-    //             "name": "description"
-    //         }, {
-    //             "label": "name_image:",
-    //             "name": "name_image",
-    //             // type: "datetime"
-    //         }, {
-    //             "label": "price:",
-    //             "name": "price"
-    //         }, {
-    //             "label": "pricebs:",
-    //             "name": "pricebs"
-    //         }
-    //     ]
-    // } );
-		//
-		// // Activate an inline edit on click of a table cell
-    // $('#cotizaciontable').on( 'click', 'tbody td:not(:first-child)', function (e) {
-    //     editor.inline( this );
-    // } )
-
-				var tableCotizacion = $('#cotizaciontable').DataTable({
-					// "dom": 'frtipB',
-					"dom": 'Bfrtip',
-					"buttons": [
-            'excel', 'pdf','colvis'
-        ],
-					"columns": [
-							{ "data": "category" },
-							{ "data": "id" },
-							{ "data": "name" },
-							{ "data": "cant" },
-							{ "data": "description" },
-							{ "data": "name_image" },
-							{ "data": "price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-							{ "data": "pricebs" }
-					]
-				});
-
-				var table = $('#productsAdmin').DataTable( {
-							"ajax": {
-				        "url": "all/product/",
-				        "dataSrc": 'data'
-	    				},
-							"columns": [
-									{ "data": "category" },
-									{ "data": "id" },
-									{ "data": "name" },
-									{ "data": "cant" },
-									{ "data": "description" },
-									{ "data": "name_image" },
-									{ "data": "price" },
-									{ "data": "pricebs" }
-							]
-					});
-
-					// console.log(table.rows( { selected: true } ).data())
-					// $("#productsAdmin_wrapper").width('90%')
-					$("#productsAdmin_filter").css('position','inherit')
-					$("#productsAdmin_filter").css('left','-80px')
-					$("#productsAdmin_filter.label.input").parent().css('border','1px solid black')
-
-					// Selecciona las filas
-					$('#productsAdmin tbody').on( 'click', 'tr', function () {
-		        if ( $(this).hasClass('selected') ) {
-		            $(this).removeClass('selected');
-		        }
-		        else {
-		            table.$('tr.selected').removeClass('selected');
-		            $(this).addClass('selected');
-								datosadd = tableCotizacion.rows().data();
-								listaid = []
-								if (datosadd.length>0) {
-									for (var i = 0; i < datosadd.length; i++) {
-										listaid.push(datosadd[i].id);
-										}
-										// console.log(listaid);
-										if (listaid.includes(table.row( this ).data().id)== false) {
-										tableCotizacion.row.add(table.row( this ).data()).draw();
-									}
-								}else {
-									tableCotizacion.row.add(table.row( this ).data()).draw();
-								}
-		        }
-	    		} );
-
-					// Eliminar product cotizado
-					$('#cotizaciontable tbody').on( 'click', 'tr', function () {
-						if ( $(this).hasClass('selected') ) {
-		            $(this).removeClass('selected');
-								// $("#buttonadd").remove();
-		        }
-		        else {
-							// $("#buttonadd").remove();
-							tableCotizacion.$('tr.selected').removeClass('selected');
-							$(this).addClass('selected');
-							// $(this).append("")
-						}
-					});
-					$('#buttonadd').click( function () {
-						tableCotizacion.row('.selected').remove().draw( false );
-					});
-			});
-
-
-
-
-			</script>
   </body>
 </html>
