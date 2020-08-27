@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.conf import settings
 from threading import Thread
 from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory, Product, DolarBolivar
-from maracay import get_client_ip, config
+from maracay import get_client_ip, config, formatoBolivares
 import json,random, string, datetime
 from django.contrib import admin
 import os
@@ -42,9 +42,7 @@ class Maracay(TemplateView):
             paginator = Paginator(contact_list, 10) # Show 25 contacts per page
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
-            for value in contacts:
-                print ("contactscontacts",value)
-                print ("contactscontacts",value.price)
+            formatoBolivares(contacts)
 
             direction = '/static/images/upload/imagesp/'
             return render(request, 'market/index.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -354,6 +352,7 @@ def AllProducts(request):
     contacts = paginator.get_page(page)
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
+    formatoBolivares(contacts)#formato en bolivares
     return render(request, 'market/allProducts.html',{'all':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 def ViveresProducts(request):
@@ -367,6 +366,7 @@ def ViveresProducts(request):
     paginator = Paginator(contact_list, 10) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/viveresProducts.html',{'viveres':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -382,6 +382,7 @@ def FrigorificoProducts(request):
     paginator = Paginator(contact_list, 10) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/frigorificoProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -397,6 +398,7 @@ def EnlatadosProducts(request):
     paginator = Paginator(contact_list, 10) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/enlatadosProducts.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -412,6 +414,7 @@ def CharcuteriaProducts(request):
     paginator = Paginator(contact_list, 10) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/charcuteriaProducts.html',{'charcuteria':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -427,6 +430,7 @@ def CarnesProducts(request):
     paginator = Paginator(contact_list, 10) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
     dataAll = {'contacts':contacts}
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/carnesProducts.html',{'carne':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
@@ -445,6 +449,7 @@ def AllProductsAdmin(request):
         paginator = Paginator(contact_list, 10) # Show 25 contacts per page
         page = request.GET.get('page')
         contacts = paginator.get_page(page)
+        formatoBolivares(contacts)#formato en bolivares
         dataAll = {'contacts':contacts}
         direction = '/static/images/upload/imagesp/'
         return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'all'})
@@ -463,6 +468,7 @@ def ViveresProductsAdmin(request):
         paginator = Paginator(contact_list, 10) # Show 25 contacts per page
         page = request.GET.get('page')
         contacts = paginator.get_page(page)
+        formatoBolivares(contacts)#formato en bolivares
         dataAll = {'contacts':contacts}
         direction = '/static/images/upload/imagesp/'
         return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'vive'})
@@ -481,6 +487,7 @@ def FrigorificoProductsAdmin(request):
         paginator = Paginator(contact_list, 10) # Show 25 contacts per page
         page = request.GET.get('page')
         contacts = paginator.get_page(page)
+        formatoBolivares(contacts)#formato en bolivares
         dataAll = {'contacts':contacts}
         direction = '/static/images/upload/imagesp/'
         return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'frigo'})
@@ -499,6 +506,7 @@ def EnlatadosProductsAdmin(request):
         paginator = Paginator(contact_list, 10) # Show 25 contacts per page
         page = request.GET.get('page')
         contacts = paginator.get_page(page)
+        formatoBolivares(contacts)#formato en bolivares
         dataAll = {'contacts':contacts}
         direction = '/static/images/upload/imagesp/'
         return render(request, 'market/adminGestion.html', {'direction':direction,'data':contacts,'flag':'enla'})
@@ -780,6 +788,7 @@ def Detail(request):
         _detailproducts.detailProducts()
         data = _detailproducts.response_data
         direction = '/static/images/upload/imagesp/'
+        print(data['data2'][0])
         return render(request, 'market/detailProduct.html', {'direction':direction,'data':data['data'],'data2':data['data2'][0]})
     else:
         data = {'code':500,'message':'Codigo invalido'}

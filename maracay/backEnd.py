@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime, timedelta, date, time
 import schedule, time, pytz, datetime
-from maracay import verificacion_compras
+from maracay import verificacion_compras, formatoBolivares
 from maracay.sendinblue import sendinblue_send
 
 class backStart():
@@ -189,26 +189,6 @@ class backStart():
                     'direction':direction,
                 })
 
-                # msg_html = render_to_string('market/facturaCompra.html',
-                #     {
-                #         'asunto':'Factura' ,
-                #         'payment_type':self._request.POST['pago'],
-                #         'email':self._request.user,
-                #         'carro':carroEmail['compra'],
-                #         'totalGeneral':carroEmail['totalGeneral'],
-                #         'totalCompleto':carroEmail['totalCompleto'],
-                #         'codigo':tokenCode,
-                #         'costoEnvio':costo_envio,
-                #         'direction':direction,
-                #     })
-                #
-                # send_mail(
-                #     'Detalles de la Compra',
-                #     'Subject',
-                #     settings.EMAIL_HOST_USER,#from
-                #     [user.email,settings.EMAIL_HOST_USER],#to
-                #     html_message=msg_html,
-                # )
                 #verificar si el hilo de revision de compras esta o no activo
                 objeto_tools = Tools.objects.get(pk=1)
                 if objeto_tools.hilo_en_proceso == 0:
@@ -222,8 +202,8 @@ class backStart():
                 self.code = 500
                 return
 
-        # envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
-        # envioemailfactura.start()
+        envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
+        envioemailfactura.start()
 
     def detailProducts(self):
         try:
@@ -237,7 +217,10 @@ class backStart():
                 moneda = h.moneda
                 payment_type=h.payment_type
                 lugarpago=h.lugarpago
-                totalcompra=h.total
+                if moneda == "Bs":
+                    totalcompra = formatoBolivares(None,h.total)
+                else:
+                    totalcompra=h.total
                 for value in productos:
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
                     self.response_data['data'].append({
@@ -253,6 +236,7 @@ class backStart():
                     })
 
             # totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
+
             self.response_data['data2'].append({
                 'totalGeneral':totalGeneral,
                 'totalCompleto':totalcompra,

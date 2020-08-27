@@ -1,32 +1,31 @@
-$(document).ready(function() {
-
-  function action_cotizacion(numero) {
-    var totalc = parseFloat($("#totalcotizaciongeneral").text());
-    if (isNaN(totalc)) {
-      totalc = 0;
-    }
-
-    if (isNaN($("#cant-"+numero).val()) || $("#cant-"+numero).val().length<1  ) {
-
-      $("#cant-"+numero).val(0);
-    }
-
-    var prev_precio = parseFloat($("#total-"+numero).val());
-
-    total = (parseFloat($("#cant-"+numero).val()) * parseFloat($("#price-"+numero).text()))
-
-    $("#total-"+numero).val(total.toFixed(2));
-    totalc = totalc+total;
-    if (total == 0) {
-      totalc = totalc-prev_precio;
-    }else {
-      totalc = totalc-prev_precio;
-    }
-
-    $("#monedacotizador").text("$");
-    $("#totalcotizaciongeneral").text(totalc.toFixed(2));
+function action_cotizacion(numero) {
+  var totalc = parseFloat($("#totalcotizaciongeneral").text());
+  if (isNaN(totalc)) {
+    totalc = 0;
   }
 
+  if (isNaN($("#cant-"+numero).val()) || $("#cant-"+numero).val().length<1  ) {
+
+    $("#cant-"+numero).val(0);
+  }
+
+  var prev_precio = parseFloat($("#total-"+numero).val());
+
+  total = (parseFloat($("#cant-"+numero).val()) * parseFloat($("#price-"+numero).text()))
+
+  $("#total-"+numero).val(total.toFixed(2));
+  totalc = totalc+total;
+  if (total == 0) {
+    totalc = totalc-prev_precio;
+  }else {
+    totalc = totalc-prev_precio;
+  }
+
+  $("#monedacotizador").text("$");
+  $("#totalcotizaciongeneral").text(totalc.toFixed(2));
+}
+
+$(document).ready(function() {
 
   $("#excelproductos").click(function(e){
     e.preventDefault();

@@ -54,3 +54,18 @@ def agrega_costo():
         data = {'costoenvio':config.COSTO_ENVIO,'create_at':datetime.datetime.now()}
         costo = Tools(**data)
         costo.save()
+
+def formatoBolivares(contacts,flag=None):
+    if flag:
+        total="{:,.2f}".format(float(flag)).replace(","," ")
+        total=total.replace(".",",")
+        total=total.replace(" ",".")
+        flag = total
+        return flag
+    else:
+        for value in contacts:#formato de moneda en bolivares
+            if value.pricebs:
+                total="{:,.2f}".format(float(value.pricebs)).replace(","," ")
+                total=total.replace(".",",")
+                total=total.replace(" ",".")
+                value.pricebs = total
