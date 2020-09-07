@@ -595,20 +595,17 @@ def HelpForm(request):
 
     def hilo():
         try:
-
-
             print("envio el formulario con la imagen")
-            # from django.core.mail import EmailMultiAlternatives
-            # from email.mime.image import MIMEImage
             asunto = request.POST.get('asunto')
             email = request.POST.get('email')
             mensaje = request.POST.get('mensaje')
             imagen = request.POST.get('imagen')
-            nombre_imagen = request.POST.get('nombre_imagen')
-            codigo = request.POST.get('codigo')
-            extension = request.POST.get('extension')
-            extension = '.'+extension.split("/")[1]
-            print("extension",extension)
+            if imagen:
+                nombre_imagen = request.POST.get('nombre_imagen')
+                codigo = request.POST.get('codigo')
+                extension = request.POST.get('extension')
+                extension = '.'+extension.split("/")[1]
+                print("extension",extension)
             # print('foto',request.FILES.get('foto'))
             now = datetime.now()
             current_time = now.strftime("%Y-%m-%d")
