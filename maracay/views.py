@@ -651,7 +651,7 @@ def HelpForm(request):
     codigo = request.POST.get('codigo')
     if codigo:
         try:
-            PagosImagenes.objects.get(codigo=codigo)
+            PagosImagenes.objects.get(codigo_compra=codigo)
         except Exception as e:
             print("codigo invalido",e)
             data = {'code':500,"error":"Código invalido"}

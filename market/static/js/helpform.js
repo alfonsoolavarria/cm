@@ -10,7 +10,6 @@ $(document).ready(function() {
       // console.log('4',input.files[0].name);
       // reader.fileName = files[i].name;
       var filedata = reader.result;
-      console.log(filedata)
 
       var nombreimagen = input.files[0].name
       var extension = input.files[0].type
@@ -32,7 +31,7 @@ $(document).ready(function() {
           }, delayInMilliseconds);
         }else {
           //poner un tootip
-          swal(result.error[0], " ", "warning");
+          swal(result.error, " ", "warning");
         }
       }).fail(function(error) {
         console.log(error.responseText);
