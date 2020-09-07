@@ -14,7 +14,7 @@ from django.conf import settings
 from threading import Thread
 from maracay.models import Tools, Profile as ProfileDB, PurchaseConfirmation, TokenPassword, PagosImagenes, purchaseHistory, Product, DolarBolivar
 from maracay import get_client_ip, config, formatoBolivares
-import json,random, string, datetime
+import json,random, string
 from django.contrib import admin
 import os
 from maracay.sendinblue import sendinblue_send
@@ -166,7 +166,7 @@ class Profile(View):
 
             return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
         except Exception as e:
-            print (e)
+            print ("Profile",e)
             data = {'code':500}
             return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
@@ -218,7 +218,7 @@ class ControlAdmin(View):
                 return render(request, 'market/admintemplates/adminIndex.html', {})
 
         except Exception as e:
-            print(e)
+            print("ControlAdmin get",e)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -324,18 +324,19 @@ def CartShopping(request):
                 'code':200
             })
         except Exception as e:
-            print (e)
+            print ("CartShopping",e)
             return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
     else:
         try:
             return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
         except Tools.DoesNotExist:
-            data = {'costoenvio':config.COSTO_ENVIO,'create_at':datetime.datetime.now()}
-            costo = Tools(**data)
-            costo.save()
-            return HttpResponseRedirect("/")
-        except Exception as e:
-            return HttpResponseRedirect("/")
+            try:
+                data = {'costoenvio':config.COSTO_ENVIO,'create_at':datetime.now()}
+                costo = Tools(**data)
+                costo.save()
+                return HttpResponseRedirect("/")
+            except Exception as e:
+                return HttpResponseRedirect("/")
 
 
 #Section Filters
@@ -609,6 +610,9 @@ def HelpForm(request):
             extension = '.'+extension.split("/")[1]
             print("extension",extension)
             # print('foto',request.FILES.get('foto'))
+            now = datetime.now()
+            current_time = now.strftime("%Y-%m-%d")
+            data_imagen_sendinblue = {}
             #guardado del archivo
 
 
@@ -618,83 +622,40 @@ def HelpForm(request):
             nombre_random = ran_gen(5,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
 
             image_data = request.POST.get('imagen')
+            if image_data:
+                format, imgstr = image_data.split(';base64,')
+                ext = format.split('/')[-1]#otra extension por si acaso
+                data = ContentFile(base64.b64decode(imgstr))
+                file_name = str(current_time)+"-"+codigo+extension
+                localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
 
-            format, imgstr = image_data.split(';base64,')
-            ext = format.split('/')[-1]#otra extension por si acaso
-            now = datetime.now()
-            current_time = now.strftime("%Y-%m-%d")
+                fs = FileSystemStorage(location=localtion_save)
+                mymodel = PagosImagenes(email_user=email,asunto=asunto,codigo_compra=codigo,mensaje=mensaje)
 
-            data = ContentFile(base64.b64decode(imgstr))
-            file_name = str(current_time)+"-"+codigo+extension
-            localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
+                istan = mymodel.picture.save(file_name,data)
 
-            fs = FileSystemStorage(location=localtion_save)
-            mymodel = PagosImagenes(email_user=email,asunto=asunto,codigo_compra=codigo,mensaje=mensaje)
+                data_imagen_sendinblue["content"] = request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
+                data_imagen_sendinblue["name"] = file_name,
 
-            istan = mymodel.picture.save(file_name,data)
-            # mymodel.email_user.save(request.user)
-            # fs.save(file_name, data)
-            # print("rurllll",fs.url(mymodel))
-            # test = "https://frutasyverdura.weebly.com/uploads/5/5/6/8/55681601/163975_orig.jpg"
             sendinblue_send('contacto',email,"","",{
                 "asunto":asunto,
                 "mensaje":mensaje,
-                "codigo":codigo,
-                "attachment":[
-                    {"content":request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
-                    "name":file_name,
-                    }]
+                "codigo":codigo if codigo else None,
+                "attachment":[data_imagen_sendinblue]
             })
-
-            # msg_html = render_to_string('market/emailHelp.html',
-            # {
-            #     "asunto":asunto,
-            #     "email":email,
-            #     "mensaje":mensaje,
-            # })
-            #
-            # send_mail(
-            # asunto,
-            # asunto,
-            # settings.EMAIL_HOST_USER,#from
-            # [request.POST.get('email','')],#to
-            # html_message=msg_html,
-            # )
-            #funciona solo que desde el fron hay problemas al enviar la data
-            # html_content = render_to_string('market/emailHelp.html', {
-            #     "asunto":asunto,
-            #     "email":email,
-            #     "mensaje":mensaje,
-            # })
-            # text_content = render_to_string('market/emailHelp.html', {
-            #     "asunto":asunto,
-            #     "email":email,
-            #     "mensaje":mensaje,
-            # })
-            # msg = EmailMultiAlternatives(asunto, text_content,
-            #                             email,[settings.EMAIL_HOST_USER])
-            #
-            # msg.attach_alternative(html_content, "text/html")
-            #
-            # msg.mixed_subtype = 'related'
-            # #guardo la imagen del pago##
-            # datos = {'picture':request.FILES['image'],'email_user':email}
-            # new_pago = PagosImagenes(**datos)
-            # new_pago.save()
-            # ###########################
-            #
-            # ruta = str(new_pago.picture)
-            # fp = open(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/static/images/upload/'+ruta, 'rb')
-            #
-            # msg_img = MIMEImage(fp.read())
-            #
-            # fp.close()
-            # msg_img.add_header('Content-ID', '<{}>'.format(1))
-            # msg.attach(msg_img)
-            # #envio de email
-            # msg.send()
         except Exception as e:
             print(e)
+
+
+    #antes de entrar en el hilo verifico si ese codigo de compra existe
+    codigo = request.POST.get('codigo')
+    if codigo:
+        try:
+            PagosImagenes.objects.get(codigo=codigo)
+        except Exception as e:
+            print("codigo invalido",e)
+            data = {'code':500,"error":"Código invalido"}
+            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
     thread = Thread(target = hilo)
     thread.start()
@@ -803,5 +764,7 @@ def SendEmailClient(request):
         if email:
             dataUser = User.objects.get(email=request.POST['email'])
             sendinblue_send('registro',dataUser.email,dataUser.first_name,dataUser.last_name,None)
+            data = {'code':200,'message':''}
+            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
     except Exception as e:
-        pass
+        print("SendEmailClient",e)

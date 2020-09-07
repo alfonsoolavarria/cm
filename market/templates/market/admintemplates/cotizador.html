@@ -3,10 +3,13 @@
 	 <img class="" style="width:60px;height:60px;" src="{%static "images/confirmation.png" %}" alt="User Image">
 	 <h4><b>Cotizacion</b></h4>
 </div>
+<div id="no">
+
 
 <table id="productsAdmin" class="display mx-auto table table-striped table-bordered" style="width:90%">
 			<thead class="thead-dark">
 					<tr>
+							<th>Producto</th>
 							<th>Nombre</th>
 							<th>cant</th>
 							<th>price</th>
@@ -15,8 +18,10 @@
 			</thead>
 			{%for value in data%}
 				<tr>
+					<td><img height="54" width="54" src="{{direction}}{{value.name_image}}" alt=""></td>
 					<td>{{value.name}}</td>
 					<td>
+					
 						<input id="cant-{{forloop.counter}}" onchange="action_cotizacion({{forloop.counter}})" class="inputcant" dataid={{forloop.counter}} type="number" name="" min="0" value="0">
 					</td>
 					<td><label id="price-{{forloop.counter}}">{{value.price}}</label></td>
@@ -28,7 +33,15 @@
 			<td><b style="font-weight: bold;">Total de Cotizacion</b></td>
 			<td>----</td>
 			<td>----</td>
+			<td>----</td>
 			<td><label id="monedacotizador" style="position:absolute;"></label><label id="totalcotizaciongeneral" style="font-weight: bold;margin-left: 10px;"></label></td>
 
 
 	</table>
+	</div>
+	<input type="button" id="btnExport" value="Export" />
+<!-- <button onclick="javascript:demoFromHTML();">PDF</button> -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> -->
