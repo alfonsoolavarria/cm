@@ -296,7 +296,6 @@
     [ Show modal1 ]*/
     $('.js-show-modal1').on('click',function(e){
         e.preventDefault();
-        console.log('---->',e.currentTarget.dataset);
         //clean
         $('#imageDinamic').empty();
         $('#imageDinamic2').empty();
@@ -309,7 +308,7 @@
         $('.m-bs').text("Bs"+e.currentTarget.dataset.pricebs);//price
         $('.stext-102').text(e.currentTarget.dataset.description);//description
         $('.cantHidden').text(e.currentTarget.dataset.cant);//cantidad de productos
-        $('#imageDinamic').append("<img id='' src='"+e.currentTarget.dataset.image+"' alt=''>");//description
+        $('#imageDinamic').append("<img id='' width='150' height='400' src='"+e.currentTarget.dataset.image+"' alt=''>");//description
         $('.js-addcart-detail').attr('data-image',e.currentTarget.dataset.image);
         $('.js-addcart-detail').attr('data-name',e.currentTarget.dataset.name);
         $('.js-addcart-detail').attr('data-cant',e.currentTarget.dataset.cant);

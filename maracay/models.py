@@ -19,6 +19,8 @@ class Product(models.Model):
     category=models.PositiveSmallIntegerField(choices=__cate,help_text="Seleccione una categoria del producto")
     visible = models.BooleanField(default=False)
     create_at=models.DateTimeField(auto_now_add=True,null=True)
+    class Meta:
+        verbose_name_plural = "Productos"
 
 
 class Profile(models.Model):
@@ -32,18 +34,24 @@ class Profile(models.Model):
     rif=models.CharField(max_length=50)
     localphone=models.CharField(max_length=50,null=True)
     reference=models.CharField(max_length=200,null=True)
+    class Meta:
+        verbose_name_plural = "Perfil de Usuario"
 
 class Tools(models.Model):
     id=models.AutoField(primary_key=True)
     costoenvio=models.PositiveSmallIntegerField(default=100)
     hilo_en_proceso=models.PositiveSmallIntegerField(default=0)#0no esta corriendo  1 ya esta iniciado
     create_at=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "Herramientas"
 
 class TokenPassword(models.Model):
     id=models.AutoField(primary_key=True)
     token=models.CharField(max_length=200)
     user=models.ForeignKey(User,related_name='user_token',on_delete=models.CASCADE)
     create_at=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "Token Password"
 
 class Shopping(models.Model):#compra
     id=models.AutoField(primary_key=True)
@@ -52,6 +60,8 @@ class Shopping(models.Model):#compra
     cantshopping=models.PositiveSmallIntegerField(default=0)
     code=models.CharField(max_length=1000)
     create_at=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "Compras"
 
 class PurchaseConfirmation(models.Model):#confirmacion de compra
     # __confirmCompra=((1,_('Anulada')),(2,_('Pendiente')),(3,_('Confirmada')))
@@ -63,6 +73,8 @@ class PurchaseConfirmation(models.Model):#confirmacion de compra
     product=models.ForeignKey(Product, related_name='product_comprado',on_delete=models.CASCADE)
     cant_product=models.PositiveSmallIntegerField(default=1)
     create_at=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "Confirmacion de compras"
 
 class purchaseHistory(models.Model):
     #se guarda el historial de compra con su total en la modena que pagara o pago
@@ -75,7 +87,8 @@ class purchaseHistory(models.Model):
     payment_type=models.CharField(max_length=1000)#modo de pago (PayPal o Transferencia)
     moneda=models.CharField(max_length=1000)#moneda en que cotizo su pago
     create_at=models.DateTimeField(auto_now_add=True)
-
+    class Meta:
+        verbose_name_plural = "Historial de Compras"
 
 class PagosImagenes(models.Model):
     id=models.AutoField(primary_key=True)
@@ -88,10 +101,14 @@ class PagosImagenes(models.Model):
     def image_tag(self):
         return mark_safe('<img src="/static/images/upload/%s" width="150" height="150" />' % (self.picture))
     image_tag.short_description = 'Image'
+    class Meta:
+        verbose_name_plural = "Imagenes de Pago"
 
 class DolarBolivar(models.Model):
     id=models.AutoField(primary_key=True)
     bolivar=models.DecimalField(max_digits=30, decimal_places=2,help_text="Cambia el dolar al precio actual y todos los precios de los productos en bolivares cambiaran al instante")
+    class Meta:
+        verbose_name_plural = "Tasa DolarBolivar"
 
 @receiver(post_save, sender=DolarBolivar, dispatch_uid="update_bolivares_product")
 def update_bolivares_product(sender, instance, **kwargs):
