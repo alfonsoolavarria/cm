@@ -1,9 +1,23 @@
 {% load static %}
+<style>
+  .desk{
+    flex: 0 0 15%;
+  }
+  @media (max-width: 991px){
+   .desk {
+    flex: 0 0 45%;
+   }
+   .wrap-pic-w img {
+    width: 45%;
+}
+ }
+
+</style>
 <div class="bs-docs-example">
   <div class="row isotope-grid1">
     <!-- Productos -->
     {%for value in contacts%}
-     <div class="col-sm-6 col-md-4 p-b-35" style="flex: 0 0 15%;">
+     <div class="col-sm-6 col-md-4 p-b-35 desk">
        <div class="block2">
          <div class="block2-pic hov-img0">
            <img style="border-radius:60px;" height="200" width="100" src="{{direction}}{{value.name_image}}" alt="IMG-PRODUCT">

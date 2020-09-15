@@ -4,3 +4,4 @@ __pycache__/*
 .sqlite3
 *.pyc
 market/templates/market/cuentas
+market/static/images/upload/imagesp/

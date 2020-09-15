@@ -39,7 +39,7 @@ class Maracay(TemplateView):
             data['code'] = _allproducts.code
 
             contact_list = data['cantTotal']
-            paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+            paginator = Paginator(contact_list, 12) # Show 25 contacts per page
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
             formatoBolivares(contacts)

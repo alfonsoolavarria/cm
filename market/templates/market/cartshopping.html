@@ -136,6 +136,16 @@
   {% include "market/scripts.html" %}
 
   <script>
+
+	function buscaIdIndice(lista,id) {
+		for (var i = 0; i < lista.length; i++) {
+			if (lista[i]['id'] == id) {
+				return i
+			}
+		}
+		return -1
+	}
+
 		var listPriceTotal = 0;
     var carrito = JSON.parse(localStorage.getItem("carrito"));
 		if (carrito.length<1) {
@@ -170,13 +180,15 @@
 				listPriceTotal = listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad));
 			}
 
-			var montototal = parseFloat(listPriceTotal)+parseFloat($("#coen").text());
+			var montototal = (parseFloat(listPriceTotal)+parseFloat($("#coen").text())).toFixed(2);
 			$(".totalDinamicFinal").text("$"+montototal.toString());
-			$(".subTotalDinamic").text("$"+listPriceTotal);
+			$(".subTotalDinamic").text("$"+listPriceTotal.toFixed(2));
 		}
 
 		function buttonUp(param,id) {
-			var indice = _.findIndex(carrito, ['id',id.toString()]);
+			// console.log(carrito,id.toString());
+			// var indice = _.findIndex(carrito, ['id',id.toString()]);
+			var indice = buscaIdIndice(carrito,id.toString());
 			var numProduct = Number($(param).prev().val());
 			if (numProduct <= parseInt($('.cantHidden-'+id).text())) {
 				numProduct = numProduct+1;
@@ -184,7 +196,7 @@
 					$(param).prev().val(numProduct);
 					if (indice!=-1) {
 						carrito[indice].cantidad=numProduct.toString();
-						$(".dinamicPrice-"+id).text(numProduct * parseFloat(carrito[indice].price));
+						$(".dinamicPrice-"+id).text((numProduct * parseFloat(carrito[indice].price)).toFixed(2));
 						localStorage.setItem("carrito",JSON.stringify(carrito));
 						/*updateo el total*/
 						var carritoUp = JSON.parse(localStorage.getItem("carrito"));
@@ -192,8 +204,8 @@
 						for (var i = 0; i < carritoUp.length; i++) {
 							sub = sub +(parseFloat(carritoUp[i].price)*parseFloat(carritoUp[i].cantidad));
 						}
-						$(".subTotalDinamic").text('$'+sub);
-						var montototal = parseFloat(sub)+parseFloat($("#coen").text());
+						$(".subTotalDinamic").text('$'+sub.toFixed(2));
+						var montototal = (parseFloat(sub)+parseFloat($("#coen").text())).toFixed(2);
 						$(".totalDinamicFinal").text("$"+montototal.toString());
 					}
 				}else {
@@ -211,7 +223,7 @@
 						$(param).next().val(numProduct - 1);
 						if (indice!=-1) {
 							carrito[indice].cantidad=(numProduct-1).toString();
-							$(".dinamicPrice-"+id).text((numProduct-1) * parseFloat(carrito[indice].price));
+							$(".dinamicPrice-"+id).text(((numProduct-1) * parseFloat(carrito[indice].price)).toFixed(2));
 							localStorage.setItem("carrito",JSON.stringify(carrito));
 							/*updateo el total*/
 							var carritoDown = JSON.parse(localStorage.getItem("carrito"));
@@ -219,8 +231,8 @@
 							for (var i = 0; i < carritoDown.length; i++) {
 								sub = sub +(parseFloat(carritoDown[i].price)*parseFloat(carritoDown[i].cantidad));
 							}
-							$(".subTotalDinamic").text('$'+sub);
-							var montototal = parseFloat(sub)+parseFloat($("#coen").text());
+							$(".subTotalDinamic").text('$'+sub.toFixed(2));
+							var montototal = (parseFloat(sub)+parseFloat($("#coen").text())).toFixed(2);
 							$(".totalDinamicFinal").text("$"+montototal.toString());
 						}
 					}
