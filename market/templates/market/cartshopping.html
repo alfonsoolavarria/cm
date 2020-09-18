@@ -175,7 +175,7 @@
 						</div>\
 						<label class='cantHidden-"+carrito[i].id+"' style='visibility:hidden;position:absolute;'>"+carrito[i].cant+"</label>\
 					</td>\
-					<td class='column-5'><h4><b class='currency-"+carrito[i].id+"'>$</b><b class='dinamicPrice-"+carrito[i].id+"'>"+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad))+"</b></h4></td>\
+					<td class='column-5'><h4><b class='currency-"+carrito[i].id+"'>$</b><b class='dinamicPrice-"+carrito[i].id+"'>"+((parseFloat(carrito[i].price).toFixed(2))*(parseFloat(carrito[i].cantidad).toFixed(2)))+"</b></h4></td>\
 				</tr>");
 				listPriceTotal = listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad));
 			}
@@ -215,7 +215,8 @@
 		}
 
 		function buttonDown(param,id) {
-			var indice = _.findIndex(carrito, ['id',id.toString()]);
+			var indice = buscaIdIndice(carrito,id.toString());
+			// var indice = _.findIndex(carrito, ['id',id.toString()]);
 			var numProduct = Number($(param).next().val());
 			if (numProduct <= parseInt($('.cantHidden-'+id).text())) {
 				if(numProduct >= 1){
@@ -241,7 +242,8 @@
 		}
 
 		function removeItems(param,id) {
-			var indice = _.findIndex(carrito, ['id',id.toString()]);
+			var indice = buscaIdIndice(carrito,id.toString());
+			// var indice = _.findIndex(carrito, ['id',id.toString()]);
 			swal({
 				title:"¿Esta seguro de borrar el articulo?",
 				text:carrito[indice].name,
@@ -250,7 +252,11 @@
 				dangerMode:true,
 			}).then((willDelete)=>{
 				if (willDelete){
-					localStorage.setItem("carrito",JSON.stringify(_.reject(carrito,{'id':id.toString()})));
+					// console.log("222222-->reject",_.reject(list,{'id':id.toString()}));
+					myNewCar = carrito.filter(function( obj ) {
+  					return obj.id !== id.toString();
+					});
+					localStorage.setItem("carrito",JSON.stringify(myNewCar));
 					location.reload(true);
 				}
 			})
