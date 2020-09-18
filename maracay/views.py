@@ -121,12 +121,23 @@ class Login(View):
 class Logout(View):
     def get(self, request, *args, **kwargs):
         logout(request)
-
         _allproducts = backStart(request)
-        _allproducts.get('all')
-        data = _allproducts.response_data
-        data['code'] = _allproducts.code
-        return render(request, 'market/index.html',{'data':data['data'][0] if data['data'] else {} })
+
+        _allproducts.get()
+        if 'pagination' not in request.GET:
+            data = _allproducts.response_data
+            data['code'] = _allproducts.code
+
+            contact_list = data['cantTotal']
+            paginator = Paginator(contact_list, 12) # Show 25 contacts per page
+            page = request.GET.get('page')
+            contacts = paginator.get_page(page)
+            formatoBolivares(contacts)
+
+            direction = '/static/images/upload/imagesp/'
+            return render(request, 'market/index.html',{'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+
+
 
 
 class Profile(View):

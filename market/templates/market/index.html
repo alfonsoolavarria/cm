@@ -7,38 +7,61 @@
 		font-family:nativa;
 	}
 	#unook{
-		background-image:url({% static "images/tercera.png" %});
+		background-image:url({% static "images/tercera2.png" %});
+		background-position: center center;
+		background-repeat: no-repeat;
+		/* background-attachment: fixed; */
+		background-size: cover;
 	}
-	@media only screen and (max-width: 500px) and (min-width: 341px){
-
+	@media only screen and (max-width: 800px) and (min-width: 700px){
 		#unook{
-			/* background-image:url('/static/images/div2.png'); */
-			background-image:url({% static "images/div2.png" %});
+			background-image:url('/static/images/tercera2.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			/* background-attachment: fixed; */
+			background-size: cover;
 			/* background-color:black; */
 		}
 	}
-	@media only screen and (max-width: 340px) and (min-width: 5px){
-
+	@media only screen and (max-width: 699px) and (min-width: 100px){
 		#unook{
-			/* background-image:url('/static/images/div1.png'); */
-			background-image:url({% static "images/div1.png" %});
-			/* background-color:red; */
+			background-image:url('/static/images/tercera4.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			/* background-attachment: fixed; */
+			background-size: cover;
+			/* background-color:black; */
 		}
 	}
+	/* #contentProduct1{
+		background-image:url("/static/images/div1.png");
+		background-repeat: no-repeat;
+	}
+	#contentProduct2{
+		background-image:url("/static/images/div2.png");
+		background-repeat: no-repeat;
+	}
+	#contentProduct3{
+		background-image:url("/static/images/div3.png");
+		background-repeat: no-repeat;
+	} */
 	</style>
 <body class="animsition">
 	{% include "market/header.html" %}
 	<!-- Click Cart -->
 	<!-- Slider -->
-	<section class="section-slide">
-		<div class="wrap-slick1">
-			<div class="slick1">
+	<section class="section-slide item-slick1" id="unook">
+		<!-- <div class="wrap-slick1">
+			<div class="slick1 item-slick1 ok"> -->
+				<!-- <div id="unook" class="item-slick1">
+
+				</div> -->
 				<!-- style="background-image:url({% static "images/tercera.png" %})" -->
-				<div id="unook" class="item-slick1"  >
-				<!-- <div id="unook" class="item-slick1" > -->
-				</div>
-			</div>
-		</div>
+				<!-- <div id="unook" class="item-slick1"  >
+
+				</div> -->
+			<!-- </div>
+		</div> -->
 	</section>
 
 
