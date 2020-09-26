@@ -38,25 +38,25 @@
 							<th class="column-4">Total</th>
 							<th class="column-5"></th>
 						</tr>
-						<tr>
-							{%for value in compra%}
-							{%for k,v in value.items|dictsort:"0.lower" %}
-							{% if k == 'image'%}
-							<td class='column-1'>
-								<div class=''>
-									<img style='border-radius:10px;width: 100px;' src="{{v}}" alt="">
-								</div>
-							</td>
-							{%else%}
-							<td class='column-{{forloop.counter}}'>
-								<div class=''>
-									<h4 style='font-size: 13px;'>{{v}}</h4>
-								</div>
-							</td>
-							{%endif%}
-							{%endfor%}
-							{%endfor%}
-						</tr>
+						{%for value in compra%}
+							<tr>
+								{%for k,v in value.items|dictsort:"0.lower" %}
+									{% if k == 'image'%}
+										<td class='column-1'>
+											<div class=''>
+												<img style='border-radius:10px;width: 100px;' src="{{v}}" alt="">
+											</div>
+										</td>
+									{%else%}
+										<td class='column-{{forloop.counter}}'>
+											<div class=''>
+												<h4 style='font-size: 13px;'>{{v}}</h4>
+											</div>
+										</td>
+									{%endif%}
+								{%endfor%}
+							</tr>
+						{%endfor%}
 					</table>
 				</div>
 			</div>

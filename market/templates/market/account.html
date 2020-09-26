@@ -4,60 +4,62 @@
 	{% include "market/head.html" %}
 <body class="animsition" translate="no">
 	{% include "market/header.html" %}
-  <!-- -->
-	<div id="places">
-		<div class="container" style="margin-top: 160px;">
-			<h4 style="text-align:center;margin-bottom: 3%;"><b>Historial de Compras</b></h4>
-			<div class="row" style="text-align: center;">
-				<div class="col-md-2">
-					<img src="/static/images/historial.png" alt="" style="margin-left:10%;margin-top: -10%;" width="110" height="120">
-				</div>
-				<div class="col-md-3">
-						<b>Còdigo de Compra</b>
-				</div>
-				<div class="col-md-2">
-						<b>Fecha</b>
-				</div>
-				<div class="col-md-1">
-						<b>Total</b>
-				</div>
-				<div class="col-md-2">
-						<b>Tipo de Pago</b>
-				</div>
-				<div class="col-md-2">
-						<b>Estado de Compra</b>
+	<div class="container">
+		<div class="col-md-12">
+			<h4 class="page-title" style="text-align:center;margin-top: 5%;margin-bottom: 5%;"><b style="font-weight:600;">Historial de Compras</b>
+				<div class="m-l-25 m-lr-0-xl">
+					<img class="" style="height:60px;" src="{%static "/images/historial.png" %}" alt="User Image">
+				</h4>
+				<div class="wrap-table-shopping-cart">
+					<table class="table-shopping-cart">
+						<tr class="table_head" id="" style="text-align: center;">
+							<th>Còdigo de Compra</th>
+							<th>Fecha</th>
+							<th>Total</th>
+							<th>Tipo de Pago</th>
+							<th>Estado de Compra</th>
+						</tr>
+						{%for value in data%}
+						<tr>
+								<td class='column-1'>
+									<div class="">
+										<a href="/detalles/?code={{value.code_purchase}}" data-toggle="tooltip" title="Detalles">{{value.code_purchase}}</a>
+									</div>
+								</td>
+								<td style="text-align: center;padding-right: 10px;" class='column-2'>
+									<div class=''>
+										<h4 style='font-size: 13px;'>{{ value.start_date|date:'d/m/Y' }} {{ value.start_date|time:'h:i a' }}</h4>
+									</div>
+								</td>
+								<td style="text-align: center;padding-right: 10px;" class='column-3'>
+									<div class=''>
+										<h4 style='font-size: 13px;'>{{value.total}}</h4>
+									</div>
+								</td>
+								<td style="text-align: center;padding-right: 10px;" class='column-4'>
+									<div class=''>
+										<h4 style='font-size: 13px;'>{{value.payment_type}}</h4>
+									</div>
+								</td>
+								<td class='column-5'>
+									<div class=''>
+										{%if value.state == 1%}
+											<span class="badge badge-danger">Anulada</span>
+										{%elif value.state == 2%}
+											<span class="badge badge-warning">Pendiente</span>
+										{%else%}
+											<span class="badge badge-success">Confirmada</span>
+										{%endif%}
+									</div>
+								</td>
+						</tr>
+						{%endfor%}
+					</table>
 				</div>
 			</div>
-			<div class="row" style="margin-bottom: 60px;">
-				{%for a in data%}
-					<div class="col-md-2">
+		</div>
+	</div>
 
-					</div>
-					<div class="col-md-3" style="text-align: center;">
-							<a href="/detalles/?code={{a.code_purchase}}" data-toggle="tooltip" title="Detalles">{{a.code_purchase}}</a>
-					</div>
-					<div class="col-md-2" style="font-size:small">
-							{{a.start_date}}<br>
-					</div>
-					<div class="col-md-1" style="text-align: center;">
-							{{a.total}}<br>
-					</div>
-					<div class="col-md-2" style="text-align: center;">
-							{{a.payment_type}}<br>
-					</div>
-					<div class="col-md-2" style="text-align: center;">
-						{%if a.state == 1%}
-							<span class="badge badge-danger">Anulada</span>
-						{%elif a.state == 2%}
-							<span class="badge badge-warning">Pendiente</span>
-						{%else%}
-							<span class="badge badge-success">Confirmada</span>
-						{%endif%}
-					</div>
-				{%endfor%}
-			</div>
-	  </div>
-  </div>
 	{% include "market/banner.html" %}
   <!-- -->
   {% include "market/footer.html" %}
