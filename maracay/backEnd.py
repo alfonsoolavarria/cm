@@ -310,7 +310,7 @@ class profileBackend():
 
     def accountData(self):
         try:
-            dataA = purchaseHistory.objects.filter(user=self._request.user)[:35]
+            dataA = purchaseHistory.objects.filter(user=self._request.user).order_by('-id')[:35]
             for a in dataA:
                 tabladecompra = PurchaseConfirmation.objects.filter(code=a.code_purchase).last()
                 if tabladecompra:

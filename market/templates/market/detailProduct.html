@@ -5,142 +5,134 @@
 <body class="animsition" translate="no">
 	{% include "market/header.html" %}
   <!-- -->
-	<div id="detail">
-		<div class="container" style="margin-top: 160px;">
-			<h4 style="text-align:center;margin-bottom: 3%;"><b>Detalles de la Compra</b></h4>
 
-			<div class="row" style="text-align: center;">
-				<div class="col-md-2">
-					<img src="/static/images/compra.png" alt="" style="margin-left:10%;margin-top: -10%;" width="110" height="120">
+	<div class="container">
+		<div class="col-md-12">
+			<h4 class="page-title" style="text-align:center;margin-top: 5%;margin-bottom: 5%;"><b style="font-weight:600;">Detalles de la Compra</b>
+				<div class="m-l-25 m-lr-0-xl">
+					<img class="rounded-circle" style="height:60px;" src="{%static "/images/compra.png" %}" alt="User Image">
+				</h4>
+				<div class="wrap-table-shopping-cart">
+					<table class="table-shopping-cart">
+						<tr class="table_head" id="dinamicItems">
+							<th class="column-1">Productos</th>
+							<th class="column-2"></th>
+							<th class="column-3">Precio</th>
+							<th class="column-4">Cantidad</th>
+							<th class="column-5">Total</th>
+						</tr>
+							{%for value in data%}
+								<tr>
+									<td style="text-align:center;" class="column-1">
+										<img style="border-radius:10px;width: 90px;height:90px;" src="{{direction}}{{value.image}}" alt="">
+									</td>
+									<td class="column-2" >{{value.name}}</td>
+									<td class="column-3" >${{value.price}}</td>
+									<td class="column-4" >{{value.cant_product}}</td>
+									<td class="column-5" >${{value.total}}</td>
+								</tr>
+							{%endfor%}
+					</table>
 				</div>
-        <div class="col-md-10">
-          <!-- Shoping Cart -->
-          <form class="">
-          <div class="container">
-            <div class="row" style="padding-top: 50px;">
-              <div class="">
-                <div class="m-l-25 m-r--38 m-lr-0-xl">
-                  <div class="wrap-table-shopping-cart">
-                    <table class="table-shopping-cart">
-                      <tr class="table_head" id="dinamicItems">
-                        <th class="column-1">Productos</th>
-                        <th class="column-2"></th>
-                        <th class="column-3">Precio</th>
-                        <th class="column-4" style="text-align: center;">Cantidad</th>
-                        <th class="column-5">Total</th>
-                      </tr>
-                        {%for value in data%}
-                          <tr>
-                    				<td style="text-align:center;;"><img style="border-radius:10px;width: 90px;height:90px;" src="{{direction}}{{value.image}}" alt=""></td>
-                            <td>{{value.name}}</td>
-                            <td style="text-align:center;">${{value.price}}</td>
-                    				<td>{{value.cant_product}}</td>
-                    				<td>${{value.total}}</td>
-                          </tr>
-                  			{%endfor%}
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="" style="margin-top: 110px;">
-                <div class="">
-                  <h4 class="mtext-109 cl2 p-b-30">
-                    Total de su compra
-                  </h4>
-
-                  <div class="flex-w flex-t bor12 p-b-13">
-                    <div class="">
-                      <span class="stext-110 cl2">
-                        Subtotal:
-                      </span>
-                    </div>
-                    <div class="" style="margin-left:20px;">
-                      <span class="mtext-110 cl2"> ${{data2.totalGeneral}}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="flex-w flex-t bor12 p-b-13">
-                    <div class="">
-                      <span class="stext-110 cl2">
-                        Costo de Envio:
-                      </span>
-                    </div>
-                    <div class="" style="margin-left:20px;">
-                      <span class="mtext-110 cl2">
-        								${{data2.costoenvio}}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="flex-w flex-t bor12 p-b-13">
-                    <div class="">
-                      <span class="stext-110 cl2">
-                        Tipo de Pago:
-                      </span>
-                    </div>
-                    <div class="" style="margin-left:20px;">
-                      <span class="mtext-110 cl2">
-        								{{data2.payment_type}}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="flex-w flex-t bor12 p-b-13">
-                    <div class="">
-                      <span class="stext-110 cl2">
-                        Forma de Pago:
-                      </span>
-                    </div>
-                    <div class="" style="margin-left:20px;">
-                      <span class="mtext-110 cl2">
-        								{{data2.lugarpago}}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="flex-w flex-t bor12 p-t-15 p-b-30">
-                    <div class="w-full-ssm">
-                      <span class="stext-110 cl2">
-                        Direccion de envio:
-                      </span>
-                    </div>
-
-                    <div class="p-r-18 p-r-0-sm w-full-ssm">
-                      <p class="stext-111 cl6 p-t-2" style="margin-left: 10px;">
-        								{%if data2.direccion%}
-        									{{data2.direccion}}
-        								{%else%}
-        									No tenemos registrada ninguna direccion de envio, por favor inicie sesion o actualice sus datos.
-        								{%endif%}
-                      </p>
-
-                      <div class="p-t-15">
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="flex-w flex-t p-t-27 p-b-33">
-                    <div class="">
-                      <span class="mtext-101 cl2">
-                        Total Pagado:
-                      </span>
-                    </div>
-
-                    <div class="p-t-1" style="margin-left:20px;">
-                      <span class="mtext-110 cl2"> <b>{{data2.moneda}} - {{data2.totalCompleto}}</b>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-        </div>
 			</div>
-	  </div>
+		</div>
+	</div>
 
-  </div>
+	<div class="container">
+		<div class="col-md-12" style="margin-top: 110px;">
+			<div class="2">
+				<h4 class="mtext-109 cl2 p-b-30">
+					Total de su compra
+				</h4>
+
+				<div class="flex-w flex-t bor12 p-b-13">
+					<div class="size-208">
+						<span class="stext-110 cl2">
+							Subtotal:
+						</span>
+					</div>
+					<div class="size-209">
+						<span class="mtext-110 cl2">${{data2.totalGeneral}}</span>
+					</div>
+				</div>
+				<div class="flex-w flex-t bor12 p-b-13">
+					<div class="size-2081">
+						<span class="stext-110 cl2">
+							Costo de Envio:
+						</span>
+					</div>
+					<div class="size-2091" style="margin-left:20px;">
+						<span class="mtext-110 cl2">
+							<b>$</b><b>${{data2.costoenvio}}</b>
+						</span>
+					</div>
+				</div>
+				<div class="flex-w flex-t bor12 p-b-13">
+					<div class="">
+						<span class="stext-110 cl2">
+							Tipo de Pago:
+						</span>
+					</div>
+					<div class="" style="margin-left:20px;">
+						<span class="mtext-110 cl2">
+							{{data2.payment_type}}
+						</span>
+					</div>
+				</div>
+				<div class="flex-w flex-t bor12 p-b-13">
+					<div class="">
+						<span class="stext-110 cl2">
+							Forma de Pago:
+						</span>
+					</div>
+					<div class="" style="margin-left:20px;">
+						<span class="mtext-110 cl2">
+							{{data2.lugarpago}}
+						</span>
+					</div>
+				</div>
+
+				<div class="flex-w flex-t bor12 p-t-15 p-b-30">
+					<div class="size-208 w-full-ssm">
+						<span class="stext-110 cl2">
+							Direccion de envio:
+						</span>
+					</div>
+
+					<div class="p-r-18 p-r-0-sm w-full-ssm">
+						<p class="stext-111 cl6 p-t-2" style="margin-left: 10px;">
+							{%if data2.direccion%}
+								{{data2.direccion}}
+							{%else%}
+								No tenemos registrada ninguna direccion de envio, por favor inicie sesion o actualice sus datos.
+							{%endif%}
+						</p>
+
+						<div class="p-t-15">
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="flex-w flex-t p-t-27 p-b-33">
+					<div class="">
+						<span class="mtext-101 cl2">
+							Total Pagado:
+						</span>
+					</div>
+
+					<div class="p-t-1" style="margin-left:20px;">
+						<span class="mtext-110 cl2"> <b>{{data2.moneda}} - {{data2.totalCompleto}}</b>
+						</span>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
 	{% include "market/banner.html" %}
   <!-- -->
   {% include "market/footer.html" %}
