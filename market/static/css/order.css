@@ -281,3 +281,6 @@ margin: 0 auto 5px auto;
         transform: rotate(360deg);
     }
 }
+b {
+  font-weight: 700;
+}

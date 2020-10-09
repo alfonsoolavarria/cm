@@ -38,21 +38,49 @@
               </span>
             </div>
             <div class="size-209">
-              <span class="mtext-110 cl2 subTotalDinamic">
+              <b>$</b><span class="mtext-110 cl2 subTotalDinamic">
               </span>
             </div>
           </div>
           <div class="flex-w flex-t bor12 p-b-13">
-            <div class="size-2081">
+            <div class="size-2081" style="margin-top: 5px;">
               <span class="stext-110 cl2">
                 Costo de Envio:
               </span>
             </div>
             <div class="size-2091" style="margin-left:20px;">
-              <span class="mtext-110 cl2 costoEnvio">
-								<b>$</b><b id="coen">{{costoenvio}}</b>
+              <b>$</b><span class="mtext-110 cl2 costoEnvio">
+								<b id="coen">2</b>
               </span>
             </div>
+						<select class="custom-select mr-sm-2" id="selectEnvio" style="width: auto;">
+							<option class="" value="2" disabled>-----ZONA 1-----</option>
+							<option class="Bermudez" value="2" selected>Bermudez</option>
+							<option class="Urb Centro" value="2">Urb Centro</option>
+							<option class="Las Acacias" value="2">Las Acacias</option>
+							<option class="San Ignacio" value="2">San Ignacio</option>
+							<option class="Los Samanes" value="2">Los Samanes</option>
+							<option class="Urb Calicanto" value="2">Urb Calicanto</option>
+							<option class="Fundacion Mendoza" value="2">Fundacion Mendoza</option>
+							<option class="Zonas Cercanas 1" value="2">Zonas Cercanas 1</option>
+							<option class="" value="3" disabled>-----ZONA 2-----</option>
+							<option class="23 de Enero" value="3">23 de Enero</option>
+							<option class="La Coromoto" value="3">La Coromoto</option>
+							<option class="Arsenal" value="3">Arsenal</option>
+							<option class="El Limon" value="3">El Limon</option>
+							<option class="Cana de Azucar" value="3">Cana de Azucar</option>
+							<option class="Palo Negro" value="3">Palo Negro</option>
+							<option class="Los Olivos" value="3">Los Olivos</option>
+							<option class="Av Dr Montoya" value="3">Av Dr Montoya</option>
+							<option class="Zonas Cercanas 2" value="3">Zonas Cercanas 2</option>
+							<option class="" value="4" disabled>-----ZONA 3-----</option>
+							<option class="La Cabrera Mariara" value="4">La Cabrera Mariara</option>
+							<option class="Turmero" value="4">Turmero</option>
+							<option class="Cagua-Bella Vista" value="4">Cagua-Bella Vista</option>
+							<option class="Zonas Cercanas 3" value="3">Zonas Cercanas 3</option>
+							<option class="" value="5" disabled>-----ZONA 4-----</option>
+							<option class="La Victoria" value="5">La Victoria</option>
+						</select>
           </div>
 
           <div class="flex-w flex-t bor12 p-t-15 p-b-30">
@@ -85,7 +113,7 @@
             </div>
 
             <div class="size-209 p-t-1">
-              <span class="mtext-110 cl2 totalDinamicFinal">
+              <b>$</b><span class="mtext-110 cl2 totalDinamicFinal">
               </span>
             </div>
           </div>
@@ -107,135 +135,6 @@
 </span>
 </div>
   {% include "market/scripts.html" %}
-
-  <script>
-
-	function buscaIdIndice(lista,id) {
-		for (var i = 0; i < lista.length; i++) {
-			if (lista[i]['id'] == id) {
-				return i
-			}
-		}
-		return -1
-	}
-
-		var listPriceTotal = 0;
-    var carrito = JSON.parse(localStorage.getItem("carrito"));
-		if (carrito.length<1) {
-			$(".wrap-table-shopping-cart").css("visibility","hidden");
-			//$(".twoColum").css("visibility","hidden");
-			$(".wrap-table-shopping-cart").after("<h4 style='text-align:center;'>Aún no hay artículos en su carrito, anda y <a href='/all'>compra</a></h4>");
-			$("#paymentBox").remove();
-		}else{
-			for (var i = 0; i < carrito.length; i++) {
-				$("#dinamicItems").after("<tr class='table_row'>\
-					<td class='column-1'>\
-						<div class='how-itemcart1' onclick='return removeItems(this,"+carrito[i].id+")' id='removeItems-"+carrito[i].id+"'>\
-							<img src='"+carrito[i].image+"' alt='IMG'>\
-						</div>\
-					</td>\
-					<td class='column-2'>"+carrito[i].name+"</td>\
-					<td class='column-3'><h4><b class='pricechange-"+carrito[i].id+"'>$</b><b>"+carrito[i].price+"</b></h4></td>\
-					<td class='column-4'>\
-						<div class='wrap-num-product flex-w m-l-auto m-r-0'>\
-							<div onclick='return buttonDown(this,"+carrito[i].id+")' data-id="+carrito[i].id+" class='btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m'>\
-								<i class='fs-16 zmdi zmdi-minus'></i>\
-							</div>\
-							<input disabled class='mtext-104 cl3 txt-center num-product' type='number' name='num-product1' value='"+carrito[i].cantidad+"'>\
-							<div onclick='return buttonUp(this,"+carrito[i].id+")' data-id="+carrito[i].id+" class='btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m'>\
-								<i class='fs-16 zmdi zmdi-plus'></i>\
-							</div>\
-						</div>\
-						<label class='cantHidden-"+carrito[i].id+"' style='visibility:hidden;position:absolute;'>"+carrito[i].cant+"</label>\
-					</td>\
-					<td class='column-5'><h4><b class='currency-"+carrito[i].id+"'>$</b><b class='dinamicPrice-"+carrito[i].id+"'>"+((parseFloat(carrito[i].price).toFixed(2))*(parseFloat(carrito[i].cantidad).toFixed(2)))+"</b></h4></td>\
-				</tr>");
-				listPriceTotal = listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad));
-			}
-
-			var montototal = (parseFloat(listPriceTotal)+parseFloat($("#coen").text())).toFixed(2);
-			$(".totalDinamicFinal").text("$"+montototal.toString());
-			$(".subTotalDinamic").text("$"+listPriceTotal.toFixed(2));
-		}
-
-		function buttonUp(param,id) {
-			// console.log(carrito,id.toString());
-			// var indice = _.findIndex(carrito, ['id',id.toString()]);
-			var indice = buscaIdIndice(carrito,id.toString());
-			var numProduct = Number($(param).prev().val());
-			if (numProduct <= parseInt($('.cantHidden-'+id).text())) {
-				numProduct = numProduct+1;
-				if (numProduct <= parseInt($('.cantHidden-'+id).text())) {
-					$(param).prev().val(numProduct);
-					if (indice!=-1) {
-						carrito[indice].cantidad=numProduct.toString();
-						$(".dinamicPrice-"+id).text((numProduct * parseFloat(carrito[indice].price)).toFixed(2));
-						localStorage.setItem("carrito",JSON.stringify(carrito));
-						/*updateo el total*/
-						var carritoUp = JSON.parse(localStorage.getItem("carrito"));
-						var sub = 0;
-						for (var i = 0; i < carritoUp.length; i++) {
-							sub = sub +(parseFloat(carritoUp[i].price)*parseFloat(carritoUp[i].cantidad));
-						}
-						$(".subTotalDinamic").text('$'+sub.toFixed(2));
-						var montototal = (parseFloat(sub)+parseFloat($("#coen").text())).toFixed(2);
-						$(".totalDinamicFinal").text("$"+montototal.toString());
-					}
-				}else {
-					swal("Ya no hay mas productos", " ", "warning");
-				}
-			}
-		}
-
-		function buttonDown(param,id) {
-			var indice = buscaIdIndice(carrito,id.toString());
-			// var indice = _.findIndex(carrito, ['id',id.toString()]);
-			var numProduct = Number($(param).next().val());
-			if (numProduct <= parseInt($('.cantHidden-'+id).text())) {
-				if(numProduct >= 1){
-					if (numProduct!=1) {
-						$(param).next().val(numProduct - 1);
-						if (indice!=-1) {
-							carrito[indice].cantidad=(numProduct-1).toString();
-							$(".dinamicPrice-"+id).text(((numProduct-1) * parseFloat(carrito[indice].price)).toFixed(2));
-							localStorage.setItem("carrito",JSON.stringify(carrito));
-							/*updateo el total*/
-							var carritoDown = JSON.parse(localStorage.getItem("carrito"));
-							var sub = 0;
-							for (var i = 0; i < carritoDown.length; i++) {
-								sub = sub +(parseFloat(carritoDown[i].price)*parseFloat(carritoDown[i].cantidad));
-							}
-							$(".subTotalDinamic").text('$'+sub.toFixed(2));
-							var montototal = (parseFloat(sub)+parseFloat($("#coen").text())).toFixed(2);
-							$(".totalDinamicFinal").text("$"+montototal.toString());
-						}
-					}
-				}
-			}
-		}
-
-		function removeItems(param,id) {
-			var indice = buscaIdIndice(carrito,id.toString());
-			// var indice = _.findIndex(carrito, ['id',id.toString()]);
-			swal({
-				title:"¿Esta seguro de borrar el articulo?",
-				text:carrito[indice].name,
-				icon:"warning",
-				buttons:['No','Si'],
-				dangerMode:true,
-			}).then((willDelete)=>{
-				if (willDelete){
-					// console.log("222222-->reject",_.reject(list,{'id':id.toString()}));
-					myNewCar = carrito.filter(function( obj ) {
-  					return obj.id !== id.toString();
-					});
-					localStorage.setItem("carrito",JSON.stringify(myNewCar));
-					location.reload(true);
-				}
-			})
-		}
-
-  </script>
-
+	<script src="{% static "js/caja.js" %}"></script>
 </body>
 </html>

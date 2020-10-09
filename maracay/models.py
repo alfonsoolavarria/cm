@@ -34,12 +34,12 @@ class Profile(models.Model):
     rif=models.CharField(max_length=50)
     localphone=models.CharField(max_length=50,null=True)
     reference=models.CharField(max_length=200,null=True)
+    costoenvio=models.PositiveSmallIntegerField(default=2)
     class Meta:
         verbose_name_plural = "Perfil de Usuario"
 
 class Tools(models.Model):
     id=models.AutoField(primary_key=True)
-    costoenvio=models.PositiveSmallIntegerField(default=100)
     hilo_en_proceso=models.PositiveSmallIntegerField(default=0)#0no esta corriendo  1 ya esta iniciado
     create_at=models.DateTimeField(auto_now_add=True)
     class Meta:

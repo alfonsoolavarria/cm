@@ -107,9 +107,14 @@ class backStart():
 
             tokenCode = ran_gen(11,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
             ########################################################################
+            user = Profile.objects.get(user__email=self._request.user)
 
             carro = json.loads(self._request.POST['carrito'])
-            costo_envio = Tools.objects.get(pk=1).costoenvio
+
+
+            costo_envio = int(self._request.POST['costoenvio'])
+            user.costoenvio = costo_envio
+            user.save()
             dataSave = {}
             productId = 0
             carroEmail = {'compra':[]}
@@ -122,11 +127,11 @@ class backStart():
 
                 dataSave['start_date'] = self._request.POST['start_date']
                 dataSave['code'] = tokenCode
-                user = User.objects.get(email=self._request.user)
+
 
                 compras = PurchaseConfirmation.objects.create(
                     code=dataSave['code'],
-                    user=user,
+                    user=user.user,
                     confirmation=2,
                     product=dataSave['product'],
                     start_date=dataSave['start_date'],
@@ -147,7 +152,7 @@ class backStart():
                 lugarpago=self._request.POST['lugarpago'],
                 categoria_pago=self._request.POST['categoria_pago'],
                 payment_type=self._request.POST['pago'],
-                user=user,
+                user=user.user,
                 total=valor_float,
                 moneda=self._request.POST['moneda'] if 'moneda' in self._request.POST else "",
             )
@@ -173,7 +178,7 @@ class backStart():
                     'total':float(value.product.price)*int(value.cant_product),
                     })
                     totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
-                carroEmail['totalGeneral'] = totalGeneral
+                carroEmail['totalGeneral'] = round(totalGeneral,2)
                 carroEmail['totalCompleto'] = carroEmail['totalGeneral']+costo_envio
                 direction = '/static/images/upload/imagesp/'
 
@@ -183,7 +188,7 @@ class backStart():
                     'email':str(params_user),
                     'carro':carroEmail['compra'],
                     'totalGeneral':carroEmail['totalGeneral'],
-                    'totalCompleto':carroEmail['totalCompleto'],
+                    'totalCompleto':round(carroEmail['totalCompleto'],2),
                     'codigo':comprascode,
                     'costoEnvio':costo_envio,
                     'direction':direction,
@@ -236,12 +241,12 @@ class backStart():
                     })
 
             # totalCompleto = totalGeneral+Tools.objects.get(pk=1).costoenvio
-
+            profile = Profile.objects.get(user=self._request.user.id)
             self.response_data['data2'].append({
                 'totalGeneral':totalGeneral,
                 'totalCompleto':totalcompra,
-                'direccion':Profile.objects.get(user=self._request.user.id).direction,
-                'costoenvio':Tools.objects.get(pk=1).costoenvio,
+                'direccion':profile.direction,
+                'costoenvio':profile.costoenvio,
                 'moneda':moneda if moneda != "" else "USD" ,
                 'payment_type':payment_type if payment_type != "" else "No aplica",
                 'lugarpago':lugarpago if lugarpago != "" else "No aplica",

@@ -50,7 +50,7 @@ urlpatterns = [
     #confirmacion de pedido
     url(r'^confirmacion/$', csrf_exempt(ConfimationOrder), name='confirmacioncompra'),
     #detales de la compra
-    url(r'^detalles/$', csrf_exempt(Detail), name='detail'),
+    url(r'^detalles/$', Detail, name='detail'),
 ]
 
 #proces de agregar costo de envio

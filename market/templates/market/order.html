@@ -83,7 +83,7 @@ body{
 										</span>
 									</div>
 									<div class="size-209">
-										<span class="mtext-110 cl2 subTotalDinamic">
+										<span class="mtext-110 cl2 subTotalDinamic2">
 										</span>
 									</div>
 								</div>
@@ -95,7 +95,7 @@ body{
 									</div>
 									<div class="size-2091" style="margin-left:20px;">
 										<span class="mtext-110 cl2 costoEnvio">
-											<b>$</b><b id="coenconf">{{costoenvio}}</b>
+											<b>$</b><b id="coenconf"></b> <span id="lugarE"></span>
 										</span>
 									</div>
 								</div>
@@ -130,7 +130,7 @@ body{
 									</div>
 
 									<div class="size-209 p-t-1">
-										<b>$</b><span class="mtext-110 cl2 totalDinamicFinal"></span>
+										<b>$</b><span class="mtext-110 cl2 totalDinamicFinal2"></span>
 									</div>
 								</div>
 							</div>
@@ -185,7 +185,7 @@ body{
 							 <!--primera seccion -->
 							 <div class="box-body section3" style="display:block;">
 
-								 <form style="margin-left: 70px;margin-top: 20px;">
+								 <form style="margin-left:10px;margin-top: 20px;">
 									 <div class="radio" style="margin-bottom: 10px;">
 										 <input style="display:initial;" type="radio" name="optionsRadios" id="optionsRadios1" value="1" >
 										 <label style="display:initial;">
@@ -248,7 +248,7 @@ body{
 													 Pago Mòvil (BsS)
 												 </label>
 												 <label id="movilTransf" style="margin-top:10px;visibility:hidden;position:fixed;">
-													 Una vez realizada la compra, con esta opciòn tendra un màximo de 1 hora para hacer su transferencia
+													 Una vez realizada la compra, con esta opciòn tendra un <b>màximo de 1 hora</b> para hacer su transferencia
 													 <b>PAGO-MÒVIL</b> y <b>REPORTAR SU PAGO</b> de lo contrario su compra serà <b>anulada</b>.
 												 </label>
 											 </div>
@@ -303,8 +303,8 @@ body{
 		 <input id="flagUser" style="visibility:hidden;position:fixed;" value="{{user}}">
      {% include "market/scripts.html" %}
 		 <!--recursos -->
-		 <script src="{% static "js/codepent.js" %}"></script>
-		 <script src="{% static "js/easing.min.js" %}"></script>
+		 <!-- <script src="{% static "js/codepent.js" %}"></script>
+		 <script src="{% static "js/easing.min.js" %}"></script> -->
      <!-- Login -->
  		<script src="{% static "js/loginRegister.js" %}"></script>
  		<!-- Registro dinamico -->
@@ -313,90 +313,5 @@ body{
  		<script src="{% static "js/order.js" %}"></script>
 		<!-- Moment--->
     <script src="{% static "js/moment.js" %}"></script>
-
-
-		<script>
-		$('.radio').change(function(){
-			if ($('#optionsRadios1').is(':checked')) {
-				$("#banescoTransf").css("visibility","visible");
-				$("#banescoTransf").css("position","static");
-				$("#cuentasTransferencia").css("visibility","visible");
-				$("#cuentasTransferencia").css("position","static");
-	    }else{
-				$("#banescoTransf").css("visibility","hidden");
-				$("#banescoTransf").css("position","fixed");
-				$("#cuentasTransferencia").css("visibility","hidden");
-				$("#cuentasTransferencia").css("position","fixed");
-			}
-	    if ($('#optionsRadios2').is(':checked')) {
-				$("#movilTransf").css("visibility","visible");
-				$("#movilTransf").css("position","static");
-	    }else{
-				$("#movilTransf").css("visibility","hidden");
-				$("#movilTransf").css("position","fixed");
-			}
-
-	    if ($('#optionsRadios3').is(':checked')) {
-				$("#paypalTransf").css("visibility","visible");
-				$("#paypalTransf").css("position","static");
-	    }else{
-				$("#paypalTransf").css("visibility","hidden");
-				$("#paypalTransf").css("position","fixed");
-			}
-
-	    if ($('#inlineRadio1').is(':checked')) {
-				$("#inlineFormCustomSelect1").prop("disabled", false)
-	    }else{
-				$("#inlineFormCustomSelect1").prop("disabled", true)
-			}
-	    if ($('#inlineRadio2').is(':checked')) {
-				$("#inlineFormCustomSelect2").prop("disabled", false)
-	    }else{
-				$("#inlineFormCustomSelect2").prop("disabled", true)
-			}
-
-      });
-
-			var listPriceTotal = 0;
-			var carrito = JSON.parse(localStorage.getItem("carrito"));
-			if (carrito.length>0) {
-				for (var i = 0; i < carrito.length; i++) {
-					listPriceTotal = listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad));
-				}
-				$(".totalDinamicFinal").text(parseFloat(listPriceTotal)+parseFloat($("#coenconf").text()));
-				$(".subTotalDinamic").text("$"+listPriceTotal);
-			}
-			$('#action').click(function (e) {
-				e.preventDefault();
-				if ($('#minPlus').attr('class') == 'fa fa-plus'){
-					$(".section1").show(900);
-					$('#minPlus').attr('class','fa fa-minus');
-				}else{
-					$(".section1").hide(900);
-					$('#minPlus').attr('class','fa fa-plus')
-				}
-			 });
-			$('#action2').click(function (e) {
-				e.preventDefault();
-				if ($('#minPlus2').attr('class') == 'fa fa-plus'){
-					$(".section2").show(900);
-					$('#minPlus2').attr('class','fa fa-minus');
-				}else{
-					$(".section2").hide(900);
-					$('#minPlus2').attr('class','fa fa-plus')
-				}
-			 });
-			$('#action3').click(function (e) {
-				e.preventDefault();
-				if ($('#minPlus3').attr('class') == 'fa fa-plus'){
-					$(".section3").show(900);
-					$('#minPlus3').attr('class','fa fa-minus');
-				}else{
-					$(".section3").hide(900);
-					$('#minPlus3').attr('class','fa fa-plus')
-				}
-			 });
-
-		</script>
   </body>
 </html>

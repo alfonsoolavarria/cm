@@ -50,7 +50,7 @@ $(document).ready(function() {
               "PagoMovil":"Bs",
             }
 
-           // if ($(".totalDinamicFinal").val())
+           // if ($(".totalDinamicFinal2").val())
 
           if ($('#optionsRadios1').is(':checked')) {
             tipodePago = 'Transferencia'
@@ -106,15 +106,17 @@ $(document).ready(function() {
           $("#preloader").css("visibility","visible");
 
           var carrito = JSON.parse(localStorage.getItem("carrito"));
+          var costo = JSON.parse(localStorage.getItem("costoenvio"));
           var fechadeinicio = moment().utc().format("YYYY-MM-DD HH:mm");// en utc
 
           $.post('/orden/entrega/',{
             pago:tipodePago,
             lugarpago:lugarPago,
             categoria_pago:categoria_pago,
-            total:$(".totalDinamicFinal").text(),
+            total:$(".totalDinamicFinal2").text(),
             moneda:moneda,
             carrito:JSON.stringify(carrito),
+            costoenvio:costo,
             start_date:fechadeinicio,
           }).done(function (result) {
             if (result.code==200) {
@@ -283,3 +285,90 @@ $(document).ready(function() {
   });
 
 });
+
+$('.radio').change(function(){
+  if ($('#optionsRadios1').is(':checked')) {
+    $("#banescoTransf").css("visibility","visible");
+    $("#banescoTransf").css("position","static");
+    $("#cuentasTransferencia").css("visibility","visible");
+    $("#cuentasTransferencia").css("position","static");
+  }else{
+    $("#banescoTransf").css("visibility","hidden");
+    $("#banescoTransf").css("position","fixed");
+    $("#cuentasTransferencia").css("visibility","hidden");
+    $("#cuentasTransferencia").css("position","fixed");
+  }
+  if ($('#optionsRadios2').is(':checked')) {
+    $("#movilTransf").css("visibility","visible");
+    $("#movilTransf").css("position","static");
+  }else{
+    $("#movilTransf").css("visibility","hidden");
+    $("#movilTransf").css("position","fixed");
+  }
+
+  if ($('#optionsRadios3').is(':checked')) {
+    $("#paypalTransf").css("visibility","visible");
+    $("#paypalTransf").css("position","static");
+  }else{
+    $("#paypalTransf").css("visibility","hidden");
+    $("#paypalTransf").css("position","fixed");
+  }
+
+  if ($('#inlineRadio1').is(':checked')) {
+    $("#inlineFormCustomSelect1").prop("disabled", false)
+  }else{
+    $("#inlineFormCustomSelect1").prop("disabled", true)
+  }
+  if ($('#inlineRadio2').is(':checked')) {
+    $("#inlineFormCustomSelect2").prop("disabled", false)
+  }else{
+    $("#inlineFormCustomSelect2").prop("disabled", true)
+  }
+
+  });
+
+  var listPriceTotal = 0;
+  var carrito = JSON.parse(localStorage.getItem("carrito"));
+  var costo = JSON.parse(localStorage.getItem("costoenvio"));
+  var lugar = localStorage.getItem("lugarenvio");
+  if (carrito.length>0) {
+    for (var i = 0; i < carrito.length; i++) {
+      listPriceTotal = (listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad))).toFixed(2);
+    }
+    $("#coenconf").text(costo);
+    $("#lugarE").text(lugar);
+    $(".totalDinamicFinal2").text(parseFloat(listPriceTotal)+parseFloat(costo));
+    $(".subTotalDinamic2").text("$"+listPriceTotal);
+  }else{
+    window.location.href = '/';
+  }
+  $('#action').click(function (e) {
+    e.preventDefault();
+    if ($('#minPlus').attr('class') == 'fa fa-plus'){
+      $(".section1").show(900);
+      $('#minPlus').attr('class','fa fa-minus');
+    }else{
+      $(".section1").hide(900);
+      $('#minPlus').attr('class','fa fa-plus')
+    }
+   });
+  $('#action2').click(function (e) {
+    e.preventDefault();
+    if ($('#minPlus2').attr('class') == 'fa fa-plus'){
+      $(".section2").show(900);
+      $('#minPlus2').attr('class','fa fa-minus');
+    }else{
+      $(".section2").hide(900);
+      $('#minPlus2').attr('class','fa fa-plus')
+    }
+   });
+  $('#action3').click(function (e) {
+    e.preventDefault();
+    if ($('#minPlus3').attr('class') == 'fa fa-plus'){
+      $(".section3").show(900);
+      $('#minPlus3').attr('class','fa fa-minus');
+    }else{
+      $(".section3").hide(900);
+      $('#minPlus3').attr('class','fa fa-plus')
+    }
+   });

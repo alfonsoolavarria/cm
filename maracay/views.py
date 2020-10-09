@@ -331,23 +331,15 @@ def CartShopping(request):
                 'rif':dataUser.user_profile.rif,
                 'localphone':dataUser.user_profile.localphone,
                 'reference':dataUser.user_profile.reference,
-                'costoenvio':Tools.objects.get().costoenvio,
                 'code':200
             })
         except Exception as e:
             print ("CartShopping",e)
-            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
+            return render(request, 'market/cartshopping.html', {})
     else:
-        try:
-            return render(request, 'market/cartshopping.html', {'costoenvio':Tools.objects.get().costoenvio})
-        except Tools.DoesNotExist:
-            try:
-                data = {'costoenvio':config.COSTO_ENVIO,'create_at':datetime.now()}
-                costo = Tools(**data)
-                costo.save()
-                return HttpResponseRedirect("/")
-            except Exception as e:
-                return HttpResponseRedirect("/")
+        return render(request, 'market/cartshopping.html', {})
+
+
 
 
 #Section Filters
@@ -541,7 +533,6 @@ def CartOrder(request):
             'rif':dataUser.user_profile.rif,
             'localphone':dataUser.user_profile.localphone,
             'reference':dataUser.user_profile.reference,
-            'costoenvio':Tools.objects.get().costoenvio,
             'code':200
             }
         except Exception as e:
@@ -559,17 +550,17 @@ def ConfimationOrder(request):
     if str(request.user) == 'AnonymousUser':
         return render(request, 'market/registerLogin.html', {})
     try:
-        dataUser = User.objects.get(email=request.user)
+        dataUser = ProfileDB.objects.get(user__email=request.user)
         data = {
-        'user':dataUser.id,
-        'name':dataUser.first_name,
-        'email':dataUser.email,
-        'costoenvio':Tools.objects.get().costoenvio,
+        'user':dataUser.user.id,
+        'name':dataUser.user.first_name,
+        'email':dataUser.user.email,
         'code':200,
+        'costoenvio':dataUser.costoenvio,
         'compra':[],
         'tipoPago':'',
         }
-        compra = PurchaseConfirmation.objects.filter(user=dataUser).last()
+        compra = PurchaseConfirmation.objects.filter(user=dataUser.user).last()
         allProducts = PurchaseConfirmation.objects.filter(code=compra.code)
         totalGeneral=0
         for value in allProducts:
@@ -578,7 +569,7 @@ def ConfimationOrder(request):
             'name':value.product.name,
             'price':"$"+str(value.product.price)+' / '+str(value.cant_product),
             'image':'/static/images/upload/imagesp/'+value.product.name_image,
-            'total':"$"+str(float(value.product.price)*int(value.cant_product)),
+            'total':"$"+str(round(float(value.product.price)*int(value.cant_product),2)),
             })
             totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
 
@@ -589,13 +580,12 @@ def ConfimationOrder(request):
             data['totalenmodena'] = value2.total
 
 
-        data['totalGeneral'] = totalGeneral
-        data['totalCompleto'] = data['totalGeneral']+data['costoenvio']
+        data['totalGeneral'] = round(totalGeneral,2)
+        data['totalCompleto'] =round(data['totalGeneral']+data['costoenvio'],2)
         if data['moneda'] == 'Bs':
             data['totalenmodena']="{:,.2f}".format(float(data['totalenmodena'])).replace(","," ")
             data['totalenmodena']=data['totalenmodena'].replace(".",",")
             data['totalenmodena']=data['totalenmodena'].replace(" ",".")
-
         return render(request, 'market/confirmationOrder.html',data)
     except Exception as e:
         print("ConfimationOrder",e)
@@ -757,7 +747,6 @@ def Detail(request):
         _detailproducts.detailProducts()
         data = _detailproducts.response_data
         direction = '/static/images/upload/imagesp/'
-        print(data['data2'][0])
         return render(request, 'market/detailProduct.html', {'direction':direction,'data':data['data'],'data2':data['data2'][0]})
     else:
         data = {'code':500,'message':'Codigo invalido'}

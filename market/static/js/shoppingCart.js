@@ -12,6 +12,8 @@ $(document).ready(function() {
   document.addEventListener("click",function(ev){
     if(!localStorage.getItem("carrito")){
       localStorage.setItem('carrito','[]');
+      localStorage.setItem('costoenvio','2');
+      localStorage.setItem('lugarenvio','Bermudez');
     }
 
     if(ev.target.id === "addItem"){
@@ -69,7 +71,6 @@ $(document).ready(function() {
 
 
   }
-
 
 
 });
