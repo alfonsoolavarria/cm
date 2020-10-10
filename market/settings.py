@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
 ]
 
 ROOT_URLCONF = 'market.urls'
@@ -83,7 +84,7 @@ DATABASES = {
         #'TIMEOUT':2,
         'NAME': 'criollitos',
         'USER': 'postgres',
-        #'PASSWORD': '21098026',
+        # 'PASSWORD': '21098026',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
