@@ -24,6 +24,8 @@ from datetime import datetime
 import os,stat
 from django.core.files.base import ContentFile
 import xlrd
+from maracay.task import forgot_pass
+
 
 # Create your views here.
 #Main Class
@@ -593,70 +595,34 @@ def ConfimationOrder(request):
 
 #envio de formulario de ayuda
 def HelpForm(request):
+    try:
+        #antes de entrar en el hilo verifico si ese codigo de compra existe
+        codigo = request.POST.get('codigo')
+        if codigo:
+            try:
+                PagosImagenes.objects.get(codigo_compra=codigo)
+            except Exception as e:
+                print("codigo invalido",e)
+                data = {'code':500,"error":"Código invalido"}
+                return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
-    def hilo():
-        try:
-            print("envio el formulario con la imagen")
-            asunto = request.POST.get('asunto')
-            email = request.POST.get('email')
-            mensaje = request.POST.get('mensaje')
-            imagen = request.POST.get('imagen')
-            if imagen:
-                nombre_imagen = request.POST.get('nombre_imagen')
-                codigo = request.POST.get('codigo')
-                extension = request.POST.get('extension')
-                extension = '.'+extension.split("/")[1]
-                print("extension",extension)
-            # print('foto',request.FILES.get('foto'))
-            now = datetime.now()
-            current_time = now.strftime("%Y-%m-%d")
-            data_imagen_sendinblue = {}
-            #guardado del archivo
+        kwargs_ = {
+        "asunto": request.POST.get('asunto'),
+        "email": request.POST.get('email'),
+        "mensaje": request.POST.get('mensaje'),
+        "imagen": request.POST.get('imagen'),
+        "nombre_imagen": request.POST.get('nombre_imagen'),
+        "codigo": request.POST.get('codigo'),
+        "origin":request.headers['Origin'],
+        }
+        extension = request.POST.get('extension')
+        if extension:
+            extension = '.'+extension.split("/")[1]
+            kwargs_["extension"] = extension
 
-
-            def ran_gen(size, chars=string.ascii_uppercase + string.digits):
-                return ''.join(random.choice(chars) for x in range(size))
-
-            nombre_random = ran_gen(5,"abcdefghijkLmnNopqrstuvwxyz0123456789*")
-
-            image_data = request.POST.get('imagen')
-            if image_data:
-                format, imgstr = image_data.split(';base64,')
-                ext = format.split('/')[-1]#otra extension por si acaso
-                data = ContentFile(base64.b64decode(imgstr))
-                file_name = str(current_time)+"-"+codigo+extension
-                localtion_save = settings.MEDIA_ROOT+"/imagesp/capturas/"
-
-                fs = FileSystemStorage(location=localtion_save)
-                mymodel = PagosImagenes(email_user=email,asunto=asunto,codigo_compra=codigo,mensaje=mensaje)
-
-                istan = mymodel.picture.save(file_name,data)
-
-                data_imagen_sendinblue["content"] = request.headers['Origin']+'/static/images/upload/imagesp/capturas/'+file_name,
-                data_imagen_sendinblue["name"] = file_name,
-
-            sendinblue_send('contacto',email,"","",{
-                "asunto":asunto,
-                "mensaje":mensaje,
-                "codigo":codigo if codigo else None,
-                "attachment":[data_imagen_sendinblue]
-            })
-        except Exception as e:
-            print(e)
-
-
-    #antes de entrar en el hilo verifico si ese codigo de compra existe
-    codigo = request.POST.get('codigo')
-    if codigo:
-        try:
-            PagosImagenes.objects.get(codigo_compra=codigo)
-        except Exception as e:
-            print("codigo invalido",e)
-            data = {'code':500,"error":"Código invalido"}
-            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
-
-    thread = Thread(target = hilo)
-    thread.start()
+        envio_email = forgot_pass.delay(kwargs_)
+    except Exception as e:
+        print("HelpForm",e)
 
     data = {'code':200}
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
