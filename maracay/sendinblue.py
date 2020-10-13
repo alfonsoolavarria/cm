@@ -52,7 +52,7 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             tempid = 5
             params = {
                 "asunto":extra["asunto"],
-                'payment_type':['payment_type'],
+                'payment_type':extra['payment_type'],
                 'email':extra['email'],
                 'carro':extra['carro'],
                 'totalGeneral':extra['totalGeneral'],
@@ -70,6 +70,7 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
             "params":params
             }
         response = requests.request("POST",STRANS,json=transaction,headers=headers)
+        print("--->",params)
         print("--->",response.status_code)
         print("--->",response.text)
         return response.text

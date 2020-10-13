@@ -331,14 +331,20 @@ $('.radio').change(function(){
   var carrito = JSON.parse(localStorage.getItem("carrito"));
   var costo = JSON.parse(localStorage.getItem("costoenvio"));
   var lugar = localStorage.getItem("lugarenvio");
+  console.log(carrito);
   if (carrito.length>0) {
     for (var i = 0; i < carrito.length; i++) {
-      listPriceTotal = (listPriceTotal+(parseFloat(carrito[i].price)*parseFloat(carrito[i].cantidad))).toFixed(2);
+      var price = parseFloat(carrito[i].price);
+      var cant = parseFloat(carrito[i].cantidad);
+      calculo = parseFloat(price*cant);
+      listPriceTotal = parseFloat(listPriceTotal)+parseFloat(calculo)
+
     }
     $("#coenconf").text(costo);
     $("#lugarE").text(lugar);
-    $(".totalDinamicFinal2").text(parseFloat(listPriceTotal)+parseFloat(costo));
-    $(".subTotalDinamic2").text("$"+listPriceTotal);
+    var total = parseFloat(listPriceTotal) + parseFloat(costo);
+    $(".totalDinamicFinal2").text(parseFloat(total).toFixed(2));
+    $(".subTotalDinamic2").text("$"+parseFloat(listPriceTotal).toFixed(2));
   }else{
     window.location.href = '/';
   }

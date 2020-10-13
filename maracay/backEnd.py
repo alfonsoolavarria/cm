@@ -11,6 +11,9 @@ from datetime import datetime, timedelta, date, time
 import schedule, time, pytz, datetime
 from maracay import verificacion_compras, formatoBolivares
 from maracay.sendinblue import sendinblue_send
+from maracay.task import send_factura
+
+
 
 class backStart():
     def __init__(self, request):
@@ -157,58 +160,33 @@ class backStart():
                 moneda=self._request.POST['moneda'] if 'moneda' in self._request.POST else "",
             )
             historialCompras.save()
+
+            kwargs_ = {
+                "costo_envio":costo_envio,
+                "params_user":str(self._request.user),
+                "comprascode":compras.code,
+                "pago":self._request.POST['lugarpago']}
+            envio_email_factura = send_factura.delay(kwargs_)
         except Exception as e:
             print("save",e)
             self.code = 500
             return
 
 
-        def hilo2(comprascode,pago,params_user,costo_envio):
-            try:
-                ###############################
-                #Envio la factura por email
-                carroEmail = {'compra':[]}
-                allProducts = PurchaseConfirmation.objects.filter(code=comprascode)
-                totalGeneral=0
-                for value in allProducts:
-                    carroEmail['compra'].append({
-                    'image':value.product.name_image,
-                    'name':value.product.name,
-                    'price':str(value.product.price)+' / '+str(value.cant_product),
-                    'total':float(value.product.price)*int(value.cant_product),
-                    })
-                    totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
-                carroEmail['totalGeneral'] = round(totalGeneral,2)
-                carroEmail['totalCompleto'] = carroEmail['totalGeneral']+costo_envio
-                direction = '/static/images/upload/imagesp/'
+        # def hilo2(comprascode,pago,params_user,costo_envio):
+        #
+        #     #verificar si el hilo de revision de compras esta o no activo
+        #     objeto_tools = Tools.objects.get(pk=1)
+        #     if objeto_tools.hilo_en_proceso == 0:
+        #         # proceso trabajoRecursivo
+        #         print("Ejecucion de Hilo")
+        #         verificacion_compras()
+        #         objeto_tools.hilo_en_proceso=1
+        #         objeto_tools.save()
 
-                sendinblue_send('detallescompra',str(params_user),"","",{
-                    "asunto":"Factura",
-                    'payment_type':pago,
-                    'email':str(params_user),
-                    'carro':carroEmail['compra'],
-                    'totalGeneral':carroEmail['totalGeneral'],
-                    'totalCompleto':round(carroEmail['totalCompleto'],2),
-                    'codigo':comprascode,
-                    'costoEnvio':costo_envio,
-                    'direction':direction,
-                })
 
-                #verificar si el hilo de revision de compras esta o no activo
-                objeto_tools = Tools.objects.get(pk=1)
-                if objeto_tools.hilo_en_proceso == 0:
-                    # proceso trabajoRecursivo
-                    print("Ejecucion de Hilo")
-                    verificacion_compras()
-                    objeto_tools.hilo_en_proceso=1
-                    objeto_tools.save()
-            except Exception as e:
-                print ("----",e)
-                self.code = 500
-                return
-
-        envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
-        envioemailfactura.start()
+        # envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
+        # envioemailfactura.start()
 
     def detailProducts(self):
         try:

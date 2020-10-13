@@ -1,5 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 import random
+from celery import Celery
+from celery.schedules import crontab
+from celery.task import periodic_task
 from celery.decorators import task
 from maracay.sendinblue import sendinblue_send
 from datetime import datetime
@@ -8,9 +11,33 @@ import base64
 from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from maracay.models import PagosImagenes
+from maracay.models import PagosImagenes, PurchaseConfirmation
+from datetime import datetime, timedelta, date, time
+import schedule, time, pytz, datetime
 
-@task()
+app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
+
+@periodic_task(run_every=(crontab(minute='*')),name="verificacion_compras_schedule")
+def verificacion_compras_schedule():
+    from maracay.models import PurchaseConfirmation, Product
+    comprasParaVerificar = PurchaseConfirmation.objects.filter(confirmation=2)
+    for compra in comprasParaVerificar:
+        ahora = datetime.datetime.now(pytz.timezone('America/Caracas'))
+        # fechaAcomparar = compra.start_date+timedelta(hours=config.TIEMPO_DE_ANULACION_COMPRA)
+        fechaAcomparar = compra.start_date+timedelta(minutes=1)
+        if ahora>fechaAcomparar:
+            print ('Anular la compra',compra.id)
+            print(compra.product.id)
+            compra.confirmation = 1
+            #restituyo la cantidad de productos comprados
+            producto = Product.objects.get(id=compra.product.id)
+            producto.cant = int(producto.cant)+int(compra.cant_product)
+            #guardo cambios
+            compra.save()
+            producto.save()
+
+
+@app.task()
 def forgot_pass(kwargs_):
     try:
         image_data = None
@@ -58,3 +85,42 @@ def forgot_pass(kwargs_):
         })
     except Exception as e:
         print("forgot_pass",e)
+
+
+@app.task()
+def send_factura(kwargs_):
+    try:
+        ###############################
+        #Envio la factura por email
+        carroEmail = {'compra':[]}
+        allProducts = PurchaseConfirmation.objects.filter(code=kwargs_["comprascode"])
+        totalGeneral=0
+        for value in allProducts:
+            carroEmail['compra'].append({
+            'image':value.product.name_image,
+            'name':value.product.name,
+            'price':str(value.product.price)+' / '+str(value.cant_product),
+            'total':float(value.product.price)*int(value.cant_product),
+            })
+            totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
+        carroEmail['totalGeneral'] = round(totalGeneral,2)
+        carroEmail['totalCompleto'] = carroEmail['totalGeneral']+kwargs_["costo_envio"]
+        direction = '/static/images/upload/imagesp/'
+        print("carroEmail['compra']",carroEmail['compra'])
+        print(kwargs_["pago"])
+        print(kwargs_["costo_envio"])
+        print(kwargs_["comprascode"])
+        print(round(carroEmail['totalCompleto'],2))
+        sendinblue_send('detallescompra',str(kwargs_["params_user"]),"","",{
+            "asunto":"Factura",
+            'payment_type':kwargs_["pago"],
+            'email':str(kwargs_["params_user"]),
+            'carro':carroEmail['compra'],
+            'totalGeneral':round(carroEmail['totalGeneral'],2),
+            'totalCompleto':round(carroEmail['totalCompleto'],2),
+            'codigo':kwargs_["comprascode"],
+            'costoEnvio':kwargs_["costo_envio"],
+            'direction':direction,
+        })
+    except Exception as e:
+        print("send_factura",e)
