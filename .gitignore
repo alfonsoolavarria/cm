@@ -6,3 +6,4 @@ __pycache__/*
 market/templates/market/cuentas
 market/static/images/upload/imagesp/
 market/static/images/
+celerybeat-schedule
