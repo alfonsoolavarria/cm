@@ -14,7 +14,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
     url(r'^account/$', Account.as_view(), name='account'),
-    url(r'^account/register/user/$', Register, name='registerUser'),
+    url(r'^account/register/user/$', csrf_exempt(Register), name='registerUser'),
     url(r'^client/web/email/$', SendEmailClient, name='sendemail'),
     url(r'^conditions/$', Conditions, name='Conditions'),
     url(r'^login/$', Login.as_view(), name='login'),
@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^forgot/password/mail/$', ForgotMail, name='restoredesdeemail'),
     url(r'^profile/$', Profile.as_view(), name='profile'),
     url(r'^help/$', Help, name='help'),
-    url(r'^help/form/$', HelpForm, name='helpform'),#OJO NOTA LEER verofocar si la imagen es muy pesada mandar alerta
+    url(r'^help/form/$', csrf_exempt(HelpForm), name='helpform'),#OJO NOTA LEER verofocar si la imagen es muy pesada mandar alerta
     url(r'^we/$', We, name='we'),
     url(r'^places/$', Places, name='places'),
     url(r'^payment/$', Payment, name='payment'),
@@ -45,7 +45,7 @@ urlpatterns = [
     #carrito de compras
     url(r'^cart/shopping/$', CartShopping, name='cartshopping'),
     #caja de compras
-    url(r'^cart/order/$', CartOrder, name='cartsorder'),
+    url(r'^cart/order/$', csrf_exempt(CartOrder), name='cartsorder'),
     #compra finalizada
     url(r'^orden/entrega/$', CartOrderEntrega, name='cartsorderentrega'),
     #confirmacion de pedido
