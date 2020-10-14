@@ -86,7 +86,7 @@ DATABASES = {
         'USER': os.environ.get('CM_DB_USER'),
         'PASSWORD': os.environ.get('CM_DB_PASSWORD'),
         'HOST': os.environ.get('CM_DB_HOST'),
-        'PORT': os.environ.get('TICKING_DB_PORT'),
+        'PORT': os.environ.get('CM_DB_PORT'),
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
