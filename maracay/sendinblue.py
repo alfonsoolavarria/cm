@@ -60,6 +60,7 @@ def sendinblue_send(template,email,nombre,apellido,extra=None):
                 'codigo':extra['codigo'],
                 'costoEnvio':extra['costoEnvio'],
                 'direction':extra['direction'],
+                'origin':extra['origin'],
             }
 
 

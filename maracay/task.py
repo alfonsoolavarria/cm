@@ -116,7 +116,6 @@ def send_factura(kwargs_):
         carroEmail['totalCompleto'] = carroEmail['totalGeneral']+kwargs_["costo_envio"]
         direction = '/static/images/upload/imagesp/'
 
-        print(carroEmail['compra'])
         sendinblue_send('detallescompra',str(kwargs_["params_user"]),"","",{
             "asunto":"Factura",
             'payment_type':kwargs_["pago"],
@@ -127,6 +126,7 @@ def send_factura(kwargs_):
             'codigo':kwargs_["comprascode"],
             'costoEnvio':kwargs_["costo_envio"],
             'direction':direction,
+            'origin':kwargs_["origin"],
         })
     except Exception as e:
         print("send_factura",e)
