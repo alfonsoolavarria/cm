@@ -17,7 +17,7 @@ import schedule, time, pytz, datetime
 
 app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
 
-@periodic_task(run_every=(crontab(minute='*')),name="verificacion_compras_schedule")
+@periodic_task(run_every=(crontab(minute='10')),name="verificacion_compras_schedule")
 def verificacion_compras_schedule():
     from maracay.models import PurchaseConfirmation, Product
     comprasParaVerificar = PurchaseConfirmation.objects.filter(confirmation=2)
