@@ -47,7 +47,7 @@ urlpatterns = [
     #caja de compras
     url(r'^cart/order/$', csrf_exempt(CartOrder), name='cartsorder'),
     #compra finalizada
-    url(r'^orden/entrega/$', CartOrderEntrega, name='cartsorderentrega'),
+    url(r'^orden/entrega/$', csrf_exempt(CartOrderEntrega), name='cartsorderentrega'),
     #confirmacion de pedido
     url(r'^confirmacion/$', ConfimationOrder, name='confirmacioncompra'),
     #detales de la compra
