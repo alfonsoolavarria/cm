@@ -106,7 +106,7 @@ def send_factura(kwargs_):
         totalGeneral=0
         for value in allProducts:
             carroEmail['compra'].append({
-            'image':value.product.name_image,
+            'image':kwargs_["origin"]+direction+value.product.name_image,
             'name':value.product.name,
             'price':str(value.product.price)+' / '+str(value.cant_product),
             'total':float(value.product.price)*int(value.cant_product),
