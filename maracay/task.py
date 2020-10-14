@@ -104,6 +104,7 @@ def send_factura(kwargs_):
         carroEmail = {'compra':[]}
         allProducts = PurchaseConfirmation.objects.filter(code=kwargs_["comprascode"])
         totalGeneral=0
+        direction = '/static/images/upload/imagesp/'
         for value in allProducts:
             carroEmail['compra'].append({
             'image':kwargs_["origin"]+direction+value.product.name_image,
@@ -114,7 +115,7 @@ def send_factura(kwargs_):
             totalGeneral = totalGeneral+(float(value.product.price)*int(value.cant_product))
         carroEmail['totalGeneral'] = round(totalGeneral,2)
         carroEmail['totalCompleto'] = carroEmail['totalGeneral']+kwargs_["costo_envio"]
-        direction = '/static/images/upload/imagesp/'
+
 
         sendinblue_send('detallescompra',str(kwargs_["params_user"]),"","",{
             "asunto":"Factura",
