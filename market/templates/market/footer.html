@@ -1,5 +1,19 @@
 
 {% load static %}
+<style>
+	#torre{
+			width: inherit;
+	}
+	@media only screen and (max-width: 699px) and (min-width: 100px){
+		#torre{
+			content:url('/static/images/imageTorremobile.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			white-space: pre;
+		}
+	}
+</style>
 {% block content %}
   <!-- Footer -->
 	<footer class="bg3 p-t-75 p-b-32" style="background-color: #eeeeee;">

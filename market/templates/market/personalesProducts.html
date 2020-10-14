@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	{% include "market/head.html" %}
+<body class="animsition">
+	{% include "market/header.html" %}
+
+	<!-- Slider -->
+  <div class="container">
+    <div class="row">
+    <div class="col-md-6">
+      <div style="margin-bottom: 13%;margin-top: 30%;"id="contentProduct">
+        Personales/......
+      </div>
+    </div>
+    </div>
+  </div>
+
+
+
+	<!-- Banner -->
+
+	<!-- Product -->
+	<section class="bg0 p-t-23 p-b-140" id="productAnimate">
+		<div class="container">
+			<div class="p-b-10">
+				<h3 class="ltext-103 cl5">
+					Productos
+				</h3>
+			</div>
+
+			<!-- header de categorias de productos -->
+			{% include "market/categoriaProductos/menuproductos.html" %}
+			<!-- listado de productos -->
+			{% include "market/categoriaProductos/listado.html" %}
+
+		</div>
+	</section>
+
+	{% include "market/footer.html" %}
+
+
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+
+	<!-- Modal1 -->
+	{% include "market/modalDetails.html" %}
+
+	<input id="miBoton" style="visibility:hidden;position:fixed;" type="button" value="Desplazar"/>
+	<input id="page" style="visibility:hidden;position:fixed;" type="button" value="{{ contacts.number }}"/>
+
+		{% include "market/scripts.html" %}
+
+		<script>
+			$(".addModalCar").on('click',function(){
+				swal("¡ Añadido al Carrito !", " ", "success");
+				//swal("");
+			});
+		</script>
+
+	</body>
+</html>

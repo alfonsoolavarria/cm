@@ -441,6 +441,21 @@ def CarnesProducts(request):
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/carnesProducts.html',{'carne':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
+def PersonalesProducts(request):
+    _personalesproductsfilter = filterProducts(request)
+    _personalesproductsfilter.personalesProductsFilter()
+
+    data = _personalesproductsfilter.response_data
+    data['code'] = _personalesproductsfilter.code
+
+    contact_list = data['cantTotal']
+    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+    page = request.GET.get('page')
+    contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
+    dataAll = {'contacts':contacts}
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/personalesProducts.html',{'personales':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
 #Section Filter Prodcuts Admin
 def AllProductsAdmin(request):
