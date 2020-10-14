@@ -36,9 +36,18 @@ def verificacion_compras_schedule():
             compra.save()
             producto.save()
 
-
 @app.task()
 def forgot_pass(kwargs_):
+    sendinblue_send(
+        'forgot',
+        kwargs_["email"],
+        "",
+        "",
+        {'token':kwargs_["uriab"]+'mail/?token='+kwargs_["token"]}
+    )
+
+@app.task()
+def help_form(kwargs_):
     try:
         image_data = None
 
@@ -106,11 +115,8 @@ def send_factura(kwargs_):
         carroEmail['totalGeneral'] = round(totalGeneral,2)
         carroEmail['totalCompleto'] = carroEmail['totalGeneral']+kwargs_["costo_envio"]
         direction = '/static/images/upload/imagesp/'
-        print("carroEmail['compra']",carroEmail['compra'])
-        print(kwargs_["pago"])
-        print(kwargs_["costo_envio"])
-        print(kwargs_["comprascode"])
-        print(round(carroEmail['totalCompleto'],2))
+
+        print(carroEmail['compra'])
         sendinblue_send('detallescompra',str(kwargs_["params_user"]),"","",{
             "asunto":"Factura",
             'payment_type':kwargs_["pago"],

@@ -24,7 +24,7 @@ from datetime import datetime
 import os,stat
 from django.core.files.base import ContentFile
 import xlrd
-from maracay.task import forgot_pass
+from maracay.task import help_form,forgot_pass
 
 
 # Create your views here.
@@ -620,7 +620,7 @@ def HelpForm(request):
             extension = '.'+extension.split("/")[1]
             kwargs_["extension"] = extension
 
-        envio_email = forgot_pass.delay(kwargs_)
+        envio_email = help_form.delay(kwargs_)
     except Exception as e:
         print("HelpForm",e)
 
@@ -664,29 +664,12 @@ def Forgot(request):
             token = TokenPassword(**dataToke)
 
         token.save()
-
-        def forgotPassword():
-            try:
-
-                sendinblue_send('forgot',dataUser.email,"","",{'token':request.build_absolute_uri()+'mail/?token='+dataToke['token']})
-                # msg_html = render_to_string('market/forgotPassword.html',
-                # {
-                # 'email':request.POST.get('email',''),
-                # 'token':tokenCode,
-                # })
-                #
-                # send_mail(
-                # 'Recuperar Clave',
-                # 'siga los pasos',
-                # settings.EMAIL_HOST_USER,#from
-                # [request.POST.get('email','')],#to
-                # html_message=msg_html,
-                # )
-            except Exception as e:
-                print ('e',e)
-
-        thread = Thread(target = forgotPassword)
-        thread.start()
+        kwargs_ = {
+            "email":str(dataUser.email),
+            "uriab":request.build_absolute_uri(),
+            "token":dataToke['token']
+        }
+        envio_email_forgot = forgot_pass.delay(kwargs_)
 
         data = {'code':200}
         return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')

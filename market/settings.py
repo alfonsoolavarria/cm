@@ -82,40 +82,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'ENGINE': 'django.db.backends.sqlite3',
         #'TIMEOUT':2,
-        'NAME': 'criollitos',
-        'USER': 'postgres',
-        # 'PASSWORD': '21098026',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('CM_DB_NAME'),
+        'USER': os.environ.get('CM_DB_USER'),
+        'PASSWORD': os.environ.get('CM_DB_PASSWORD'),
+        'HOST': os.environ.get('CM_DB_HOST'),
+        'PORT': os.environ.get('TICKING_DB_PORT'),
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
-#####db de produccion
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-#####db de produccion
 
-
-
-# DATABASES['default'] = dj_database_url.parse('postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee', conn_max_age=600)
-#https://fierce-garden-63252.herokuapp.com/
-#'postgres://wudwjeeqngsoln:db0b4d57a4280154798016702a4a2427d32691a5d00efd39e75468263be770a1@ec2-34-225-82-212.compute-1.amazonaws.com:5432/d7rddbdt0sbmee'
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'djongo',
-#             'ENFORCE_SCHEMA': True,
-#             'NAME': 'criollotest',
-#             'host': '127.0.0.1',
-#             'port': 27017,
-#             'username': 'root',
-#             'password': 'root',
-#         }
-#     }
-
-# Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [

@@ -172,22 +172,6 @@ class backStart():
             self.code = 500
             return
 
-
-        # def hilo2(comprascode,pago,params_user,costo_envio):
-        #
-        #     #verificar si el hilo de revision de compras esta o no activo
-        #     objeto_tools = Tools.objects.get(pk=1)
-        #     if objeto_tools.hilo_en_proceso == 0:
-        #         # proceso trabajoRecursivo
-        #         print("Ejecucion de Hilo")
-        #         verificacion_compras()
-        #         objeto_tools.hilo_en_proceso=1
-        #         objeto_tools.save()
-
-
-        # envioemailfactura = threading.Thread(target = hilo2, args=(compras.code,self._request.POST['lugarpago'],self._request.user,costo_envio,))
-        # envioemailfactura.start()
-
     def detailProducts(self):
         try:
             history = purchaseHistory.objects.filter(code_purchase=self._request.GET['code'])
