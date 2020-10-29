@@ -103,12 +103,12 @@ $(document).ready(function() {
           $("#paymentBox2").css("visibility","hidden");
           $("#sendUserSection1").css("visibility","hidden");
           $("#sendUserSection2").css("visibility","hidden");
-          $("#preloader").css("visibility","visible");
+          $(".loader05").css("visibility","visible");
 
           var carrito = JSON.parse(localStorage.getItem("carrito"));
           var costo = JSON.parse(localStorage.getItem("costoenvio"));
           var fechadeinicio = moment().utc().format("YYYY-MM-DD HH:mm");// en utc
-
+          
           $.post('/orden/entrega/',{
             pago:tipodePago,
             lugarpago:lugarPago,
@@ -127,7 +127,7 @@ $(document).ready(function() {
             }else {
               //poner un tootip
               swal(result.message, " ", "warning");
-              $("#preloader").css("visibility","hidden");
+              $("#loader05").css("visibility","hidden");
               $("#paymentBox2").css("visibility","visible");
               $("#sendUserSection1").css("visibility","visible");
               $("#sendUserSection2").css("visibility","visible");

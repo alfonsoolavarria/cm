@@ -57,7 +57,8 @@ $(document).ready(function() {
         swal("Claves incorrectas", " ", "warning");
         return;
       }
-
+      $(".loader05").css("visibility","visible");
+      $("#loginRegister").css("visibility","hidden");
       $.post('/profile/',{
         email:dataObj.email,
         password:dataObj.pass,
@@ -88,6 +89,8 @@ $(document).ready(function() {
         }else {
           //poner un tootip
           swal(result.error[0], " ", "warning");
+          $(".loader05").css("visibility","hidden");
+          $("#loginRegister").css("visibility","visible");
         }
       }).fail(function(error) {
         console.log(error.responseText);
