@@ -5,7 +5,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
     EnlatadosProducts,ViveresProducts, CartShopping, CartOrder, ConfimationOrder,HelpForm,
     CartOrderEntrega,Restore,Forgot,ForgotMail,AllProductsAdmin,ViveresProductsAdmin,
     FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail,AllProductsAdminTable,Register,
-    SendEmailClient,CharcuteriaProducts,CarnesProducts,PersonalesProducts)
+    SendEmailClient,CharcuteriaProducts,CarnesProducts,PersonalesProducts,GoogleVerificacion)
 from django.conf import settings
 from django.conf.urls import url
 from maracay import agrega_costo
@@ -13,6 +13,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', Maracay.as_view(), name='maracay'),
+    url(r'^googlebebc5688f09bbff0.html$', GoogleVerificacion.as_view(), name='verificacion'),
     url(r'^account/$', Account.as_view(), name='account'),
     url(r'^account/register/user/$', csrf_exempt(Register), name='registerUser'),
     url(r'^client/web/email/$', csrf_exempt(SendEmailClient), name='sendemail'),

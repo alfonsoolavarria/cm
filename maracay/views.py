@@ -28,6 +28,10 @@ from maracay.task import help_form,forgot_pass
 
 
 # Create your views here.
+class GoogleVerificacion(TemplateView):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'market/googlebebc5688f09bbff0.html',{})
+
 #Main Class
 class Maracay(TemplateView):
     template_name = 'market/index.html'
