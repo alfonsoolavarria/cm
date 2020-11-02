@@ -686,7 +686,7 @@ def Forgot(request):
         kwargs_ = {
             "email":str(dataUser.email),
             "uriab":request.build_absolute_uri(),
-            "token":dataToke['token']
+            "token":token.token
         }
         envio_email_forgot = forgot_pass.delay(kwargs_)
 
