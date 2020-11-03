@@ -5,5 +5,5 @@ __pycache__/*
 *.pyc
 market/templates/market/cuentas
 market/static/images/upload/imagesp/
-market/static/images/
+#market/static/images/
 celerybeat-schedule
