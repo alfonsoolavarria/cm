@@ -381,6 +381,23 @@ def ViveresProducts(request):
     direction = '/static/images/upload/imagesp/'
     return render(request, 'market/viveresProducts.html',{'viveres':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
 
+def ChucheriasProducts(request):
+    _chucheriasproductsfilter = filterProducts(request)
+    _chucheriasproductsfilter.chucheriasProductsFilter()
+
+    data = _chucheriasproductsfilter.response_data
+    data['code'] = _chucheriasproductsfilter.code
+
+    contact_list = data['cantTotal']
+    paginator = Paginator(contact_list, 10) # Show 25 contacts per page
+    page = request.GET.get('page')
+    contacts = paginator.get_page(page)
+    formatoBolivares(contacts)#formato en bolivares
+    dataAll = {'contacts':contacts}
+    direction = '/static/images/upload/imagesp/'
+    return render(request, 'market/chucheriaProducts.html',{'chucherias':1,'direction':direction,'contacts':contacts,'data':json.dumps(data['data'])})
+
+
 def FrigorificoProducts(request):
     _frigorificoproductsfilter = filterProducts(request)
     _frigorificoproductsfilter.frigorificoProductsFilter()

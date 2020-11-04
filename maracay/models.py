@@ -7,7 +7,7 @@ from django.utils.html import mark_safe
 
 # Create your models here.
 class Product(models.Model):
-    __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')),(4,_('Charcuteria')),(5,_('Carnes')),(6,_('Personales')))
+    __cate=((1,_('Viveres')),(2,_('Frigorifico')),(3,_('Enlatados')),(4,_('Charcuteria')),(5,_('Carnes')),(6,_('Personales')),(7,_('Chucherias')))
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=1000,help_text="Alias de la imagen")
     price=models.DecimalField(max_digits=30, decimal_places=2,help_text="Precio en Dolares")

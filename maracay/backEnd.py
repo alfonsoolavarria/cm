@@ -360,6 +360,18 @@ class filterProducts():
             "name_image":a.name_image,
             #"price":a.price,
             })
+    def chucheriasProductsFilter(self):
+        self.response_data['cantTotal']= Product.objects.filter(category=7,visible=True)
+        for a in Product.objects.filter(category=7,visible=True):
+            self.response_data['data'].append({
+            "category":a.category,
+            "id":a.id,
+            "name":a.name,
+            "cant":a.cant,
+            "description":a.description,
+            "name_image":a.name_image,
+            #"price":a.price,
+            })
     def charcuteriaProductsFilter(self):
         self.response_data['cantTotal']= Product.objects.filter(category=4,visible=True)
         for a in Product.objects.filter(category=4,visible=True):

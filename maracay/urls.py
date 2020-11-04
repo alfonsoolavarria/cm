@@ -5,7 +5,7 @@ from .views import (Maracay, Account, Conditions,Login,Logout,Profile, Help, We,
     EnlatadosProducts,ViveresProducts, CartShopping, CartOrder, ConfimationOrder,HelpForm,
     CartOrderEntrega,Restore,Forgot,ForgotMail,AllProductsAdmin,ViveresProductsAdmin,
     FrigorificoProductsAdmin,EnlatadosProductsAdmin,Detail,AllProductsAdminTable,Register,
-    SendEmailClient,CharcuteriaProducts,CarnesProducts,PersonalesProducts,GoogleVerificacion)
+    SendEmailClient,CharcuteriaProducts,CarnesProducts,PersonalesProducts,GoogleVerificacion,ChucheriasProducts)
 from django.conf import settings
 from django.conf.urls import url
 from maracay import agrega_costo
@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^charcuteria/$', CharcuteriaProducts, name='charcuteria'),
     url(r'^carnes/$', CarnesProducts, name='carnes'),
     url(r'^personales/$', PersonalesProducts, name='personales'),
+    url(r'^chucherias/$', ChucheriasProducts, name='chucherias'),
     #carrito de compras
     url(r'^cart/shopping/$', CartShopping, name='cartshopping'),
     #caja de compras
