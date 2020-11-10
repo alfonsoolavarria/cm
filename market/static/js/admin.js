@@ -130,3 +130,74 @@ $(document).ready(function() {
   });
 
 });
+
+$(document).ready(function() {
+
+  $("#excelinventario").click(function(e){
+    e.preventDefault();
+    var file = document.getElementById('fileproductoinventario')
+    var input = file;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var filedata = reader.result;
+      var nombreimagen = input.files[0].name
+      var extension = input.files[0].type
+      $.post('/criollitos/market/admin/',{
+        csrfmiddlewaretoken:$("#token")[0].children.defaultValue,
+        archivo:filedata,
+        nombre_archivo:nombreimagen,
+        extension:extension,
+        flag:'inventario',
+      }).done(function (result) {
+        console.log(result);
+        if (result.code==200) {
+          //price-{{forloop.counter}}
+          //{{value.stockcritico}}
+          swal(result.mensaje, " ", "success");
+
+          for (var i = 0; i < result.data.length; i++) {
+          $("#nextdinamic").after(
+              "<tr style='text-align:center;'><td>"+result.data[i].producto+"</td>\
+              <td><label>"+result.data[i].stockcritico+"</label></td><tr>"
+          )
+        }
+          var delayInMilliseconds = 1000; //menos de 1 second
+          // setTimeout(function() {
+          //   location.reload(true);
+          // }, delayInMilliseconds);
+        }else {
+          //poner un tootip
+          swal(result.error, " ", "warning");
+        }
+      }).fail(function(error) {
+        console.log(error.responseText);
+      });/*fin ajax*/
+
+    };
+
+
+    if (input.files && input.files[0].type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || input.files[0].type == 'application/vnd.oasis.opendocument.spreadsheet') {
+      reader.readAsDataURL(input.files[0]);
+    }else {
+      swal("Debe seleccionar un achivo tipo xlsx o ods", " ", "warning");
+      return false;
+    }
+
+  });
+
+  // $("body").on("click", "#btnExport", function () {
+  //     html2canvas($('#productsAdmin')[0], {
+  //         onrendered: function (canvas) {
+  //             var data = canvas.toDataURL();
+  //             var docDefinition = {
+  //                 content: [{
+  //                     image: data,
+  //                     width: 500
+  //                 }]
+  //             };
+  //             pdfMake.createPdf(docDefinition).download("cutomer-details.pdf");
+  //         }
+  //     });
+  // });
+
+});

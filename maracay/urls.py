@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^payment/$', Payment, name='payment'),
     url(r'^delivery/$', Delivery, name='delivery'),
     #administrador
-    url(r'^criollitos/market/admin/$', ControlAdmin.as_view(), name='admin'),
+    url(r'^criollitos/market/admin/$', csrf_exempt(ControlAdmin.as_view()), name='admin'),
     url(r'^criollitos/market/admin/all/product/$', AllProductsAdminTable, name='prodtable'),
     url(r'^criollitos/market/admin/all/$', AllProductsAdmin, name='adminall'),
     url(r'^criollitos/market/admin/viveres/$', ViveresProductsAdmin, name='adminviveres'),

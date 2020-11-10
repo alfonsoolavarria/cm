@@ -205,10 +205,10 @@ class ControlAdmin(View):
     def get(self, request, *args, **kwargs):
         try:
             #poner esto and request.user.is_superuser==True para el admin
-            if str(request.user) != 'AnonymousUser' :#si esta logeado su data
+            if str(request.user) != 'AnonymousUser' and request.user.is_superuser==True:#si esta logeado su data
                 _allproductsfilter = adminSite(request)
                 _allproductsfilter.dataProductUser()
-                lista_template = ['productos','cotizacion','precios']
+                lista_template = ['productos','cotizacion','precios','inventario']
                 data = _allproductsfilter.response_data
                 data['code'] = _allproductsfilter.code
                 contact_list = data['cantTotal']
@@ -219,13 +219,13 @@ class ControlAdmin(View):
                 flag = False
                 direction = '/static/images/upload/imagesp/'
                 for value in lista_template:
-                    print("value",value)
+                    # print("value",value)
                     if value in request.GET:
                         flag=True
                         data[value]=True
                 if not flag:
                     data['cotizacion']=True
-                print("Data",data)
+                # print("Data",data)
                 return render(request, 'market/admintemplates/adminGestion.html', {'valores':data,'direction':direction,'data':data['data'],'flag':'all'})
                 #mandar los productos con nombre , y precio en dolares y dejar dos campos vacion que seran cant y total
                 #llenarlo en el fron dinamicamente y hacer la multiplicacion y ya  y poner un filtro para mostrar solo los que
@@ -253,40 +253,66 @@ class ControlAdmin(View):
             #Abrimos el archivo excel
             documento = xlrd.open_workbook(settings.MEDIA_ROOT+'/'+nombre_archivo)
             sheet_excel = documento.sheet_names()
-            if 'CALCULADOR' in sheet_excel:
-                lista_productos_precios_venta = documento.sheet_by_index(sheet_excel.index('CALCULADOR'))
-                listafinal = []
-                listafinalreal = []
+            if request.POST.get('flag'):
+                if 'INVENTARIO' in sheet_excel:
+                    data = {"code":200,"mensaje":"Subido Correctamente"}
+                    inventariocritico = []
+                    inventariocritico_return = []
+                    lista_productos_inventario = documento.sheet_by_index(sheet_excel.index('INVENTARIO'))
+                    # print (lista_productos_inventario.row_values(3))
+                    # print(lista_productos_inventario.nrows)
+                    for i in range(100): #
+                        if i !=0 and i>=3:
+                            fila = lista_productos_inventario.row(i) #
+                            stock = int(float(str(fila[5]).split("number:")[1]))
+                            if stock <=5:
+                                inventariocritico.append([str(fila[1]).split("text:"),str(fila[2]).split("number:"),str(fila[5]).split("number:")])
 
-                for i in range(lista_productos_precios_venta.nrows): #
-                    if i !=0:
-                        fila = lista_productos_precios_venta.row(i) #
-                        listafinal.append([str(fila[1]).split("text:"),str(fila[2]).split("number:"),str(fila[5]).split("number:")])
-
-                for product_precio in listafinal:
-                    nombre_producto = product_precio[0][1].replace("'","")
-                    precio_producto = round(float(product_precio[1][1]),2)
-                    categoria = round(float(product_precio[2][1]))
-
-                    try:
-                        producto_para_actualizar = Product.objects.get(name=nombre_producto)
-                        producto_para_actualizar.price = precio_producto
-                        producto_para_actualizar.pricebs = round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2)
-                        producto_para_actualizar.save()
-                    except Exception as e:
-                        if categoria != 0:
-                            print("No existe y lo creo")
-                            actualizado = Product.objects.create(
-                                name=nombre_producto,
-                                price=precio_producto,
-                                category=categoria,
-                                pricebs=round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2))
-                            actualizado.save()
-                        else:
-                            print("salta porque no es categoria valida")
+                    for value in inventariocritico:
+                        nombre_producto = value[0][1].replace("'","")
+                        cantidad_en_stock_del_producto = round(float(value[2][1]),2)
+                        inventariocritico_return.append({"producto":nombre_producto,"stockcritico":cantidad_en_stock_del_producto})
+                print("borrar excel del sistema ")
+                data = {"code":200,"mensaje":"Critico","data":inventariocritico_return}
+                os.remove(settings.MEDIA_ROOT+'/'+nombre_archivo)
+                return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 
             else:
-                data = {"code":500,"mensaje":"Error Verifique el archivo subido"}
+                if 'CALCULADOR' in sheet_excel:
+                    lista_productos_precios_venta = documento.sheet_by_index(sheet_excel.index('CALCULADOR'))
+                    listafinal = []
+                    listafinalreal = []
+
+                    for i in range(lista_productos_precios_venta.nrows): #
+                        if i !=0:
+                            fila = lista_productos_precios_venta.row(i) #
+                            listafinal.append([str(fila[1]).split("text:"),str(fila[2]).split("number:"),str(fila[5]).split("number:")])
+
+                    for product_precio in listafinal:
+                        nombre_producto = product_precio[0][1].replace("'","")
+                        precio_producto = round(float(product_precio[1][1]),2)
+                        categoria = round(float(product_precio[2][1]))
+
+                        try:
+                            producto_para_actualizar = Product.objects.get(name=nombre_producto)
+                            producto_para_actualizar.price = precio_producto
+                            producto_para_actualizar.pricebs = round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2)
+                            producto_para_actualizar.save()
+                        except Exception as e:
+                            if categoria != 0:
+                                print("No existe y lo creo")
+                                actualizado = Product.objects.create(
+                                    name=nombre_producto,
+                                    price=precio_producto,
+                                    category=categoria,
+                                    pricebs=round((float(precio_producto)*float(DolarBolivar.objects.get().bolivar)),2))
+                                actualizado.save()
+                            else:
+                                print("salta porque no es categoria valida")
+
+                else:
+                    data = {"code":500,"mensaje":"Error Verifique el archivo subido"}
+
             print("borrar excel del sistema ")
             os.remove(settings.MEDIA_ROOT+'/'+nombre_archivo)
             data = {"code":200,"mensaje":"Subido Correctamente"}
