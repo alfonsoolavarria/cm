@@ -135,6 +135,8 @@ $(document).ready(function() {
 
   $("#excelinventario").click(function(e){
     e.preventDefault();
+    $(".loader05").css("visibility","visible");
+    $("#excelinventario").css("visibility","hidden");
     var file = document.getElementById('fileproductoinventario')
     var input = file;
     var reader = new FileReader();
@@ -149,7 +151,6 @@ $(document).ready(function() {
         extension:extension,
         flag:'inventario',
       }).done(function (result) {
-        console.log(result);
         if (result.code==200) {
           //price-{{forloop.counter}}
           //{{value.stockcritico}}
@@ -165,12 +166,18 @@ $(document).ready(function() {
           // setTimeout(function() {
           //   location.reload(true);
           // }, delayInMilliseconds);
+          $(".loader05").css("visibility","hidden");
+          $("#excelinventario").css("visibility","visible");
         }else {
           //poner un tootip
           swal(result.error, " ", "warning");
+          $(".loader05").css("visibility","hidden");
+          $("#excelinventario").css("visibility","visible");
         }
       }).fail(function(error) {
         console.log(error.responseText);
+        $(".loader05").css("visibility","hidden");
+        $("#excelinventario").css("visibility","visible");
       });/*fin ajax*/
 
     };
